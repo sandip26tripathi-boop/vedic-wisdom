@@ -1,13 +1,3 @@
-import crypto from 'crypto';
-
-// Global memory cache across warm serverless invocations
-if (!(global as any).__vedic_otp_store) {
-  (global as any).__vedic_otp_store = new Map<string, { hash: string; expiresAt: number; attempts: number }>();
-}
-const otpStore: Map<string, { hash: string; expiresAt: number; attempts: number }> = (global as any).__vedic_otp_store;
-
-const OTP_SECRET = process.env.OTP_SECRET_SALT || 'vedic_wisdom_secure_salt_2026';
-
 export default async function handler(req: any, res: any) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -22,7 +12,7 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const { phone, mobileNumber, countryCode = '+91' } = req.body || {};
+    const { phone, mobileNumber, countryCode = '+91', name = 'Vedic Seeker' } = req.body || {};
     const rawNumber = String(mobileNumber || phone || '');
     const cleanPhone = rawNumber.replace(/\D/g, '').slice(-10);
 
@@ -31,98 +21,18 @@ export default async function handler(req: any, res: any) {
     }
 
     const fullPhone = `${countryCode} ${cleanPhone}`;
-    // Secure 6-digit numeric OTP
-    const generatedOtp = crypto.randomInt(100000, 1000000).toString();
-    const expiresAt = Date.now() + 5 * 60 * 1000; // 5 minutes validity
-
-    // Cryptographic hash of phone + OTP
-    const otpHash = crypto.createHmac('sha256', OTP_SECRET).update(`${cleanPhone}:${generatedOtp}`).digest('hex');
-    // Token that works across stateless lambdas
-    const statelessSignature = crypto.createHmac('sha256', OTP_SECRET).update(`${cleanPhone}:${generatedOtp}:${expiresAt}`).digest('hex');
-    const verificationToken = `${cleanPhone}:${expiresAt}:${statelessSignature}`;
-
-    otpStore.set(cleanPhone, { hash: otpHash, expiresAt, attempts: 0 });
-
-    // SMS Gateway Client Integration (Fast2SMS / Twilio)
-    const fast2smsApiKey = process.env.FAST2SMS_API_KEY || process.env.SMS_API_KEY;
-    const twilioSid = process.env.TWILIO_ACCOUNT_SID;
-    const twilioToken = process.env.TWILIO_AUTH_TOKEN;
-    const twilioFrom = process.env.TWILIO_PHONE_NUMBER;
-
-    let smsDispatched = false;
-
-    if (fast2smsApiKey) {
-      try {
-        const smsResponse = await fetch('https://www.fast2sms.com/dev/bulkV2', {
-          method: 'POST',
-          headers: {
-            'authorization': fast2smsApiKey,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            route: 'otp',
-            variables_values: generatedOtp,
-            numbers: rawNumber.replace('+91', '').trim()
-          })
-        });
-        const smsData: any = await smsResponse.json();
-        if (smsData && (smsData.return === true || smsData.status_code === 200)) {
-          smsDispatched = true;
-          console.log(`[Fast2SMS Real Gateway] Successfully delivered OTP SMS to ${cleanPhone}`);
-        } else {
-          console.warn(`[Fast2SMS Gateway Warning] Response for ${cleanPhone}:`, smsData);
-        }
-      } catch (err: any) {
-        console.error(`[Fast2SMS Delivery Error]:`, err.message);
-      }
-    } else if (twilioSid && twilioToken && twilioFrom) {
-      try {
-        const auth = Buffer.from(`${twilioSid}:${twilioToken}`).toString('base64');
-        const body = new URLSearchParams({
-          To: `${countryCode}${cleanPhone}`,
-          From: twilioFrom,
-          Body: `Your Vedic Wisdom verification code is: ${generatedOtp}. Valid for 5 minutes.`
-        });
-        const twilioRes = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${twilioSid}/Messages.json`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Basic ${auth}`,
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: body.toString()
-        });
-        if (twilioRes.ok) {
-          smsDispatched = true;
-          console.log(`[Twilio] Successfully sent SMS to ${countryCode}${cleanPhone}`);
-        }
-      } catch (err: any) {
-        console.error(`[Twilio] Failed to send SMS:`, err.message);
-      }
-    }
-
-    if (!smsDispatched) {
-      console.log(`[Vedic Auth SMS] FAST2SMS_API_KEY not set. Outgoing OTP for ${fullPhone}: [${generatedOtp}]`);
-    }
-
-    const isProduction = process.env.NODE_ENV === 'production' || Boolean(fast2smsApiKey);
-
-    if (isProduction) {
-      return res.status(200).json({
-        success: true,
-        message: 'OTP sent to your mobile phone.',
-        verificationToken
-      });
-    }
+    const waUrl = `https://wa.me/919009448601?text=${encodeURIComponent(
+      `Namaste Vedic Wisdom, I am ${name}. Please verify my mobile number: ${fullPhone} to access services.`
+    )}`;
 
     return res.status(200).json({
       success: true,
-      message: 'OTP sent to your mobile phone.',
-      verificationToken,
-      expiresIn: 300,
-      isProduction: false,
-      devOtpPreview: generatedOtp
+      message: '1-Click WhatsApp verification initiated.',
+      waUrl,
+      phone: fullPhone,
+      verified: true
     });
   } catch (err: any) {
-    return res.status(500).json({ success: false, message: err.message || 'Error sending OTP' });
+    return res.status(500).json({ success: false, message: err.message || 'Error processing request' });
   }
 }

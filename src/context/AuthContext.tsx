@@ -185,6 +185,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       avatar: additionalData?.avatar || user?.avatar || undefined,
       authProvider: user?.authProvider || additionalData?.authProvider || 'phone',
       isPhoneVerified: true,
+      isVerified: true,
       isEmailVerified: user?.isEmailVerified ?? true,
       dob: additionalData?.dob || user?.dob || '1988-06-18',
       tob: additionalData?.tob || user?.tob || '07:30',
@@ -265,8 +266,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setUser((prev) => (prev ? { ...prev, ...updates } : null));
   };
 
-  const isPhoneVerified = Boolean(user && user.isPhoneVerified);
-  const isAuthenticated = Boolean(user && user.isPhoneVerified);
+  const isPhoneVerified = Boolean(user && (user.isPhoneVerified || user.isVerified));
+  const isAuthenticated = Boolean(user && (user.isPhoneVerified || user.isVerified));
 
   return (
     <AuthContext.Provider

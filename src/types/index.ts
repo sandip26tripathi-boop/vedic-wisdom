@@ -85,7 +85,8 @@ export interface UserProfile {
   joinedDate: string;
   isPhoneVerified?: boolean;
   isEmailVerified?: boolean;
-  authProvider?: 'google' | 'email' | 'phone';
+  isVerified?: boolean;
+  authProvider?: 'google' | 'email' | 'phone' | 'whatsapp';
 }
 
 // Client Portal Tabs

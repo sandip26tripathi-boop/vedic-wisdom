@@ -1,0 +1,23 @@
+/* Global Stylesheet for Mobile Viewport & Screen Bleeding Fix */
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden !important;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+#root, #__next, main {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden !important;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}

@@ -14,8 +14,8 @@ export function useRequireAuth() {
     action: (verifiedUser?: UserProfile) => void,
     options?: RequireAuthOptions
   ) => {
-    // If user is already authenticated with phone verified, execute action directly
-    if (user && user.isPhoneVerified) {
+    // If user is already authenticated with phone/WhatsApp verified, execute action directly
+    if (user && (user.isPhoneVerified || user.isVerified)) {
       action(user);
       return;
     }

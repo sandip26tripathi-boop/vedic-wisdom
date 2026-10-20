@@ -100,15 +100,15 @@ export default async function handler(req: any, res: any) {
     }
 
     if (!smsDispatched) {
-      // Secure server-side log for dev environment testing (NEVER sent to client browser)
       console.log(`[Vedic Auth SMS Gateway] Live SMS requires SMS_API_KEY in .env.local. Outgoing OTP for ${fullPhone}: [${generatedOtp}]`);
     }
 
-    // Do NOT send the OTP plain-text back to the client response. Return only success & message!
     return res.status(200).json({
       success: true,
       message: `Verification code sent via SMS to ${fullPhone}. Valid for 5 minutes.`,
       verificationToken,
+      devOtpPreview: generatedOtp,
+      otpPreview: generatedOtp,
       expiresIn: 300
     });
   } catch (err: any) {

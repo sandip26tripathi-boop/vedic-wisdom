@@ -32,7 +32,7 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({ currentLang,
   return (
     <>
       {/* Floating Button at Bottom-Right */}
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end">
+      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end">
         
         {/* Floating AstroCopilot AI Trigger */}
         {onOpenCopilot && (
@@ -79,7 +79,7 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({ currentLang,
 
       {/* Sleek WhatsApp Chat Drawer / Modal */}
       {isOpen && (
-        <div className="fixed bottom-24 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-96 rounded-3xl bg-white dark:bg-[#111827] border border-[#D4AF37]/40 shadow-2xl overflow-hidden flex flex-col animate-in slide-in-from-bottom-5 duration-200">
+        <div className="fixed bottom-20 sm:bottom-24 right-3 left-3 sm:left-auto sm:right-6 w-auto sm:w-96 max-w-sm z-50 rounded-3xl bg-white dark:bg-[#111827] border border-[#D4AF37]/40 shadow-2xl overflow-hidden flex flex-col animate-in slide-in-from-bottom-5 duration-200">
           
           {/* Header */}
           <div className="p-4 bg-gradient-to-r from-[#064E3B] via-[#047857] to-[#0B0F19] text-white flex items-center justify-between">

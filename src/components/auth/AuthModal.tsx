@@ -15,7 +15,8 @@ import {
   KeyRound, 
   AlertCircle,
   Globe,
-  Check
+  Check,
+  Phone
 } from 'lucide-react';
 
 interface AuthModalProps {
@@ -50,9 +51,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     completePhoneVerification
   } = useAuth();
 
-  // Funnel steps: 'auth' (Google / Email) -> 'otp' (Mandatory phone verification) -> 'success'
+  // Funnel steps: 'auth' (Google / Mobile / Email) -> 'otp' (Mandatory phone verification) -> 'success'
   const [funnelStep, setFunnelStep] = useState<'auth' | 'otp' | 'success'>('auth');
-  const [authMethod, setAuthMethod] = useState<'options' | 'email'>('options');
+  const [authMethod, setAuthMethod] = useState<'options' | 'email' | 'mobile'>('options');
   const [isRegisterMode, setIsRegisterMode] = useState(false);
 
   // Email form states
@@ -75,6 +76,18 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   const otpInputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
+  // Lock background body scroll when AuthModal is active
+  useEffect(() => {
+    if (isAuthModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isAuthModalOpen]);
+
   // Sync modal options when opened
   useEffect(() => {
     if (isAuthModalOpen) {
@@ -88,7 +101,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         }
       }
 
-      // If user is already authenticated via email/Google but phone is unverified, jump to OTP
+      // If user is already authenticated via email/Google but phone is unverified, jump straight to OTP
       if (activeModalOptions?.initialStep === 'otp' || (user && !user.isPhoneVerified)) {
         setFunnelStep('otp');
       } else {
@@ -146,7 +159,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         // If phone is unverified (mandatory), smoothly advance to Step 2 OTP Gate
         if (!googleUser.isPhoneVerified) {
           setFunnelStep('otp');
-          // Auto-trigger send OTP if phone number is already present
           if (phoneInput.trim().length >= 8) {
             handleSendOtp(`${countryCode} ${phoneInput}`);
           }
@@ -380,19 +392,19 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     setTimeout(() => {
       closeAuthModal();
 
-      // Trigger attached report generator or unlocking callback immediately
+      // Trigger attached report generator, booking, or checkout callback immediately
       if (activeModalOptions?.onSuccess) {
         activeModalOptions.onSuccess(verifiedUser);
       } else if (onSuccessRedirect) {
         onSuccessRedirect(activeModalOptions?.redirectToTab || 'overview');
       }
-    }, 900);
+    }, 800);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200 overflow-y-auto">
       <div 
-        className="relative w-full max-w-md rounded-3xl bg-[#FAF9F6] dark:bg-[#111827] border border-[#D4AF37]/40 shadow-2xl overflow-hidden text-slate-800 dark:text-slate-100 transition-all"
+        className="relative w-full max-w-md my-auto rounded-3xl bg-[#FAF9F6] dark:bg-[#111827] border border-[#D4AF37]/40 shadow-2xl overflow-hidden text-slate-800 dark:text-slate-100 transition-all max-h-[95vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Gold Trim Accent */}
@@ -408,7 +420,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         </button>
 
         {/* ========================================================================= */}
-        {/* VIEW 1: STEP 1 - AUTH OPTIONS (GOOGLE 1-CLICK OR EMAIL/PASSWORD)          */}
+        {/* VIEW 1: STEP 1 - IDENTIFICATION (GOOGLE, MOBILE NUMBER, OR EMAIL)         */}
         {/* ========================================================================= */}
         {funnelStep === 'auth' && (
           <div className="p-6 sm:p-8">
@@ -420,16 +432,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               </div>
               <div className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#D4AF37]/15 text-[#B45309] dark:text-[#F3E5AB] mb-1.5">
                 <Sparkles className="w-3 h-3 text-[#D4AF37]" />
-                <span>AI Vedic Dossier Access Gate</span>
+                <span>Vedic Wisdom Authentication Gateway</span>
               </div>
               <h3 className="font-cinzel text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
-                {currentLang === 'en' ? 'Unlock AI Vedic Dossier' : 'वैदिक रिपोर्ट अनलॉक करें'}
+                {currentLang === 'en' ? 'Verify to Proceed' : 'आगे बढ़ने हेतु सत्यापन करें'}
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xs mx-auto">
                 {activeModalOptions?.message ||
                   (currentLang === 'en'
-                    ? 'Authenticate below to securely calculate, store, and unlock your 24-page analytical report.'
-                    : 'अपनी 24-पृष्ठ की प्रामाणिक रिपोर्ट अनलॉक करने हेतु प्रमाणीकरण करें।')}
+                    ? 'Authenticate below to securely confirm your booking, generate reports, or reserve academy seats.'
+                    : 'परामर्श बुकिंग, रिपोर्ट अथवा अकादमी प्रवेश हेतु प्रमाणीकरण करें।')}
               </p>
             </div>
 
@@ -442,7 +454,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             )}
 
             {authMethod === 'options' ? (
-              <div className="space-y-4">
+              <div className="space-y-3.5">
                 {/* OPTION 1: High-Converting One-Click Google Authentication */}
                 <button
                   type="button"
@@ -476,6 +488,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <span>{currentLang === 'en' ? 'Continue with Google' : 'Google से आगे बढ़ें'}</span>
                 </button>
 
+                {/* OPTION 2: Enter Mobile Number Directly */}
+                <button
+                  type="button"
+                  onClick={() => setFunnelStep('otp')}
+                  className="w-full py-3.5 px-4 rounded-xl font-bold text-sm text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 shadow-md shadow-[#D4AF37]/25 flex items-center justify-center gap-2.5 transition-all cursor-pointer"
+                >
+                  <Smartphone className="w-4 h-4" />
+                  <span>{currentLang === 'en' ? 'Enter Mobile Number (Instant OTP)' : 'मोबाइल नंबर से आगे बढ़ें (ओटीपी)'}</span>
+                </button>
+
                 {/* Aesthetic Divider */}
                 <div className="relative flex items-center justify-center my-3">
                   <div className="border-t border-slate-200 dark:border-slate-800 w-full" />
@@ -485,18 +507,18 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <div className="border-t border-slate-200 dark:border-slate-800 w-full" />
                 </div>
 
-                {/* OPTION 2: Email & Password Trigger */}
+                {/* OPTION 3: Email & Password Trigger */}
                 <button
                   type="button"
                   onClick={() => setAuthMethod('email')}
-                  className="w-full py-3.5 px-4 rounded-xl font-semibold text-sm bg-gradient-to-r from-amber-500/10 to-amber-600/10 hover:from-amber-500/20 hover:to-amber-600/20 border border-[#D4AF37]/50 text-slate-900 dark:text-[#F3E5AB] flex items-center justify-center gap-2.5 transition-all cursor-pointer"
+                  className="w-full py-3 px-4 rounded-xl font-semibold text-xs bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700/80 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 flex items-center justify-center gap-2 transition-all cursor-pointer"
                 >
-                  <Mail className="w-4 h-4 text-[#D4AF37]" />
+                  <Mail className="w-3.5 h-3.5 text-[#D4AF37]" />
                   <span>{currentLang === 'en' ? 'Continue with Email & Password' : 'ईमेल और पासवर्ड से लॉगिन करें'}</span>
                 </button>
 
                 {/* Security Guarantee Strip */}
-                <div className="pt-3 text-center">
+                <div className="pt-2 text-center">
                   <span className="text-[11px] text-slate-400 inline-flex items-center gap-1.5">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
                     <span>256-Bit SSL Encrypted & Non-Demolition Guarantee</span>
@@ -588,7 +610,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   className="w-full py-3 px-4 rounded-xl font-bold text-xs text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 shadow-md shadow-[#D4AF37]/25 flex items-center justify-center gap-2 cursor-pointer transition-all"
                 >
                   {isLoading && <RefreshCw className="w-3.5 h-3.5 animate-spin" />}
-                  <span>{isRegisterMode ? 'Register & Verify Phone' : 'Sign In & Verify Phone'}</span>
+                  <span>{isRegisterMode ? 'Register & Verify Mobile' : 'Sign In & Verify Mobile'}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
 
@@ -596,11 +618,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <button
                     type="button"
                     onClick={() => setAuthMethod('options')}
-                    className="hover:underline text-slate-600 dark:text-slate-300"
+                    className="hover:underline text-slate-600 dark:text-slate-300 cursor-pointer"
                   >
-                    ← Back to all options
+                    ← Back to options
                   </button>
-                  <span className="text-[#D4AF37]">Step 1 of 2</span>
+                  <span className="text-[#D4AF37] font-semibold">Step 1 of 2</span>
                 </div>
               </form>
             )}
@@ -620,15 +642,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               </div>
               <div className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-[#B45309] dark:text-[#F3E5AB] mb-1">
                 <Lock className="w-3 h-3 text-[#D4AF37]" />
-                <span>Mandatory Step 2 of 2: Phone Security</span>
+                <span>Mandatory Step 2 of 2: Phone Verification</span>
               </div>
               <h3 className="font-cinzel text-xl font-bold text-slate-900 dark:text-white">
-                {currentLang === 'en' ? 'Verify Mobile to Unlock Dossier' : 'रिपोर्ट अनलॉक करने हेतु मोबाइल सत्यापित करें'}
+                {currentLang === 'en' ? 'Verify Mobile Number' : 'मोबाइल नंबर सत्यापित करें'}
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xs mx-auto">
                 {currentLang === 'en'
-                  ? 'We deliver an instant 6-digit access OTP to verify identity and unlock your PDF dossier.'
-                  : 'आपकी प्रामाणिक रिपोर्ट अनलॉक करने हेतु 6-अंकों का ओटीपी भेजा जाएगा।'}
+                  ? 'We deliver an instant 6-digit access code via SMS to confirm identity and unlock services.'
+                  : 'पहचान सत्यापित करने और सेवा आगे बढ़ाने हेतु 6-अंकों का ओटीपी भेजा जाएगा।'}
               </p>
             </div>
 
@@ -656,7 +678,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     setOtpDigits(digits);
                     handleVerifyOtp(simulatedOtpPreview);
                   }}
-                  className="px-2 py-0.5 rounded bg-emerald-600 text-white text-[10px] font-bold hover:bg-emerald-700 cursor-pointer"
+                  className="px-2.5 py-1 rounded bg-emerald-600 text-white text-[10px] font-bold hover:bg-emerald-700 cursor-pointer shadow-xs"
                 >
                   Auto-Fill
                 </button>
@@ -695,7 +717,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     />
                   </div>
                   <span className="text-[10px] text-slate-400 mt-1 block">
-                    {currentLang === 'en' ? 'Standard SMS carrier rates apply. Confidential & non-spam.' : 'गोपनीय एवं सुरक्षित। कोई स्पैम नहीं।'}
+                    {currentLang === 'en' ? 'Standard SMS carrier rates apply. Confidential & 100% spam-free.' : 'गोपनीय एवं सुरक्षित। कोई स्पैम नहीं।'}
                   </span>
                 </div>
 
@@ -709,6 +731,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <span>{currentLang === 'en' ? 'Send 6-Digit OTP Code' : 'ओटीपी कोड भेजें'}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
+
+                <div className="pt-2 text-center">
+                  <button
+                    type="button"
+                    onClick={() => { setFunnelStep('auth'); setAuthMethod('options'); }}
+                    className="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer"
+                  >
+                    ← {currentLang === 'en' ? 'Change sign-in method' : 'दूसरा माध्यम चुनें'}
+                  </button>
+                </div>
               </div>
             ) : (
               /* 6-BOX AUTO-FOCUSING OTP INPUT */
@@ -718,14 +750,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <button
                     type="button"
                     onClick={() => { setIsOtpSent(false); setOtpDigits(['', '', '', '', '', '']); }}
-                    className="text-amber-600 dark:text-[#D4AF37] hover:underline font-semibold text-[11px]"
+                    className="text-amber-600 dark:text-[#D4AF37] hover:underline font-semibold text-[11px] cursor-pointer"
                   >
                     Edit Phone
                   </button>
                 </div>
 
                 {/* 6 Auto-Focusing Inputs */}
-                <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center justify-between gap-1.5 sm:gap-2">
                   {otpDigits.map((digit, idx) => (
                     <input
                       key={idx}
@@ -737,7 +769,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       onChange={(e) => handleDigitChange(idx, e.target.value)}
                       onKeyDown={(e) => handleDigitKeyDown(idx, e)}
                       onPaste={handleDigitPaste}
-                      className="w-12 h-14 text-center text-xl font-bold rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] shadow-inner transition-all"
+                      className="w-11 sm:w-12 h-13 sm:h-14 text-center text-lg sm:text-xl font-bold rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] shadow-inner transition-all"
                     />
                   ))}
                 </div>
@@ -756,9 +788,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     type="button"
                     disabled={!canResend || isLoading}
                     onClick={() => handleSendOtp()}
-                    className={`font-semibold cursor-pointer text-xs ${
+                    className={`font-semibold text-xs ${
                       canResend && !isLoading
-                        ? 'text-[#B45309] dark:text-[#F3E5AB] hover:underline'
+                        ? 'text-[#B45309] dark:text-[#F3E5AB] hover:underline cursor-pointer'
                         : 'text-slate-400 cursor-not-allowed opacity-50'
                     }`}
                   >
@@ -779,7 +811,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 >
                   {isLoading && <RefreshCw className="w-4 h-4 animate-spin" />}
                   <ShieldCheck className="w-4 h-4" />
-                  <span>{currentLang === 'en' ? 'Verify OTP & Unlock Report' : 'ओटीपी सत्यापित करें व रिपोर्ट खोलें'}</span>
+                  <span>{currentLang === 'en' ? 'Verify OTP & Continue' : 'ओटीपी सत्यापित करें व आगे बढ़ें'}</span>
                 </button>
               </div>
             )}
@@ -795,16 +827,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <CheckCircle2 className="w-10 h-10" />
             </div>
             <h3 className="font-cinzel text-xl font-bold text-slate-900 dark:text-white mb-1">
-              {currentLang === 'en' ? 'Verification Successful!' : 'सत्यापन पूर्ण हुआ!'}
+              {currentLang === 'en' ? 'Verification Successful!' : 'सत्यापन सफल रहा!'}
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs mx-auto mb-4">
               {currentLang === 'en'
-                ? 'Mobile verified. Unlocking your AI Astro-Vastu Diagnostic Dossier now...'
-                : 'मोबाइल सत्यापित। आपकी वैदिक रिपोर्ट तैयार की जा रही है...'}
+                ? 'Your mobile number is verified. Proceeding to your request...'
+                : 'मोबाइल नंबर सत्यापित हो गया है। आपका अनुरोध खोला जा रहा है...'}
             </p>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-xs font-semibold text-[#B45309] dark:text-[#F3E5AB]">
               <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#D4AF37]" />
-              <span>Generating Instant PDF...</span>
+              <span>Unlocking Action...</span>
             </div>
           </div>
         )}

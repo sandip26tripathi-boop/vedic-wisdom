@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { translations } from '../data/translations.ts';
 import { Language } from '../types/index.ts';
+import { useAuth } from '../context/AuthContext.tsx';
 import { X, Calendar, MapPin, Building, Phone, Mail, User, ShieldCheck, ArrowRight, CheckCircle2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -17,16 +18,43 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   currentLang,
   initialServiceId = 'industrial',
 }) => {
+  const { user } = useAuth();
   const [serviceType, setServiceType] = useState(initialServiceId);
   const [clientType, setClientType] = useState('enterprise');
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  const [name, setName] = useState(user?.name || '');
+  const [email, setEmail] = useState(user?.email || '');
+  const [phone, setPhone] = useState(user?.phone || '');
   const [area, setArea] = useState('');
-  const [city, setCity] = useState('');
+  const [city, setCity] = useState(user?.pob || '');
   const [date, setDate] = useState('');
   const [notes, setNotes] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    if (initialServiceId) {
+      setServiceType(initialServiceId);
+    }
+  }, [initialServiceId]);
+
+  useEffect(() => {
+    if (user && isOpen) {
+      if (user.name) setName(user.name);
+      if (user.email) setEmail(user.email);
+      if (user.phone) setPhone(user.phone);
+      if (user.pob && !city) setCity(user.pob);
+    }
+  }, [user, isOpen]);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   const t = translations[currentLang];
   const bm = t.bookingModal;

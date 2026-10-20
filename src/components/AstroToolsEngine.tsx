@@ -278,8 +278,8 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
   };
 
   return (
-    <section id="free-calculators" className="py-20 bg-slate-50 dark:bg-[#0F172A] border-t border-[#D4AF37]/20 transition-colors duration-300">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="free-calculators" className="py-20 bg-slate-50 dark:bg-[#0F172A] border-t border-[#D4AF37]/20 transition-colors duration-300 w-full max-w-full overflow-x-hidden">
+      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-10">
@@ -556,7 +556,7 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
 
               {/* Authentic North-Indian Diamond Kundli Chart Graphic (Crisp Vector SVG) */}
               <div className="my-6 flex items-center justify-center">
-                <div className="relative w-80 h-80 sm:w-96 sm:h-96 bg-gradient-to-br from-amber-500/5 via-slate-900/10 to-amber-950/20 border-2 border-[#D4AF37] rounded-2xl p-2 shadow-2xl overflow-hidden">
+                <div className="relative w-full max-w-[310px] sm:max-w-sm aspect-square bg-gradient-to-br from-amber-500/5 via-slate-900/10 to-amber-950/20 border-2 border-[#D4AF37] rounded-2xl p-2 shadow-2xl overflow-hidden">
                   <svg viewBox="0 0 320 320" className="w-full h-full select-none" fill="none">
                     {/* Outer Box */}
                     <rect x="8" y="8" width="304" height="304" stroke="#D4AF37" strokeWidth="2.5" className="fill-amber-500/5 dark:fill-amber-950/30" />

@@ -32,14 +32,14 @@ export const Hero: React.FC<HeroProps> = ({
   const t = translations[currentLang];
 
   return (
-    <section className="relative overflow-hidden pt-8 pb-16 lg:pt-14 lg:pb-24 border-b border-[#D4AF37]/15 bg-[#FAF9F6] dark:bg-[#0B0F19] transition-colors duration-300">
+    <section className="relative overflow-hidden w-full max-w-full pt-8 pb-16 lg:pt-14 lg:pb-24 border-b border-[#D4AF37]/15 bg-[#FAF9F6] dark:bg-[#0B0F19] transition-colors duration-300">
       {/* Background Decorative Gradients & Sacred Geometry Watermark */}
-      <div className="absolute inset-0 pointer-events-none opacity-30 dark:opacity-20 flex items-center justify-center">
+      <div className="absolute inset-0 pointer-events-none opacity-30 dark:opacity-20 flex items-center justify-center overflow-hidden">
         <div className="absolute w-[600px] h-[600px] rounded-full bg-radial from-[#D4AF37]/20 via-transparent to-transparent blur-3xl"></div>
         <div className="absolute -top-24 right-0 w-[400px] h-[400px] rounded-full bg-radial from-[#B45309]/15 via-transparent to-transparent blur-2xl"></div>
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           {/* Left Column: Balanced Dual-Pillar Value Proposition & CTAs */}
@@ -119,11 +119,11 @@ export const Hero: React.FC<HeroProps> = ({
           <div className="lg:col-span-5 relative flex items-center justify-center">
             
             {/* Outer Container with Light-first Luxury Glassmorphism & Gold Border Glow */}
-            <div className="relative w-full max-w-md p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-white/95 via-white/90 to-[#FAF9F6]/95 dark:from-[#111827]/95 dark:via-[#0F172A]/95 dark:to-[#0B0F19]/95 border border-[#D4AF37]/40 shadow-2xl gold-border-glow backdrop-blur-md">
+            <div className="relative w-full max-w-md p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-white/95 via-white/90 to-[#FAF9F6]/95 dark:from-[#111827]/95 dark:via-[#0F172A]/95 dark:to-[#0B0F19]/95 border border-[#D4AF37]/40 shadow-2xl gold-border-glow backdrop-blur-md overflow-hidden">
               
               {/* Corner Accents */}
-              <div className="absolute -top-3 -right-3 w-7 h-7 border-t-2 border-r-2 border-[#D4AF37]"></div>
-              <div className="absolute -bottom-3 -left-3 w-7 h-7 border-b-2 border-l-2 border-[#D4AF37]"></div>
+              <div className="absolute top-0 right-0 sm:-top-3 sm:-right-3 w-7 h-7 border-t-2 border-r-2 border-[#D4AF37]"></div>
+              <div className="absolute bottom-0 left-0 sm:-bottom-3 sm:-left-3 w-7 h-7 border-b-2 border-l-2 border-[#D4AF37]"></div>
 
               {/* Header inside graphic card */}
               <div className="flex items-center justify-between pb-4 border-b border-[#D4AF37]/20">

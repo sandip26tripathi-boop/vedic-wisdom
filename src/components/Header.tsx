@@ -86,30 +86,30 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-[#FAF9F6]/95 dark:bg-[#0B0F19]/95 border-b border-[#D4AF37]/25 shadow-xs transition-colors duration-300">
       {/* Top Advisory Hotline Ticker */}
-      <div className="bg-gradient-to-r from-[#0B0F19] via-[#1E293B] to-[#0B0F19] text-[#F3E5AB] text-xs py-1.5 px-4 border-b border-[#D4AF37]/30 flex flex-wrap items-center justify-between gap-2">
-        <div className="container mx-auto flex items-center justify-between text-[11px] sm:text-xs">
-          <div className="flex items-center space-x-2">
-            <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span className="font-medium text-slate-200">
+      <div className="w-full max-w-full overflow-x-hidden bg-gradient-to-r from-[#0B0F19] via-[#1E293B] to-[#0B0F19] text-[#F3E5AB] text-xs py-1.5 px-3 sm:px-4 border-b border-[#D4AF37]/30">
+        <div className="container mx-auto flex items-center justify-between text-[11px] sm:text-xs gap-2">
+          <div className="flex items-center space-x-2 min-w-0 flex-1">
+            <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+            <span className="font-medium text-slate-200 truncate">
               {currentLang === 'en' 
                 ? 'Empirical 100% Non-Demolition Industrial Vastu & KP Cuspal Interlink (CIL) Astrology'
                 : '100% बिना तोड़-फोड़ औद्योगिक वास्तु एवं गणितीय केपी कस्पल इंटरलिंक ज्योतिष'}
             </span>
             <span className="hidden md:inline-block text-[#D4AF37]">|</span>
-            <span className="hidden md:inline-block text-slate-300">
+            <span className="hidden md:inline-block text-slate-300 whitespace-nowrap">
               {currentLang === 'en' ? 'Bhopal • Delhi NCR • Mumbai • Dubai' : 'भोपाल • दिल्ली • मुंबई • दुबई'}
             </span>
-            <span className="hidden lg:inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-[10px] text-emerald-300">
+            <span className="hidden lg:inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-[10px] text-emerald-300 shrink-0">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
               <span className="font-bold">{liveMuhurta.name}</span>
               <span className="text-slate-400 font-normal">• {liveMuhurta.meaning}</span>
             </span>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3 sm:space-x-4 shrink-0">
             <a 
               href="tel:+919009448601" 
-              className="flex items-center space-x-1.5 text-amber-300 hover:text-white transition-colors"
+              className="flex items-center space-x-1.5 text-amber-300 hover:text-white transition-colors whitespace-nowrap"
             >
               <PhoneCall className="w-3.5 h-3.5 text-[#D4AF37]" />
               <span className="font-semibold tracking-wide">+91 90094 48601</span>
@@ -117,7 +117,7 @@ export const Header: React.FC<HeaderProps> = ({
             <span className="hidden sm:inline-block text-slate-400">•</span>
             <a 
               href="mailto:ask.vedicwisdom@gmail.com" 
-              className="hidden sm:inline-block text-slate-300 hover:text-amber-200 transition-colors"
+              className="hidden sm:inline-block text-slate-300 hover:text-amber-200 transition-colors whitespace-nowrap"
             >
               ask.vedicwisdom@gmail.com
             </a>

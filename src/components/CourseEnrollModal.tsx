@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { translations } from '../data/translations.ts';
 import { Language } from '../types/index.ts';
+import { useAuth } from '../context/AuthContext.tsx';
 import { X, GraduationCap, CheckCircle2, Clock, Calendar, ArrowRight, ShieldCheck, Download } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -17,10 +18,30 @@ export const CourseEnrollModal: React.FC<CourseEnrollModalProps> = ({
   courseId,
   currentLang,
 }) => {
-  const [studentName, setStudentName] = useState('');
-  const [studentPhone, setStudentPhone] = useState('');
-  const [studentEmail, setStudentEmail] = useState('');
+  const { user } = useAuth();
+  const [studentName, setStudentName] = useState(user?.name || '');
+  const [studentPhone, setStudentPhone] = useState(user?.phone || '');
+  const [studentEmail, setStudentEmail] = useState(user?.email || '');
   const [priorExperience, setPriorExperience] = useState('beginner');
+
+  useEffect(() => {
+    if (user && isOpen) {
+      if (user.name) setStudentName(user.name);
+      if (user.phone) setStudentPhone(user.phone);
+      if (user.email) setStudentEmail(user.email);
+    }
+  }, [user, isOpen]);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 

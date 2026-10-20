@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DigitalReportItem } from '../data/digitalReports.ts';
 import { Language } from '../types/index.ts';
+import { useAuth } from '../context/AuthContext.tsx';
 import { X, FileText, CheckCircle2, Download, Send, ArrowRight, ShieldCheck, Clock, Sparkles } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -17,18 +18,41 @@ export const ReportOrderModal: React.FC<ReportOrderModalProps> = ({
   report,
   currentLang,
 }) => {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<'order' | 'preview'>('order');
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [dob, setDob] = useState('1990-01-01');
-  const [tob, setTob] = useState('12:00');
-  const [pob, setPob] = useState('');
+  const [name, setName] = useState(user?.name || '');
+  const [phone, setPhone] = useState(user?.phone || '');
+  const [email, setEmail] = useState(user?.email || '');
+  const [dob, setDob] = useState(user?.dob || '1990-01-01');
+  const [tob, setTob] = useState(user?.tob || '12:00');
+  const [pob, setPob] = useState(user?.pob || '');
   const [partnerName, setPartnerName] = useState('');
   const [partnerDob, setPartnerDob] = useState('');
   const [partnerTob, setPartnerTob] = useState('');
   const [partnerPob, setPartnerPob] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    if (user && isOpen) {
+      if (user.name) setName(user.name);
+      if (user.phone) setPhone(user.phone);
+      if (user.email) setEmail(user.email);
+      if (user.dob) setDob(user.dob);
+      if (user.tob) setTob(user.tob);
+      if (user.pob) setPob(user.pob);
+    }
+  }, [user, isOpen]);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   if (!isOpen || !report) return null;
 

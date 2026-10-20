@@ -6,6 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import { Language, Theme } from './types/index.ts';
 import { AuthProvider } from './context/AuthContext.tsx';
+import { useRequireAuth } from './hooks/useRequireAuth.ts';
 import { Header } from './components/Header.tsx';
 import { Hero } from './components/Hero.tsx';
 import { TrustBar } from './components/TrustBar.tsx';
@@ -32,10 +33,11 @@ import { DigitalReportItem, digitalReportsData } from './data/digitalReports.ts'
 import { Sparkles, ArrowLeft, ShieldCheck } from 'lucide-react';
 import { SriYantraMotif } from './components/SriYantraMotif.tsx';
 
-export default function App() {
+function MainApp() {
   const [currentLang, setCurrentLang] = useState<Language>('en');
   // Light-First Luxury Default
   const [currentTheme, setCurrentTheme] = useState<Theme>('light');
+  const { requireAuth } = useRequireAuth();
   
   // Navigation View State: 'website' | 'dashboard' | 'generate-report'
   const [activeView, setActiveView] = useState<'website' | 'dashboard' | 'generate-report'>('website');
@@ -73,9 +75,17 @@ export default function App() {
     setCurrentTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
 
+  // Universal Gated Action Handlers
   const handleOpenBooking = (serviceId: string = 'industrial') => {
-    setBookingServiceId(serviceId);
-    setIsBookingOpen(true);
+    requireAuth(() => {
+      setBookingServiceId(serviceId);
+      setIsBookingOpen(true);
+    }, {
+      message: currentLang === 'hi' 
+        ? 'परामर्श बुक करने के लिए कृपया अपना मोबाइल नंबर सत्यापित करें।' 
+        : 'Please authenticate & verify your mobile number to book your consultation.',
+      source: `booking-${serviceId}`
+    });
   };
 
   const handleOpenScope = (serviceId: string) => {
@@ -84,13 +94,27 @@ export default function App() {
   };
 
   const handleOpenEnroll = (courseId: string) => {
-    setEnrollCourseId(courseId);
-    setIsEnrollOpen(true);
+    requireAuth(() => {
+      setEnrollCourseId(courseId);
+      setIsEnrollOpen(true);
+    }, {
+      message: currentLang === 'hi' 
+        ? 'कोर्स में प्रवेश पाने के लिए कृपया अपना मोबाइल नंबर सत्यापित करें।' 
+        : 'Please authenticate & verify your mobile number to enroll in this academy program.',
+      source: `course-${courseId}`
+    });
   };
 
   const handleOpenReportModal = (report: DigitalReportItem) => {
-    setSelectedReport(report);
-    setIsReportModalOpen(true);
+    requireAuth(() => {
+      setSelectedReport(report);
+      setIsReportModalOpen(true);
+    }, {
+      message: currentLang === 'hi' 
+        ? 'डिजिटल रिपोर्ट अनलॉक करने के लिए कृपया अपना मोबाइल नंबर सत्यापित करें।' 
+        : 'Please authenticate & verify your mobile number to order this digital report.',
+      source: `report-${report.id}`
+    });
   };
 
   const handleOpenGenerateReport = () => {
@@ -119,222 +143,228 @@ export default function App() {
   };
 
   return (
-    <AuthProvider>
-      <div className={`min-h-screen flex flex-col font-sans transition-colors duration-300 ${currentLang === 'hi' ? 'font-hindi' : ''} bg-[#FAF9F6] dark:bg-[#0B0F19] text-slate-800 dark:text-slate-100`}>
-        
-        {/* VIEW 1: PROTECTED ENTERPRISE CLIENT DASHBOARD */}
-        {activeView === 'dashboard' ? (
-          <ClientDashboard
+    <div className={`w-full max-w-full overflow-x-hidden min-h-screen flex flex-col font-sans transition-colors duration-300 ${currentLang === 'hi' ? 'font-hindi' : ''} bg-[#FAF9F6] dark:bg-[#0B0F19] text-slate-800 dark:text-slate-100`}>
+      
+      {/* VIEW 1: PROTECTED ENTERPRISE CLIENT DASHBOARD */}
+      {activeView === 'dashboard' ? (
+        <ClientDashboard
+          currentLang={currentLang}
+          onReturnToWebsite={() => setActiveView('website')}
+          onOpenBooking={handleOpenBooking}
+          onOpenGenerateReport={handleOpenGenerateReport}
+        />
+      ) : activeView === 'generate-report' ? (
+        /* VIEW 2: MODULE 1 - AI DIGITAL REPORT GENERATION AGENT */
+        <div className="w-full max-w-full overflow-x-hidden min-h-screen flex flex-col">
+          <Header
             currentLang={currentLang}
-            onReturnToWebsite={() => setActiveView('website')}
+            onLanguageChange={setCurrentLang}
+            currentTheme={currentTheme}
+            onThemeToggle={handleThemeToggle}
             onOpenBooking={handleOpenBooking}
+            onOpenDashboard={() => setActiveView('dashboard')}
+            onOpenCopilot={() => setIsCopilotOpen(true)}
             onOpenGenerateReport={handleOpenGenerateReport}
           />
-        ) : activeView === 'generate-report' ? (
-          /* VIEW 2: MODULE 1 - AI DIGITAL REPORT GENERATION AGENT */
-          <div className="min-h-screen flex flex-col">
-            <Header
-              currentLang={currentLang}
-              onLanguageChange={setCurrentLang}
-              currentTheme={currentTheme}
-              onThemeToggle={handleThemeToggle}
-              onOpenBooking={handleOpenBooking}
-              onOpenDashboard={() => setActiveView('dashboard')}
-              onOpenCopilot={() => setIsCopilotOpen(true)}
-              onOpenGenerateReport={handleOpenGenerateReport}
-            />
 
-            <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-10">
-              {/* Back to Website Button */}
-              <div className="max-w-4xl mx-auto mb-6 flex items-center justify-between">
-                <button
-                  onClick={() => { setActiveView('website'); setGeneratedReportData(null); }}
-                  className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                >
-                  <ArrowLeft className="w-3.5 h-3.5" />
-                  <span>Return to Vedic Wisdom Platform</span>
-                </button>
+          <main className="w-full max-w-full overflow-x-hidden flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            {/* Back to Website Button */}
+            <div className="max-w-4xl mx-auto mb-6 flex items-center justify-between">
+              <button
+                onClick={() => { setActiveView('website'); setGeneratedReportData(null); }}
+                className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Return to Vedic Wisdom Platform</span>
+              </button>
 
-                <div className="hidden sm:flex items-center space-x-2 text-xs font-semibold text-[#B45309] dark:text-[#F3E5AB]">
-                  <Sparkles className="w-4 h-4 text-[#D4AF37]" />
-                  <span>Computational Vedic & KP Analytics Agent</span>
-                </div>
+              <div className="hidden sm:flex items-center space-x-2 text-xs font-semibold text-[#B45309] dark:text-[#F3E5AB]">
+                <Sparkles className="w-4 h-4 text-[#D4AF37]" />
+                <span>Computational Vedic & KP Analytics Agent</span>
               </div>
+            </div>
 
-              {/* Render Report Form or Generated Report Dossier */}
-              {generatedReportData ? (
-                <ReportViewer
-                  reportData={generatedReportData}
-                  currentLang={currentLang}
-                  onBack={() => setGeneratedReportData(null)}
-                  onOpenBooking={() => handleOpenBooking('astrology')}
-                />
-              ) : (
-                <ReportForm
-                  currentLang={currentLang}
-                  onReportGenerated={(data) => {
-                    setGeneratedReportData(data);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                />
-              )}
-            </main>
+            {/* Render Report Form or Generated Report Dossier */}
+            {generatedReportData ? (
+              <ReportViewer
+                reportData={generatedReportData}
+                currentLang={currentLang}
+                onBack={() => setGeneratedReportData(null)}
+                onOpenBooking={() => handleOpenBooking('astrology')}
+              />
+            ) : (
+              <ReportForm
+                currentLang={currentLang}
+                onReportGenerated={(data) => {
+                  setGeneratedReportData(data);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              />
+            )}
+          </main>
 
-            <Footer
+          <Footer
+            currentLang={currentLang}
+            onLanguageChange={setCurrentLang}
+            currentTheme={currentTheme}
+            onThemeToggle={handleThemeToggle}
+            onOpenBooking={handleOpenBooking}
+            onScrollTo={handleScrollTo}
+          />
+        </div>
+      ) : (
+        /* VIEW 3: PUBLIC HIGH-CONVERTING VEDIC WISDOM PLATFORM */
+        <>
+          {/* Primary Sticky Header */}
+          <Header
+            currentLang={currentLang}
+            onLanguageChange={setCurrentLang}
+            currentTheme={currentTheme}
+            onThemeToggle={handleThemeToggle}
+            onOpenBooking={handleOpenBooking}
+            onOpenDashboard={() => setActiveView('dashboard')}
+            onOpenCopilot={() => setIsCopilotOpen(true)}
+            onOpenGenerateReport={handleOpenGenerateReport}
+          />
+
+          {/* Main Content Sections */}
+          <main className="w-full max-w-full overflow-x-hidden flex-1">
+            {/* 1. Hero Section (Balanced Dual-Pillar Focus) */}
+            <Hero
               currentLang={currentLang}
-              onLanguageChange={setCurrentLang}
-              currentTheme={currentTheme}
-              onThemeToggle={handleThemeToggle}
               onOpenBooking={handleOpenBooking}
               onScrollTo={handleScrollTo}
             />
-          </div>
-        ) : (
-          /* VIEW 3: PUBLIC HIGH-CONVERTING VEDIC WISDOM PLATFORM */
-          <>
-            {/* Primary Sticky Header */}
-            <Header
+
+            {/* 2. Enterprise Trust & Credibility Strip */}
+            <TrustBar currentLang={currentLang} />
+
+            {/* 2.5. Offline Empirical Execution Workflow (Online Coordinates to On-Site Rectification) */}
+            <OfflineWorkflowSection
               currentLang={currentLang}
-              onLanguageChange={setCurrentLang}
-              currentTheme={currentTheme}
-              onThemeToggle={handleThemeToggle}
               onOpenBooking={handleOpenBooking}
-              onOpenDashboard={() => setActiveView('dashboard')}
-              onOpenCopilot={() => setIsCopilotOpen(true)}
+            />
+
+            {/* 3. Dual Consultation Ecosystem [ Astrology Consultations | Astro-Vastu Audits ] */}
+            <ConsultationsGrid
+              currentLang={currentLang}
+              onOpenBooking={handleOpenBooking}
+              onOpenScopeModal={handleOpenScope}
+            />
+
+            {/* 4. Automated Digital Astro Reports (Instant Download Engine) */}
+            <DigitalReportsSection
+              currentLang={currentLang}
+              onOpenReportModal={handleOpenReportModal}
               onOpenGenerateReport={handleOpenGenerateReport}
             />
 
-            {/* Main Content Sections */}
-            <main className="flex-1">
-              {/* 1. Hero Section (Balanced Dual-Pillar Focus) */}
-              <Hero
-                currentLang={currentLang}
-                onOpenBooking={handleOpenBooking}
-                onScrollTo={handleScrollTo}
-              />
-
-              {/* 2. Enterprise Trust & Credibility Strip */}
-              <TrustBar currentLang={currentLang} />
-
-              {/* 2.5. Offline Empirical Execution Workflow (Online Coordinates to On-Site Rectification) */}
-              <OfflineWorkflowSection
-                currentLang={currentLang}
-                onOpenBooking={handleOpenBooking}
-              />
-
-              {/* 3. Dual Consultation Ecosystem [ Astrology Consultations | Astro-Vastu Audits ] */}
-              <ConsultationsGrid
-                currentLang={currentLang}
-                onOpenBooking={handleOpenBooking}
-                onOpenScopeModal={handleOpenScope}
-              />
-
-              {/* 4. Automated Digital Astro Reports (Instant Download Engine) */}
-              <DigitalReportsSection
-                currentLang={currentLang}
-                onOpenReportModal={handleOpenReportModal}
-                onOpenGenerateReport={handleOpenGenerateReport}
-              />
-
-              {/* 5. Interactive Free Tools & Lead Magnets (Instant Kundli, Panchang & Choghadiya, Vastu Compass) */}
-              <AstroToolsEngine
-                currentLang={currentLang}
-                onOpenBooking={handleOpenBooking}
-              />
-
-              {/* 6. Vedic Wisdom Academy Professional Course Directory */}
-              <AcademyDirectory
-                currentLang={currentLang}
-                onOpenEnroll={handleOpenEnroll}
-              />
-
-              {/* 7. Leadership, Lineage & Research Methodology */}
-              <LeadershipSection
-                currentLang={currentLang}
-                onOpenBooking={handleOpenBooking}
-              />
-
-              {/* 8. Industrial Turnaround Case Studies */}
-              <CaseStudiesSection
-                currentLang={currentLang}
-                onOpenBooking={handleOpenBooking}
-              />
-
-              {/* 9. Authentic Vedic & Non-Demolition Vastu FAQ Section */}
-              <FAQSection
-                currentLang={currentLang}
-                onOpenBooking={handleOpenBooking}
-              />
-            </main>
-
-            {/* 4-Column Luxury Footer */}
-            <Footer
+            {/* 5. Interactive Free Tools & Lead Magnets (Instant Kundli, Panchang & Choghadiya, Vastu Compass) */}
+            <AstroToolsEngine
               currentLang={currentLang}
-              onLanguageChange={setCurrentLang}
-              currentTheme={currentTheme}
-              onThemeToggle={handleThemeToggle}
               onOpenBooking={handleOpenBooking}
-              onScrollTo={handleScrollTo}
             />
-          </>
-        )}
 
-        {/* Intelligent Floating WhatsApp Chatbot & Community Drawer */}
-        <FloatingWhatsApp 
-          currentLang={currentLang} 
-          onOpenCopilot={() => setIsCopilotOpen(true)}
-        />
+            {/* 6. Vedic Wisdom Academy Professional Course Directory */}
+            <AcademyDirectory
+              currentLang={currentLang}
+              onOpenEnroll={handleOpenEnroll}
+            />
 
-        {/* Streaming AI AstroCopilot Assistant Modal */}
-        <AstroCopilot
-          isOpen={isCopilotOpen}
-          onClose={() => setIsCopilotOpen(false)}
-          currentLang={currentLang}
-        />
+            {/* 7. Leadership, Lineage & Research Methodology */}
+            <LeadershipSection
+              currentLang={currentLang}
+              onOpenBooking={handleOpenBooking}
+            />
 
-        {/* Auth Modal with OTP Verification, Google 1-Click & Magic Link */}
-        <AuthModal
-          currentLang={currentLang}
-          onSuccessRedirect={() => {
-            if (activeView === 'generate-report') {
-              // Stay in generator after verification to proceed
-              return;
-            }
-            setActiveView('dashboard');
-          }}
-        />
+            {/* 8. Industrial Turnaround Case Studies */}
+            <CaseStudiesSection
+              currentLang={currentLang}
+              onOpenBooking={handleOpenBooking}
+            />
 
-        {/* Interactive Modals */}
-        <BookingModal
-          isOpen={isBookingOpen}
-          onClose={() => setIsBookingOpen(false)}
-          currentLang={currentLang}
-          initialServiceId={bookingServiceId}
-        />
+            {/* 9. Authentic Vedic & Non-Demolition Vastu FAQ Section */}
+            <FAQSection
+              currentLang={currentLang}
+              onOpenBooking={handleOpenBooking}
+            />
+          </main>
 
-        <ConsultationScopeModal
-          isOpen={isScopeOpen}
-          onClose={() => setIsScopeOpen(false)}
-          serviceId={scopeServiceId}
-          currentLang={currentLang}
-          onOpenBooking={handleOpenBooking}
-        />
+          {/* 4-Column Luxury Footer */}
+          <Footer
+            currentLang={currentLang}
+            onLanguageChange={setCurrentLang}
+            currentTheme={currentTheme}
+            onThemeToggle={handleThemeToggle}
+            onOpenBooking={handleOpenBooking}
+            onScrollTo={handleScrollTo}
+          />
+        </>
+      )}
 
-        <CourseEnrollModal
-          isOpen={isEnrollOpen}
-          onClose={() => setIsEnrollOpen(false)}
-          courseId={enrollCourseId}
-          currentLang={currentLang}
-        />
+      {/* Intelligent Floating WhatsApp Chatbot & Community Drawer */}
+      <FloatingWhatsApp 
+        currentLang={currentLang} 
+        onOpenCopilot={() => setIsCopilotOpen(true)}
+      />
 
-        <ReportOrderModal
-          isOpen={isReportModalOpen}
-          onClose={() => setIsReportModalOpen(false)}
-          report={selectedReport}
-          currentLang={currentLang}
-        />
+      {/* Streaming AI AstroCopilot Assistant Modal */}
+      <AstroCopilot
+        isOpen={isCopilotOpen}
+        onClose={() => setIsCopilotOpen(false)}
+        currentLang={currentLang}
+      />
 
-      </div>
+      {/* Auth Modal with OTP Verification, Google 1-Click & Mobile Login */}
+      <AuthModal
+        currentLang={currentLang}
+        onSuccessRedirect={() => {
+          if (activeView === 'generate-report') {
+            // Stay in generator after verification to proceed
+            return;
+          }
+          setActiveView('dashboard');
+        }}
+      />
+
+      {/* Interactive Modals */}
+      <BookingModal
+        isOpen={isBookingOpen}
+        onClose={() => setIsBookingOpen(false)}
+        currentLang={currentLang}
+        initialServiceId={bookingServiceId}
+      />
+
+      <ConsultationScopeModal
+        isOpen={isScopeOpen}
+        onClose={() => setIsScopeOpen(false)}
+        serviceId={scopeServiceId}
+        currentLang={currentLang}
+        onOpenBooking={handleOpenBooking}
+      />
+
+      <CourseEnrollModal
+        isOpen={isEnrollOpen}
+        onClose={() => setIsEnrollOpen(false)}
+        courseId={enrollCourseId}
+        currentLang={currentLang}
+      />
+
+      <ReportOrderModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        report={selectedReport}
+        currentLang={currentLang}
+      />
+
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <MainApp />
     </AuthProvider>
   );
 }

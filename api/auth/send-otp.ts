@@ -43,19 +43,19 @@ export default async function handler(req: any, res: any) {
     otpStore.set(cleanPhone, { hash: otpHash, expiresAt, attempts: 0 });
 
     // SMS Gateway Client Integration (Fast2SMS / Twilio)
-    const smsApiKey = process.env.SMS_API_KEY || process.env.FAST2SMS_API_KEY;
+    const fast2smsApiKey = process.env.FAST2SMS_API_KEY || process.env.SMS_API_KEY;
     const twilioSid = process.env.TWILIO_ACCOUNT_SID;
     const twilioToken = process.env.TWILIO_AUTH_TOKEN;
     const twilioFrom = process.env.TWILIO_PHONE_NUMBER;
 
     let smsDispatched = false;
 
-    if (smsApiKey) {
+    if (fast2smsApiKey) {
       try {
         const smsResponse = await fetch('https://www.fast2sms.com/dev/bulkV2', {
           method: 'POST',
           headers: {
-            'authorization': smsApiKey,
+            'authorization': fast2smsApiKey,
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
@@ -67,12 +67,12 @@ export default async function handler(req: any, res: any) {
         const smsData: any = await smsResponse.json();
         if (smsData && (smsData.return === true || smsData.status_code === 200)) {
           smsDispatched = true;
-          console.log(`[Fast2SMS] Successfully delivered OTP SMS to ${cleanPhone}`);
+          console.log(`[Fast2SMS Real Gateway] Successfully delivered OTP SMS to ${cleanPhone}`);
         } else {
-          console.warn(`[Fast2SMS] Gateway warning for ${cleanPhone}:`, smsData);
+          console.warn(`[Fast2SMS Gateway Warning] Response for ${cleanPhone}:`, smsData);
         }
       } catch (err: any) {
-        console.error(`[Fast2SMS] Failed to send SMS:`, err.message);
+        console.error(`[Fast2SMS Delivery Error]:`, err.message);
       }
     } else if (twilioSid && twilioToken && twilioFrom) {
       try {
@@ -100,17 +100,23 @@ export default async function handler(req: any, res: any) {
     }
 
     if (!smsDispatched) {
-      console.log(`[Vedic Auth SMS Gateway] Live SMS requires SMS_API_KEY in .env.local. Outgoing OTP for ${fullPhone}: [${generatedOtp}]`);
+      console.log(`[Vedic Auth SMS] FAST2SMS_API_KEY not set. Outgoing OTP for ${fullPhone}: [${generatedOtp}]`);
     }
 
-    return res.status(200).json({
+    const isProduction = process.env.NODE_ENV === 'production' || Boolean(fast2smsApiKey);
+    const responsePayload: any = {
       success: true,
-      message: `Verification code sent via SMS to ${fullPhone}. Valid for 5 minutes.`,
+      message: 'OTP sent to your mobile phone.',
       verificationToken,
-      devOtpPreview: generatedOtp,
-      otpPreview: generatedOtp,
-      expiresIn: 300
-    });
+      expiresIn: 300,
+      isProduction
+    };
+
+    if (!isProduction) {
+      responsePayload.devOtpPreview = generatedOtp;
+    }
+
+    return res.status(200).json(responsePayload);
   } catch (err: any) {
     return res.status(500).json({ success: false, message: err.message || 'Error sending OTP' });
   }

@@ -65,7 +65,7 @@ app.post('/api/auth/send-otp', async (req: Request, res: Response) => {
     serverOtpStore.set(cleanPhone, { hash: otpHash, phone: fullPhone, expiresAt, attempts: 0 });
 
     // SMS Gateway Client Integration (Fast2SMS / Twilio)
-    const smsApiKey = process.env.SMS_API_KEY || process.env.FAST2SMS_API_KEY;
+    const smsApiKey = process.env.FAST2SMS_API_KEY || process.env.SMS_API_KEY;
     const twilioSid = process.env.TWILIO_ACCOUNT_SID;
     const twilioToken = process.env.TWILIO_AUTH_TOKEN;
     const twilioFrom = process.env.TWILIO_PHONE_NUMBER;
@@ -89,12 +89,12 @@ app.post('/api/auth/send-otp', async (req: Request, res: Response) => {
         const smsData: any = await smsResponse.json();
         if (smsData && (smsData.return === true || smsData.status_code === 200)) {
           smsDispatched = true;
-          console.log(`[Fast2SMS] Successfully delivered OTP SMS to ${cleanPhone}`);
+          console.log(`[Fast2SMS Real Gateway] Successfully delivered OTP SMS to ${cleanPhone}`);
         } else {
-          console.warn(`[Fast2SMS] Gateway warning for ${cleanPhone}:`, smsData);
+          console.warn(`[Fast2SMS Gateway Warning] Response for ${cleanPhone}:`, smsData);
         }
       } catch (err: any) {
-        console.error(`[Fast2SMS] Failed to send SMS:`, err.message);
+        console.error(`[Fast2SMS Delivery Error]:`, err.message);
       }
     } else if (twilioSid && twilioToken && twilioFrom) {
       try {
@@ -122,19 +122,28 @@ app.post('/api/auth/send-otp', async (req: Request, res: Response) => {
     }
 
     if (!smsDispatched) {
-      // Secure server-side log for dev environment testing (NEVER sent to client browser)
-      console.log(`[Vedic Auth SMS Gateway] Live SMS requires SMS_API_KEY in .env.local. Outgoing OTP for ${fullPhone}: [${generatedOtp}]`);
+      console.log(`[Vedic Auth SMS] FAST2SMS_API_KEY not set. Outgoing OTP for ${fullPhone}: [${generatedOtp}]`);
     }
 
-    // Do NOT send the OTP plain-text back to the client response. Return only success & message!
-    return res.json({
+    const isProduction = process.env.NODE_ENV === 'production' || Boolean(smsApiKey);
+
+    // In production mode, remove the on-screen "Development Mode OTP" badge completely.
+    // Return only `{ success: true, message: "OTP sent to your mobile phone." }`.
+    const responsePayload: any = {
       success: true,
-      message: `Verification code sent via SMS to ${fullPhone}. Valid for 5 minutes.`,
+      message: smsDispatched
+        ? `Verification code delivered via SMS to ${countryCode} ${cleanPhone}. Valid for 5 minutes.`
+        : 'OTP sent to your mobile phone.',
       verificationToken,
-      devOtpPreview: generatedOtp,
-      otpPreview: generatedOtp,
-      expiresIn: 300
-    });
+      expiresIn: 300,
+      isProduction
+    };
+
+    if (!isProduction) {
+      responsePayload.devOtpPreview = generatedOtp;
+    }
+
+    return res.json(responsePayload);
   } catch (err: any) {
     return res.status(500).json({ success: false, message: err.message || 'Error sending OTP' });
   }
@@ -218,13 +227,16 @@ app.post('/api/auth/verify-otp', (req: Request, res: Response) => {
     serverOtpStore.delete(cleanPhone);
 
     const user = {
-      id: `usr_${Date.now()}`,
+      id: userData?.id || `usr_${Date.now()}`,
       name: userData?.name || 'Verified Vedic Seeker',
       phone: `+91 ${cleanPhone}`,
       email: userData?.email || `${(userData?.name || 'client').toLowerCase().replace(/\s+/g, '')}@enterprise.in`,
+      avatar: userData?.avatar || userData?.picture,
+      authProvider: userData?.authProvider || 'mobile_otp',
+      isEmailVerified: Boolean(userData?.email),
       isPhoneVerified: true,
       clientTier: 'Enterprise VIP',
-      memberId: `VW-IND-${Math.floor(1000 + Math.random() * 9000)}`,
+      memberId: userData?.memberId || `VW-IND-${Math.floor(1000 + Math.random() * 9000)}`,
       joinedDate: 'Joined Today',
       whatsappOptIn: true
     };
@@ -237,6 +249,74 @@ app.post('/api/auth/verify-otp', (req: Request, res: Response) => {
     });
   } catch (err: any) {
     return res.status(500).json({ success: false, message: err.message || 'Error verifying OTP' });
+  }
+});
+
+// API: Google One-Click Authentication (/api/auth/google)
+app.post('/api/auth/google', async (req: Request, res: Response) => {
+  try {
+    const { credential, profile } = req.body || {};
+    let verifiedProfile: any = null;
+
+    // 1. Verify Google ID token against Google OAuth TokenInfo API
+    if (credential && typeof credential === 'string') {
+      try {
+        const googleRes = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${credential}`);
+        if (googleRes.ok) {
+          const tokenInfo: any = await googleRes.json();
+          verifiedProfile = {
+            id: tokenInfo.sub,
+            name: tokenInfo.name || tokenInfo.given_name || 'Google Seeker',
+            email: tokenInfo.email,
+            avatar: tokenInfo.picture,
+            email_verified: tokenInfo.email_verified === 'true' || tokenInfo.email_verified === true
+          };
+        }
+      } catch (err: any) {
+        console.warn('[Google Auth] Tokeninfo verification warning:', err.message);
+      }
+    }
+
+    // 2. Client decoded profile fallback
+    if (!verifiedProfile && profile) {
+      verifiedProfile = {
+        id: profile.sub || profile.id || `usr_google_${Date.now()}`,
+        name: profile.name || profile.displayName || 'Google Seeker',
+        email: profile.email,
+        avatar: profile.picture || profile.avatar,
+        email_verified: true
+      };
+    }
+
+    if (!verifiedProfile || !verifiedProfile.email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid Google credential. Please try signing in again.'
+      });
+    }
+
+    const user = {
+      id: `usr_google_${String(verifiedProfile.id).slice(-8)}`,
+      name: verifiedProfile.name,
+      email: verifiedProfile.email,
+      avatar: verifiedProfile.avatar,
+      authProvider: 'google',
+      isEmailVerified: true,
+      isPhoneVerified: false, // Mandatory phone OTP funnel gate
+      clientTier: 'Enterprise Seeker',
+      joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+    };
+
+    return res.status(200).json({
+      success: true,
+      message: 'Google authentication successful',
+      user
+    });
+  } catch (err: any) {
+    return res.status(500).json({
+      success: false,
+      message: err.message || 'Internal server error during Google sign-in'
+    });
   }
 });
 

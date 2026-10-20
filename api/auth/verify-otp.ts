@@ -96,13 +96,16 @@ export default async function handler(req: any, res: any) {
     otpStore.delete(cleanPhone);
 
     const user = {
-      id: `usr_${Date.now()}`,
+      id: userData?.id || `usr_${Date.now()}`,
       name: userData?.name || 'Verified Vedic Seeker',
       phone: `+91 ${cleanPhone}`,
       email: userData?.email || `${(userData?.name || 'client').toLowerCase().replace(/\s+/g, '')}@enterprise.in`,
+      avatar: userData?.avatar || userData?.picture,
+      authProvider: userData?.authProvider || 'mobile_otp',
+      isEmailVerified: Boolean(userData?.email),
       isPhoneVerified: true,
       clientTier: 'Enterprise VIP',
-      memberId: `VW-IND-${Math.floor(1000 + Math.random() * 9000)}`,
+      memberId: userData?.memberId || `VW-IND-${Math.floor(1000 + Math.random() * 9000)}`,
       joinedDate: 'Joined Today',
       whatsappOptIn: true
     };

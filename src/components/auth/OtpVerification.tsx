@@ -101,7 +101,11 @@ export const OtpVerification: React.FC<OtpVerificationProps> = ({
 
       const data = await res.json();
       if (res.ok && data.success) {
-        setSimulatedOtp(data.otpPreview || '786921');
+        if (!data.isProduction && (data.devOtpPreview || data.otpPreview)) {
+          setSimulatedOtp(data.devOtpPreview || data.otpPreview);
+        } else {
+          setSimulatedOtp(null);
+        }
         setStep('otp');
         setCountdown(30);
         setCanResend(false);

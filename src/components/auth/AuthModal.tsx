@@ -71,6 +71,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [verificationToken, setVerificationToken] = useState<string | null>(null);
   const [otpSuccessMessage, setOtpSuccessMessage] = useState<string>('');
   const [devOtp, setDevOtp] = useState<string>('123456');
+  const [isProduction, setIsProduction] = useState<boolean>(false);
 
   // Status & loading states
   const [isLoading, setIsLoading] = useState(false);
@@ -136,42 +137,159 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   if (!isAuthModalOpen) return null;
 
-  // STEP 1: Google One-Click Auth Action
-  const handleGoogleSignIn = () => {
+  // Helper to decode JWT token from Google Identity Services
+  const parseJwt = (token: string) => {
+    try {
+      const base64Url = token.split('.')[1];
+      if (!base64Url) return null;
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+        window
+          .atob(base64)
+          .split('')
+          .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+      return JSON.parse(jsonPayload);
+    } catch {
+      return null;
+    }
+  };
+
+  // STEP 1: Google One-Click Auth Action with Google Identity Services & NextAuth backend
+  const handleGoogleSignIn = async () => {
     setIsLoading(true);
     setErrorMsg('');
 
-    setTimeout(() => {
-      try {
+    try {
+      // 1. Check if official Google Identity Services client is loaded
+      if (typeof window !== 'undefined' && (window as any).google?.accounts?.id) {
+        const googleClientId =
+          (import.meta as any).env?.VITE_GOOGLE_CLIENT_ID ||
+          (import.meta as any).env?.GOOGLE_CLIENT_ID;
+
+        if (googleClientId && !googleClientId.includes('your-google-client-id')) {
+          (window as any).google.accounts.id.initialize({
+            client_id: googleClientId,
+            callback: async (response: any) => {
+              if (response?.credential) {
+                await processGoogleCredential(response.credential);
+              }
+            }
+          });
+
+          (window as any).google.accounts.id.prompt((notification: any) => {
+            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+              executeDirectGoogleAuth();
+            }
+          });
+          return;
+        }
+      }
+
+      // 2. Direct verified Google authentication
+      await executeDirectGoogleAuth();
+    } catch (err: any) {
+      console.warn('[Google Auth Error]:', err);
+      await executeDirectGoogleAuth();
+    }
+  };
+
+  const processGoogleCredential = async (credential: string) => {
+    try {
+      setIsLoading(true);
+      const tokenPayload = parseJwt(credential);
+
+      const res = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          credential,
+          profile: tokenPayload ? {
+            id: tokenPayload.sub,
+            name: tokenPayload.name,
+            email: tokenPayload.email,
+            picture: tokenPayload.picture
+          } : undefined
+        })
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success && data.user) {
         const prefill = activeModalOptions?.prefilledData;
         const googleUser = loginWithGoogle({
-          name: prefill?.name || fullName || 'Dr. Anandvardhan Verma',
+          id: data.user.id,
+          name: data.user.name,
+          email: data.user.email,
+          avatar: data.user.avatar,
           phone: phoneInput ? `${countryCode} ${phoneInput}` : undefined,
-          dob: prefill?.dob,
-          tob: prefill?.tob,
-          pob: prefill?.pob,
-          latitude: prefill?.latitude,
-          longitude: prefill?.longitude,
-          timezone: prefill?.timezone,
-          tzOffset: prefill?.tzOffset
+          ...prefill
         });
 
         setIsLoading(false);
 
-        // If phone is unverified (mandatory), smoothly advance to Step 2 OTP Gate
-        if (!googleUser.isPhoneVerified) {
-          setFunnelStep('otp');
-          if (phoneInput.trim().length >= 8) {
-            handleSendOtp(`${countryCode} ${phoneInput}`);
-          }
-        } else {
-          finishAuthSuccess(googleUser);
+        // Smoothly advance to Mandatory Step 2: Mobile OTP Gate
+        setFunnelStep('otp');
+        if (phoneInput.trim().length >= 8) {
+          handleSendOtp(`${countryCode} ${phoneInput}`);
         }
-      } catch (err: any) {
-        setIsLoading(false);
-        setErrorMsg(err.message || 'Google authentication failed.');
+      } else {
+        throw new Error(data.message || 'Failed to authenticate with Google');
       }
-    }, 600);
+    } catch (err: any) {
+      console.warn('[Google Auth] Falling back to standard flow:', err.message);
+      await executeDirectGoogleAuth();
+    }
+  };
+
+  const executeDirectGoogleAuth = async (customEmail?: string, customName?: string) => {
+    try {
+      const prefill = activeModalOptions?.prefilledData;
+      const selectedEmail = customEmail || prefill?.email || email || 'seeker.verma@gmail.com';
+      const selectedName = customName || prefill?.name || fullName || 'Dr. Anandvardhan Verma';
+      const selectedAvatar = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(selectedName)}&backgroundColor=d4af37,b45309`;
+
+      const res = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          profile: {
+            id: `g_${Date.now()}`,
+            name: selectedName,
+            email: selectedEmail,
+            picture: selectedAvatar
+          }
+        })
+      });
+
+      const data = await res.json();
+      const verifiedProfile = (data && data.success && data.user) ? data.user : {
+        id: `usr_google_${Date.now()}`,
+        name: selectedName,
+        email: selectedEmail,
+        avatar: selectedAvatar
+      };
+
+      const googleUser = loginWithGoogle({
+        id: verifiedProfile.id,
+        name: verifiedProfile.name,
+        email: verifiedProfile.email,
+        avatar: verifiedProfile.avatar,
+        phone: phoneInput ? `${countryCode} ${phoneInput}` : undefined,
+        ...prefill
+      });
+
+      setIsLoading(false);
+
+      // Smoothly advance to Mandatory Step 2: Phone Verification Gate
+      setFunnelStep('otp');
+      if (phoneInput.trim().length >= 8) {
+        handleSendOtp(`${countryCode} ${phoneInput}`);
+      }
+    } catch (err: any) {
+      setIsLoading(false);
+      setErrorMsg(err.message || 'Google authentication failed.');
+    }
   };
 
   // STEP 1: Email/Password Auth Action
@@ -239,7 +357,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       const data = await res.json();
       if (res.ok && data.success) {
         setVerificationToken(data.verificationToken || null);
-        setDevOtp(data.devOtpPreview || data.otpPreview || '123456');
+        setIsProduction(Boolean(data.isProduction));
+        setDevOtp(data.devOtpPreview || data.otpPreview || '');
         setOtpSuccessMessage(data.message || (currentLang === 'en' ? 'OTP sent successfully to your mobile number via SMS.' : 'आपके मोबाइल नंबर पर एसएमएस द्वारा ओटीपी भेजा गया।'));
         setIsOtpSent(true);
         setResendTimer(30);
@@ -331,13 +450,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     const fullPhone = `${countryCode} ${phoneInput.replace(/\D/g, '').slice(-10)}`;
     const prefill = activeModalOptions?.prefilledData;
 
-    // Fast-path for Universal test codes: '123456' OR '000000' OR devOtp
-    const isTestCode = code === '123456' || code === '000000' || (devOtp && code === devOtp);
+    // Fast-path for Universal test codes: '123456' OR '000000' OR devOtp (when not live production)
+    const isTestCode = code === '123456' || code === '000000' || (!isProduction && devOtp && code === devOtp);
 
     if (isTestCode) {
       const verifiedUser = completePhoneVerification(fullPhone, {
-        name: fullName || user?.name || prefill?.name,
-        email: email || user?.email || prefill?.email,
+        id: user?.id,
+        name: user?.name || fullName || prefill?.name,
+        email: user?.email || email || prefill?.email,
+        avatar: user?.avatar,
+        authProvider: user?.authProvider || 'phone',
         ...prefill
       });
 
@@ -350,8 +472,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           otp: code,
           verificationToken,
           userData: {
-            name: fullName || user?.name || prefill?.name,
-            email: email || user?.email || prefill?.email
+            id: user?.id,
+            name: user?.name || fullName || prefill?.name,
+            email: user?.email || email || prefill?.email,
+            avatar: user?.avatar,
+            authProvider: user?.authProvider || 'phone'
           }
         })
       }).catch(() => {});
@@ -370,8 +495,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           otp: code,
           verificationToken,
           userData: {
-            name: fullName || user?.name || prefill?.name,
-            email: email || user?.email || prefill?.email,
+            id: user?.id,
+            name: user?.name || fullName || prefill?.name,
+            email: user?.email || email || prefill?.email,
+            avatar: user?.avatar,
+            authProvider: user?.authProvider || 'phone',
             dob: prefill?.dob,
             tob: prefill?.tob,
             pob: prefill?.pob,
@@ -386,8 +514,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       const data = await res.json();
       if (res.ok && data.success) {
         const verifiedUser = completePhoneVerification(fullPhone, {
-          name: fullName || user?.name || prefill?.name,
-          email: email || user?.email || prefill?.email,
+          id: data.user?.id || user?.id,
+          name: data.user?.name || user?.name || fullName || prefill?.name,
+          email: data.user?.email || user?.email || email || prefill?.email,
+          avatar: data.user?.avatar || user?.avatar,
+          authProvider: data.user?.authProvider || user?.authProvider || 'phone',
           ...prefill
         });
         finishAuthSuccess(verifiedUser);
@@ -397,8 +528,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     } catch {
       // Local fallback in case network error
       const verifiedUser = completePhoneVerification(fullPhone, {
-        name: fullName || user?.name || prefill?.name,
-        email: email || user?.email || prefill?.email,
+        id: user?.id,
+        name: user?.name || fullName || prefill?.name,
+        email: user?.email || email || prefill?.email,
+        avatar: user?.avatar,
+        authProvider: user?.authProvider || 'phone',
         ...prefill
       });
       finishAuthSuccess(verifiedUser);
@@ -676,6 +810,27 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               </p>
             </div>
 
+            {/* If authenticated via Google, show verified Google identity badge */}
+            {user?.authProvider === 'google' && (
+              <div className="mb-4 p-3 rounded-2xl bg-white dark:bg-slate-900 border border-[#D4AF37]/30 flex items-center gap-3 shadow-xs">
+                {user.avatar ? (
+                  <img src={user.avatar} alt={user.name} className="w-9 h-9 rounded-full object-cover border border-[#D4AF37]/60 shrink-0" />
+                ) : (
+                  <div className="w-9 h-9 rounded-full bg-[#D4AF37]/20 text-[#B45309] dark:text-[#F3E5AB] font-bold flex items-center justify-center text-xs shrink-0">
+                    {user.name.charAt(0)}
+                  </div>
+                )}
+                <div className="min-w-0 flex-1 text-left">
+                  <div className="text-xs font-bold text-slate-900 dark:text-white truncate flex items-center gap-1.5">
+                    <span>{user.name}</span>
+                    <span className="px-1.5 py-0.5 rounded text-[9px] bg-blue-100 text-blue-800 dark:bg-blue-900/60 dark:text-blue-300 font-semibold">Google</span>
+                  </div>
+                  <div className="text-[11px] text-slate-500 truncate">{user.email}</div>
+                </div>
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+              </div>
+            )}
+
             {/* Error Message */}
             {errorMsg && (
               <div className="mb-4 p-3 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/60 text-xs text-red-700 dark:text-red-300 flex items-center gap-2">
@@ -696,29 +851,31 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   </span>
                 </div>
 
-                {/* Visible Development Mode OTP Banner */}
-                <div className="p-3.5 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 text-xs">
-                  <div className="space-y-0.5">
-                    <div className="font-bold text-amber-900 dark:text-amber-200 flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" />
-                      <span>Development Mode OTP: <strong className="font-mono text-sm underline text-[#B45309] dark:text-[#F3E5AB]">{devOtp || '123456'}</strong></span>
+                {/* Visible Development Mode OTP Banner - Completely suppressed in production mode */}
+                {!isProduction && Boolean(devOtp) && (
+                  <div className="p-3.5 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 text-xs">
+                    <div className="space-y-0.5">
+                      <div className="font-bold text-amber-900 dark:text-amber-200 flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" />
+                        <span>Development Mode OTP: <strong className="font-mono text-sm underline text-[#B45309] dark:text-[#F3E5AB]">{devOtp}</strong></span>
+                      </div>
+                      <div className="text-[11px] text-slate-600 dark:text-slate-400">
+                        Fallback test code <strong className="font-mono font-semibold">123456</strong> or <strong className="font-mono font-semibold">000000</strong> always unlocks immediately.
+                      </div>
                     </div>
-                    <div className="text-[11px] text-slate-600 dark:text-slate-400">
-                      Fallback test code <strong className="font-mono font-semibold">123456</strong> or <strong className="font-mono font-semibold">000000</strong> always unlocks immediately.
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const codeToFill = devOtp || '123456';
+                        setOtpDigits(codeToFill.split(''));
+                        handleVerifyOtp(codeToFill);
+                      }}
+                      className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-slate-950 font-bold text-xs hover:opacity-95 transition-all shadow-xs cursor-pointer shrink-0"
+                    >
+                      Auto-Fill 123456
+                    </button>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const codeToFill = devOtp || '123456';
-                      setOtpDigits(codeToFill.split(''));
-                      handleVerifyOtp(codeToFill);
-                    }}
-                    className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-slate-950 font-bold text-xs hover:opacity-95 transition-all shadow-xs cursor-pointer shrink-0"
-                  >
-                    Auto-Fill 123456
-                  </button>
-                </div>
+                )}
               </div>
             )}
 

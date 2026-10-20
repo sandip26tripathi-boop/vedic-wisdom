@@ -102,13 +102,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const loginWithGoogle = (customData?: Partial<UserProfile>): UserProfile => {
     const prefill = activeModalOptions?.prefilledData;
     const googleUser: UserProfile = {
-      id: user?.id || `usr_google_${Date.now()}`,
-      name: customData?.name || prefill?.name || user?.name || 'Dr. Anandvardhan Verma',
+      id: customData?.id || user?.id || `usr_google_${Date.now()}`,
+      name: customData?.name || prefill?.name || user?.name || 'Google Seeker',
       phone: customData?.phone || prefill?.phone || user?.phone || '',
-      email: customData?.email || 'anand.verma@googlemail.com',
+      email: customData?.email || prefill?.email || user?.email || 'seeker@gmail.com',
       authProvider: 'google',
       isEmailVerified: true,
-      isPhoneVerified: user?.isPhoneVerified || false, // Mandatory OTP gate
+      isPhoneVerified: customData?.isPhoneVerified ?? user?.isPhoneVerified ?? false, // Mandatory OTP gate
       dob: customData?.dob || prefill?.dob || user?.dob || '1984-06-18',
       tob: customData?.tob || prefill?.tob || user?.tob || '07:30',
       pob: customData?.pob || prefill?.pob || user?.pob || 'Bhopal, MP, India',
@@ -120,7 +120,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       lagna: customData?.lagna || prefill?.lagna || user?.lagna || 'Leo (सिंह)',
       nakshatra: customData?.nakshatra || prefill?.nakshatra || user?.nakshatra || 'Pushya (पुष्य)',
       whatsappOptIn: customData?.whatsappOptIn ?? prefill?.whatsappOptIn ?? user?.whatsappOptIn ?? true,
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+      avatar: customData?.avatar || user?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
       memberId: user?.memberId || `VW-ENT-${Math.floor(1000 + Math.random() * 9000)}`,
       clientTier: 'Enterprise VIP',
       joinedDate: user?.joinedDate || new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
@@ -181,7 +181,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       name: additionalData?.name?.trim() || user?.name || 'Vedic Seeker',
       phone: phone.trim(),
       email: additionalData?.email?.trim() || user?.email || `${(additionalData?.name || 'client').toLowerCase().replace(/\s+/g, '')}@vedicwisdom.org`,
-      authProvider: user?.authProvider || 'phone',
+      avatar: additionalData?.avatar || user?.avatar || undefined,
+      authProvider: user?.authProvider || additionalData?.authProvider || 'phone',
       isPhoneVerified: true,
       isEmailVerified: user?.isEmailVerified ?? true,
       dob: additionalData?.dob || user?.dob || '1988-06-18',

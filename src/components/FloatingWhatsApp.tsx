@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { translations } from '../data/translations.ts';
 import { Language } from '../types/index.ts';
-import { MessageCircle, X, Send, Users, ShieldCheck, ArrowRight, Bot, Sparkles } from 'lucide-react';
+import { MessageCircle, X, Send, Users, ShieldCheck, ArrowRight, Bot, Sparkles, Lock } from 'lucide-react';
 import { SriYantraMotif } from './SriYantraMotif.tsx';
+import { useAuth } from '../context/AuthContext.tsx';
 
 interface FloatingWhatsAppProps {
   currentLang: Language;
@@ -10,6 +11,7 @@ interface FloatingWhatsAppProps {
 }
 
 export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({ currentLang, onOpenCopilot }) => {
+  const { openAuthModal } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [customMsg, setCustomMsg] = useState('');
   const t = translations[currentLang];
@@ -143,6 +145,20 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({ currentLang,
               >
                 <Users className="w-3.5 h-3.5 text-[#D4AF37]" />
                 <span>{wa.communityBtn}</span>
+              </button>
+            </div>
+
+            {/* Quick 1-Click WhatsApp Login Button */}
+            <div className="pt-1">
+              <button
+                onClick={() => {
+                  setIsOpen(false);
+                  openAuthModal({ source: 'whatsapp_widget' });
+                }}
+                className="w-full p-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:brightness-110 text-white text-xs font-bold flex items-center justify-center space-x-2 shadow-md cursor-pointer transition-all"
+              >
+                <Lock className="w-3.5 h-3.5" />
+                <span>{currentLang === 'en' ? '🔐 1-Click Login via WhatsApp / Gmail' : '🔐 WhatsApp / Gmail से 1-क्लिक लॉगिन'}</span>
               </button>
             </div>
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { translations } from '../data/translations.ts';
 import { Language } from '../types/index.ts';
 import { SriYantraMotif } from './SriYantraMotif.tsx';
+import { useAuth } from '../context/AuthContext.tsx';
 import { 
   ShieldCheck, 
   Sparkles, 
@@ -29,6 +30,7 @@ export const Hero: React.FC<HeroProps> = ({
   onOpenBooking,
   onScrollTo,
 }) => {
+  const { openAuthModal } = useAuth();
   const t = translations[currentLang];
 
   return (
@@ -101,14 +103,26 @@ export const Hero: React.FC<HeroProps> = ({
               </button>
             </div>
 
-            {/* Quick Link to Digital Reports Store */}
-            <div className="pt-2 flex items-center space-x-4 text-xs font-medium">
+            {/* Quick Link to Digital Reports Store & Instant Login */}
+            <div className="pt-2 flex flex-wrap items-center gap-4 text-xs font-medium">
               <button
                 onClick={() => onScrollTo('digital-reports')}
                 className="text-slate-600 dark:text-slate-400 hover:text-[#B45309] dark:hover:text-[#D4AF37] transition-colors inline-flex items-center gap-1.5 cursor-pointer underline underline-offset-4 decoration-[#D4AF37]/50"
               >
                 <FileText className="w-4 h-4 text-[#D4AF37]" />
                 <span>{t.hero.ctaReports}</span>
+                <span>→</span>
+              </button>
+
+              <button
+                onClick={() => openAuthModal()}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white dark:bg-slate-800/90 border border-[#D4AF37]/60 text-slate-800 dark:text-white font-bold hover:bg-[#D4AF37]/15 transition-all shadow-xs cursor-pointer"
+              >
+                <div className="flex items-center -space-x-1">
+                  <span className="w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center text-[8px] font-black shadow-2xs">G</span>
+                  <span className="w-4 h-4 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[8px] font-black shadow-2xs">W</span>
+                </div>
+                <span>{currentLang === 'en' ? 'Sign In with Gmail / WhatsApp' : 'Gmail या WhatsApp से लॉगिन'}</span>
                 <span>→</span>
               </button>
             </div>

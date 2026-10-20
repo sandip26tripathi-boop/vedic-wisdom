@@ -18,6 +18,7 @@ export interface AuthContextType {
   activeModalTab: 'phone' | 'google' | 'magicLink' | 'emailPassword';
   activeModalOptions: AuthModalOptions | null;
   simulatedOtpCode: string;
+  sessionExpiredNotification: string | null;
   openAuthModal: (options?: AuthModalOptions) => void;
   closeAuthModal: () => void;
   setActiveModalTab: (tab: 'phone' | 'google' | 'magicLink' | 'emailPassword') => void;
@@ -29,16 +30,24 @@ export interface AuthContextType {
   logout: () => void;
   updateProfile: (updates: Partial<UserProfile>) => void;
   generateNewOtp: (phone: string) => string;
+  triggerSessionExpiry: () => void;
+  clearSessionExpiredNotification: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const LOCAL_STORAGE_KEY = 'vedic_wisdom_auth_user';
+// Ephemeral Session Storage (Expires on tab / browser close)
+const SESSION_STORAGE_KEY = 'vedic_wisdom_session_user';
+
+// Clean legacy localStorage to prevent indefinite sessions
+try {
+  localStorage.removeItem('vedic_wisdom_auth_user');
+} catch {}
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<UserProfile | null>(() => {
     try {
-      const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+      const stored = sessionStorage.getItem(SESSION_STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
         if (parsed && typeof parsed === 'object') {
@@ -56,14 +65,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [activeModalTab, setActiveModalTab] = useState<'phone' | 'google' | 'magicLink' | 'emailPassword'>('google');
   const [activeModalOptions, setActiveModalOptions] = useState<AuthModalOptions | null>(null);
   const [simulatedOtpCode, setSimulatedOtpCode] = useState('786921');
+  const [sessionExpiredNotification, setSessionExpiredNotification] = useState<string | null>(null);
 
-  // Sync user state to localStorage
+  // Sync user state to ephemeral sessionStorage
   useEffect(() => {
     try {
       if (user) {
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(user));
+        sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(user));
       } else {
-        localStorage.removeItem(LOCAL_STORAGE_KEY);
+        sessionStorage.removeItem(SESSION_STORAGE_KEY);
       }
     } catch {
       // ignore
@@ -192,7 +202,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     setUser(verifiedUser);
     try {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(verifiedUser));
+      sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(verifiedUser));
     } catch {
       // ignore
     }
@@ -220,10 +230,22 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const logout = () => {
     setUser(null);
     try {
-      localStorage.removeItem(LOCAL_STORAGE_KEY);
+      sessionStorage.removeItem(SESSION_STORAGE_KEY);
+      localStorage.removeItem('vedic_wisdom_auth_user');
     } catch {
       // ignore
     }
+  };
+
+  const triggerSessionExpiry = () => {
+    logout();
+    setSessionExpiredNotification(
+      'Session expired due to 15 minutes of inactivity. Please log in again.'
+    );
+  };
+
+  const clearSessionExpiredNotification = () => {
+    setSessionExpiredNotification(null);
   };
 
   const updateProfile = (updates: Partial<UserProfile>) => {
@@ -243,6 +265,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         activeModalTab,
         activeModalOptions,
         simulatedOtpCode,
+        sessionExpiredNotification,
         openAuthModal,
         closeAuthModal,
         setActiveModalTab,
@@ -253,7 +276,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         completePhoneVerification,
         logout,
         updateProfile,
-        generateNewOtp
+        generateNewOtp,
+        triggerSessionExpiry,
+        clearSessionExpiredNotification
       }}
     >
       {children}

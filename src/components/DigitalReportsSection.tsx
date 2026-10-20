@@ -2,6 +2,7 @@ import React from 'react';
 import { digitalReportsData, DigitalReportItem } from '../data/digitalReports.ts';
 import { translations } from '../data/translations.ts';
 import { Language } from '../types/index.ts';
+import { useCart } from '../context/CartContext.tsx';
 import { 
   FileText, 
   Sparkles, 
@@ -13,8 +14,9 @@ import {
   Calendar, 
   TrendingUp, 
   ShieldAlert, 
-  Heart,
-  Zap
+  Heart, 
+  Zap, 
+  ShoppingBag 
 } from 'lucide-react';
 
 interface DigitalReportsSectionProps {
@@ -28,6 +30,7 @@ export const DigitalReportsSection: React.FC<DigitalReportsSectionProps> = ({
   onOpenReportModal,
   onOpenGenerateReport,
 }) => {
+  const { addToCart } = useCart();
   const t = translations[currentLang];
   const dr = t.digitalReports;
 
@@ -157,13 +160,32 @@ export const DigitalReportsSection: React.FC<DigitalReportsSectionProps> = ({
 
               {/* Actions */}
               <div className="pt-3 border-t border-slate-200 dark:border-slate-800 space-y-2">
-                <button
-                  onClick={() => onOpenReportModal(report)}
-                  className="w-full py-2.5 rounded-xl font-bold text-xs text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 shadow-sm transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
-                >
-                  <span>{dr.orderReportBtn}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => onOpenReportModal(report)}
+                    className="flex-1 py-2.5 rounded-xl font-bold text-xs text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 shadow-sm transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
+                  >
+                    <span>{dr.orderReportBtn}</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => addToCart({
+                      id: report.id,
+                      title: currentLang === 'en' ? report.titleEn : report.titleHi,
+                      category: 'Digital Report',
+                      price: parseInt(report.priceInr.replace(/\D/g, ''), 10) || 999,
+                      turnaround: report.deliveryTimeEn,
+                      badge: report.badgeEn
+                    })}
+                    className="p-2.5 rounded-xl border border-[#D4AF37]/50 bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 text-[#B45309] dark:text-[#F3E5AB] transition-colors cursor-pointer"
+                    title={currentLang === 'en' ? 'Add Report to Cart' : 'रिपोर्ट कार्ट में जोड़ें'}
+                    aria-label="Add Report to Cart"
+                  >
+                    <ShoppingBag className="w-4 h-4 text-[#D4AF37]" />
+                  </button>
+                </div>
 
                 <button
                   onClick={() => onOpenReportModal(report)}

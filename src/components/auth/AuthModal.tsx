@@ -68,7 +68,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [resendTimer, setResendTimer] = useState(30);
   const [canResend, setCanResend] = useState(false);
-  const [simulatedOtpPreview, setSimulatedOtpPreview] = useState<string | null>(null);
+  const [verificationToken, setVerificationToken] = useState<string | null>(null);
+  const [otpSuccessMessage, setOtpSuccessMessage] = useState<string>('');
 
   // Status & loading states
   const [isLoading, setIsLoading] = useState(false);
@@ -236,7 +237,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
       const data = await res.json();
       if (res.ok && data.success) {
-        setSimulatedOtpPreview(data.otpPreview || '786921');
+        setVerificationToken(data.verificationToken || null);
+        setOtpSuccessMessage(data.message || (currentLang === 'en' ? 'OTP sent successfully to your mobile number via SMS.' : 'आपके मोबाइल नंबर पर एसएमएस द्वारा ओटीपी भेजा गया।'));
         setIsOtpSent(true);
         setResendTimer(30);
         setCanResend(false);
@@ -246,19 +248,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           otpInputRefs.current[0]?.focus();
         }, 150);
       } else {
-        throw new Error(data.message || 'Failed to dispatch verification code.');
+        throw new Error(data.message || 'Failed to dispatch verification code via SMS.');
       }
-    } catch {
-      // Offline / sandbox fallback
-      const localCode = Math.floor(100000 + Math.random() * 900000).toString();
-      setSimulatedOtpPreview(localCode);
-      setIsOtpSent(true);
-      setResendTimer(30);
-      setCanResend(false);
-
-      setTimeout(() => {
-        otpInputRefs.current[0]?.focus();
-      }, 150);
+    } catch (err: any) {
+      setErrorMsg(err.message || (currentLang === 'en' ? 'Failed to send SMS OTP. Please check your number and try again.' : 'एसएमएस ओटीपी भेजने में विफल। कृपया नंबर जांचें व पुनः प्रयास करें।'));
     } finally {
       setIsLoading(false);
     }
@@ -334,6 +327,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         body: JSON.stringify({
           phone: fullPhone,
           otp: code,
+          verificationToken,
           userData: {
             name: fullName || user?.name || prefill?.name,
             email: email || user?.email || prefill?.email,
@@ -357,29 +351,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         });
         finishAuthSuccess(verifiedUser);
       } else {
-        throw new Error(data.message || 'Invalid or expired OTP code.');
+        setErrorMsg(data.message || (currentLang === 'en' ? 'Invalid OTP code. Please check your SMS and enter the 6-digit code.' : 'अमान्य ओटीपी कोड। कृपया एसएमएस में आया 6 अंकों का कोड दर्ज करें।'));
       }
-    } catch {
-      // Local fallback verification for demo / standard codes
-      if (
-        code === simulatedOtpPreview ||
-        code === '123456' ||
-        code === '786921' ||
-        code.length === 6
-      ) {
-        const verifiedUser = completePhoneVerification(fullPhone, {
-          name: fullName || user?.name || prefill?.name,
-          email: email || user?.email || prefill?.email,
-          ...prefill
-        });
-        finishAuthSuccess(verifiedUser);
-      } else {
-        setErrorMsg(
-          currentLang === 'en'
-            ? 'Invalid OTP code. Please retry or use demo code 786921.'
-            : 'अमान्य ओटीपी कोड। कृपया पुनः प्रयास करें अथवा 786921 दर्ज करें।'
-        );
-      }
+    } catch (err: any) {
+      setErrorMsg(err.message || (currentLang === 'en' ? 'Verification failed. Please retry.' : 'सत्यापन विफल। कृपया पुनः प्रयास करें।'));
     } finally {
       setIsLoading(false);
     }
@@ -662,26 +637,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               </div>
             )}
 
-            {/* Simulation/Test OTP Helper Banner */}
-            {simulatedOtpPreview && isOtpSent && (
-              <div className="mb-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-between text-xs text-emerald-800 dark:text-emerald-300">
-                <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-emerald-500" />
-                  <span>
-                    <strong>SMS Code Dispatched:</strong> {simulatedOtpPreview}
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const digits = simulatedOtpPreview.split('');
-                    setOtpDigits(digits);
-                    handleVerifyOtp(simulatedOtpPreview);
-                  }}
-                  className="px-2.5 py-1 rounded bg-emerald-600 text-white text-[10px] font-bold hover:bg-emerald-700 cursor-pointer shadow-xs"
-                >
-                  Auto-Fill
-                </button>
+            {/* Real SMS Dispatched Banner */}
+            {isOtpSent && (
+              <div className="mb-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center gap-2.5 text-xs text-emerald-800 dark:text-emerald-300">
+                <Check className="w-4 h-4 text-emerald-500 shrink-0" />
+                <span>
+                  {otpSuccessMessage || (currentLang === 'en'
+                    ? `Verification code dispatched via SMS to ${countryCode} ${phoneInput}. Valid for 5 minutes.`
+                    : `${countryCode} ${phoneInput} पर एसएमएस द्वारा सत्यापन कोड भेजा गया। मान्य अवधि: 5 मिनट।`)}
+                </span>
               </div>
             )}
 

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { SriYantraMotif } from './SriYantraMotif.tsx';
-import { Sun, Moon, Globe, PhoneCall, Menu, X, ArrowRight, ShieldCheck, ChevronDown, Sparkles, FileText, Compass, GraduationCap, User, LogIn, Lock, Bot } from 'lucide-react';
+import { Sun, Moon, Globe, PhoneCall, Menu, X, ArrowRight, ShieldCheck, ChevronDown, Sparkles, FileText, Compass, GraduationCap, User, LogIn, Lock, Bot, ShoppingBag } from 'lucide-react';
 import { translations } from '../data/translations.ts';
 import { Language, Theme } from '../types/index.ts';
 import { useAuth } from '../context/AuthContext.tsx';
+import { useCart } from '../context/CartContext.tsx';
 
 interface HeaderProps {
   currentLang: Language;
@@ -27,6 +28,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenGenerateReport,
 }) => {
   const { user, isAuthenticated, openAuthModal } = useAuth();
+  const { totalItems, openCart } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [astroDropdownOpen, setAstroDropdownOpen] = useState(false);
   const [vastuDropdownOpen, setVastuDropdownOpen] = useState(false);
@@ -381,6 +383,21 @@ export const Header: React.FC<HeaderProps> = ({
               )}
             </button>
 
+            {/* Shopping Cart Trigger Button with Dynamic Badge */}
+            <button
+              onClick={openCart}
+              className="relative p-2 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
+              aria-label="Open Cart"
+              title={currentLang === 'en' ? 'Open Vedic Cart' : 'कार्ट देखें'}
+            >
+              <ShoppingBag className="w-4 h-4 text-[#D4AF37]" />
+              {totalItems > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-gradient-to-r from-amber-500 to-red-500 text-white font-mono font-bold text-[10px] flex items-center justify-center shadow-xs animate-in zoom-in-50">
+                  {totalItems}
+                </span>
+              )}
+            </button>
+
             {/* Client Portal / Sign In Button */}
             {isAuthenticated ? (
               <button
@@ -455,6 +472,20 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             )}
           </div>
+
+          {/* Mobile Cart Review Button */}
+          <button
+            onClick={() => { setMobileMenuOpen(false); openCart(); }}
+            className="w-full flex items-center justify-between p-2.5 rounded-xl bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-xs font-semibold text-slate-900 dark:text-white cursor-pointer"
+          >
+            <div className="flex items-center space-x-2">
+              <ShoppingBag className="w-4 h-4 text-[#D4AF37]" />
+              <span>{currentLang === 'en' ? 'Review Vedic Services Cart' : 'वैदिक सर्विसेज कार्ट देखें'}</span>
+            </div>
+            <span className="px-2 py-0.5 rounded-full bg-[#D4AF37] text-slate-950 font-bold font-mono text-[11px]">
+              {totalItems} {currentLang === 'en' ? 'items' : 'आइटम'}
+            </span>
+          </button>
           {/* AI Tools Quick Access Strip */}
           <div className="grid grid-cols-2 gap-2">
             <button

@@ -5,8 +5,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { Language, Theme } from './types/index.ts';
-import { AuthProvider } from './context/AuthContext.tsx';
+import { AuthProvider, useAuth } from './context/AuthContext.tsx';
+import { CartProvider } from './context/CartContext.tsx';
 import { useRequireAuth } from './hooks/useRequireAuth.ts';
+import { useAutoLogout } from './hooks/useAutoLogout.ts';
 import { Header } from './components/Header.tsx';
 import { Hero } from './components/Hero.tsx';
 import { TrustBar } from './components/TrustBar.tsx';
@@ -28,9 +30,11 @@ import { ClientDashboard } from './components/ClientDashboard.tsx';
 import { AstroCopilot } from './components/ai/AstroCopilot.tsx';
 import { ReportForm } from './components/reports/ReportForm.tsx';
 import { ReportViewer } from './components/reports/ReportViewer.tsx';
+import { CartDrawer } from './components/cart/CartDrawer.tsx';
+import { CheckoutView } from './components/cart/CheckoutView.tsx';
 import { Footer } from './components/Footer.tsx';
 import { DigitalReportItem, digitalReportsData } from './data/digitalReports.ts';
-import { Sparkles, ArrowLeft, ShieldCheck } from 'lucide-react';
+import { Sparkles, ArrowLeft, ShieldCheck, AlertTriangle, X } from 'lucide-react';
 import { SriYantraMotif } from './components/SriYantraMotif.tsx';
 
 function MainApp() {
@@ -38,9 +42,15 @@ function MainApp() {
   // Light-First Luxury Default
   const [currentTheme, setCurrentTheme] = useState<Theme>('light');
   const { requireAuth } = useRequireAuth();
+  const { sessionExpiredNotification, clearSessionExpiredNotification, openAuthModal } = useAuth();
+
+  // Task 3: 15-Minute Inactivity Auto-Logout Tracker
+  useAutoLogout({
+    timeoutMs: 15 * 60 * 1000 // 15 minutes of inactivity
+  });
   
-  // Navigation View State: 'website' | 'dashboard' | 'generate-report'
-  const [activeView, setActiveView] = useState<'website' | 'dashboard' | 'generate-report'>('website');
+  // Navigation View State: 'website' | 'dashboard' | 'generate-report' | 'checkout'
+  const [activeView, setActiveView] = useState<'website' | 'dashboard' | 'generate-report' | 'checkout'>('website');
 
   // AI Generated Report State (Module 1)
   const [generatedReportData, setGeneratedReportData] = useState<any | null>(null);
@@ -123,6 +133,18 @@ function MainApp() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleProceedToCheckout = () => {
+    requireAuth(() => {
+      setActiveView('checkout');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, {
+      message: currentLang === 'hi'
+        ? 'सुरक्षित चेकआउट हेतु कृपया अपना मोबाइल नंबर सत्यापित करें।'
+        : 'Please authenticate & verify your mobile number to proceed to secure checkout.',
+      source: 'cart-checkout'
+    });
+  };
+
   const handleScrollTo = (elementId: string) => {
     // If not in website view, switch back to website first then scroll
     if (activeView !== 'website') {
@@ -145,8 +167,69 @@ function MainApp() {
   return (
     <div className={`w-full max-w-full overflow-x-hidden min-h-screen flex flex-col font-sans transition-colors duration-300 ${currentLang === 'hi' ? 'font-hindi' : ''} bg-[#FAF9F6] dark:bg-[#0B0F19] text-slate-800 dark:text-slate-100`}>
       
-      {/* VIEW 1: PROTECTED ENTERPRISE CLIENT DASHBOARD */}
-      {activeView === 'dashboard' ? (
+      {/* Task 3: Inactivity Session Expired Floating Notification Toast */}
+      {sessionExpiredNotification && (
+        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 max-w-lg w-full px-4 animate-in slide-in-from-top-4 duration-300">
+          <div className="p-3.5 rounded-2xl bg-amber-500/95 dark:bg-amber-600/95 text-slate-950 shadow-2xl border border-amber-300 flex items-center justify-between gap-3 text-xs font-semibold backdrop-blur-sm">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-slate-950 shrink-0" />
+              <span>{sessionExpiredNotification}</span>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                onClick={() => {
+                  clearSessionExpiredNotification();
+                  openAuthModal();
+                }}
+                className="px-2.5 py-1 rounded-lg bg-slate-950 text-white text-[11px] font-bold hover:bg-slate-900 cursor-pointer shadow-xs"
+              >
+                Log In
+              </button>
+              <button
+                onClick={clearSessionExpiredNotification}
+                className="p-1 text-slate-950 hover:opacity-70 cursor-pointer"
+                aria-label="Dismiss"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* VIEW 0: OFFICIAL ENCRYPTED CHECKOUT ROUTE */}
+      {activeView === 'checkout' ? (
+        <div className="w-full max-w-full overflow-x-hidden min-h-screen flex flex-col">
+          <Header
+            currentLang={currentLang}
+            onLanguageChange={setCurrentLang}
+            currentTheme={currentTheme}
+            onThemeToggle={handleThemeToggle}
+            onOpenBooking={handleOpenBooking}
+            onOpenDashboard={() => setActiveView('dashboard')}
+            onOpenCopilot={() => setIsCopilotOpen(true)}
+            onOpenGenerateReport={handleOpenGenerateReport}
+          />
+
+          <main className="w-full max-w-full overflow-x-hidden flex-1">
+            <CheckoutView
+              currentLang={currentLang}
+              onReturnToWebsite={() => setActiveView('website')}
+              onOpenBooking={handleOpenBooking}
+            />
+          </main>
+
+          <Footer
+            currentLang={currentLang}
+            onLanguageChange={setCurrentLang}
+            currentTheme={currentTheme}
+            onThemeToggle={handleThemeToggle}
+            onOpenBooking={handleOpenBooking}
+            onScrollTo={handleScrollTo}
+          />
+        </div>
+      ) : activeView === 'dashboard' ? (
+        /* VIEW 1: PROTECTED ENTERPRISE CLIENT DASHBOARD */
         <ClientDashboard
           currentLang={currentLang}
           onReturnToWebsite={() => setActiveView('website')}
@@ -315,12 +398,18 @@ function MainApp() {
         currentLang={currentLang}
       />
 
+      {/* Global Slide-Over Cart Drawer */}
+      <CartDrawer
+        currentLang={currentLang}
+        onProceedToCheckout={handleProceedToCheckout}
+        onExploreServices={() => handleScrollTo('consultations')}
+      />
+
       {/* Auth Modal with OTP Verification, Google 1-Click & Mobile Login */}
       <AuthModal
         currentLang={currentLang}
         onSuccessRedirect={() => {
-          if (activeView === 'generate-report') {
-            // Stay in generator after verification to proceed
+          if (activeView === 'generate-report' || activeView === 'checkout') {
             return;
           }
           setActiveView('dashboard');
@@ -364,7 +453,9 @@ function MainApp() {
 export default function App() {
   return (
     <AuthProvider>
-      <MainApp />
+      <CartProvider>
+        <MainApp />
+      </CartProvider>
     </AuthProvider>
   );
 }

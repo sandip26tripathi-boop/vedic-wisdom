@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { translations } from '../data/translations.ts';
 import { Language } from '../types/index.ts';
+import { useCart } from '../context/CartContext.tsx';
 import { CourseSyllabusModal } from './courses/CourseSyllabusModal.tsx';
 import { 
   GraduationCap, 
@@ -11,10 +12,11 @@ import {
   ArrowRight, 
   Download, 
   CheckCircle2, 
-  Sparkles,
-  ShieldAlert,
-  Compass,
-  Layers
+  Sparkles, 
+  ShieldAlert, 
+  Compass, 
+  Layers, 
+  ShoppingBag 
 } from 'lucide-react';
 
 interface AcademyDirectoryProps {
@@ -26,6 +28,7 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
   currentLang,
   onOpenEnroll,
 }) => {
+  const { addToCart } = useCart();
   const [activeTab, setActiveTab] = useState<'all' | 'astrology' | 'vastu' | 'numerology'>('all');
   const [selectedSyllabusId, setSelectedSyllabusId] = useState<string | null>(null);
   const t = translations[currentLang];
@@ -289,10 +292,10 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
                   <span>Curriculum Overview (60s Quick Syllabus)</span>
                 </button>
 
-                <div className="grid grid-cols-2 gap-2">
+                <div className="flex items-center gap-2">
                   <button
                     onClick={() => onOpenEnroll(course.id)}
-                    className="flex items-center justify-center space-x-1 px-3 py-2.5 rounded-xl font-bold text-xs text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 shadow-sm transition-all cursor-pointer"
+                    className="flex-1 flex items-center justify-center space-x-1 px-3 py-2.5 rounded-xl font-bold text-xs text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 shadow-sm transition-all cursor-pointer"
                   >
                     <span>{t.academy.enrollBtn}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -300,11 +303,28 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
 
                   <button
                     type="button"
+                    onClick={() => addToCart({
+                      id: course.id,
+                      title: course.title,
+                      category: 'Academy Certification',
+                      price: course.id === 'kpMastery' ? 14999 : course.id === 'astroVastuCert' ? 18500 : 7999,
+                      turnaround: course.duration,
+                      badge: course.badge
+                    })}
+                    className="p-2.5 rounded-xl border border-[#D4AF37]/50 bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 text-[#B45309] dark:text-[#F3E5AB] transition-colors cursor-pointer"
+                    title={currentLang === 'en' ? 'Add Course to Cart' : 'कोर्स कार्ट में जोड़ें'}
+                    aria-label="Add Course to Cart"
+                  >
+                    <ShoppingBag className="w-4 h-4 text-[#D4AF37]" />
+                  </button>
+
+                  <button
+                    type="button"
                     onClick={() => setSelectedSyllabusId(course.id)}
-                    className="flex items-center justify-center space-x-1 px-3 py-2.5 rounded-xl font-semibold text-xs text-slate-700 dark:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 transition-colors cursor-pointer"
+                    className="px-3 py-2.5 rounded-xl font-semibold text-xs text-slate-700 dark:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 transition-colors cursor-pointer"
+                    title="View Syllabus"
                   >
                     <Download className="w-3.5 h-3.5 text-[#D4AF37]" />
-                    <span>View Syllabus</span>
                   </button>
                 </div>
               </div>

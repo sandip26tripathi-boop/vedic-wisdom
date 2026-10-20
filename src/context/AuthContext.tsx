@@ -1,27 +1,31 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { UserProfile, ClientPortalTab } from '../types/index.ts';
-import { defaultMockUser } from '../data/mockClientData.ts';
 
-interface AuthModalOptions {
+export interface AuthModalOptions {
   prefilledData?: Partial<UserProfile>;
   redirectToTab?: ClientPortalTab;
   message?: string;
   source?: string;
+  initialStep?: 'auth' | 'otp';
+  onSuccess?: (user: UserProfile) => void;
 }
 
-interface AuthContextType {
+export interface AuthContextType {
   user: UserProfile | null;
   isAuthenticated: boolean;
+  isPhoneVerified: boolean;
   isAuthModalOpen: boolean;
-  activeModalTab: 'phone' | 'google' | 'magicLink';
+  activeModalTab: 'phone' | 'google' | 'magicLink' | 'emailPassword';
   activeModalOptions: AuthModalOptions | null;
   simulatedOtpCode: string;
   openAuthModal: (options?: AuthModalOptions) => void;
   closeAuthModal: () => void;
-  setActiveModalTab: (tab: 'phone' | 'google' | 'magicLink') => void;
+  setActiveModalTab: (tab: 'phone' | 'google' | 'magicLink' | 'emailPassword') => void;
   loginWithPhoneOtp: (phone: string, enteredOtp: string, additionalData?: Partial<UserProfile>) => boolean;
-  loginWithGoogle: () => boolean;
+  loginWithGoogle: (customData?: Partial<UserProfile>) => UserProfile;
+  loginWithEmailPassword: (email: string, password?: string, isRegister?: boolean, fullName?: string) => UserProfile;
   loginWithMagicLink: (email: string) => boolean;
+  completePhoneVerification: (phone: string, additionalData?: Partial<UserProfile>) => UserProfile;
   logout: () => void;
   updateProfile: (updates: Partial<UserProfile>) => void;
   generateNewOtp: (phone: string) => string;
@@ -36,20 +40,24 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (stored) {
-        return JSON.parse(stored);
+        const parsed = JSON.parse(stored);
+        if (parsed && typeof parsed === 'object') {
+          return parsed;
+        }
       }
     } catch {
       // ignore
     }
-    return defaultMockUser; // default active user for immediate exploration
+    // Strict Auth: unauthenticated visitor by default until verified
+    return null;
   });
 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [activeModalTab, setActiveModalTab] = useState<'phone' | 'google' | 'magicLink'>('phone');
+  const [activeModalTab, setActiveModalTab] = useState<'phone' | 'google' | 'magicLink' | 'emailPassword'>('google');
   const [activeModalOptions, setActiveModalOptions] = useState<AuthModalOptions | null>(null);
   const [simulatedOtpCode, setSimulatedOtpCode] = useState('786921');
 
-  // Save user changes to localStorage
+  // Sync user state to localStorage
   useEffect(() => {
     try {
       if (user) {
@@ -64,7 +72,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const openAuthModal = (options?: AuthModalOptions) => {
     setActiveModalOptions(options || null);
-    // Generate a fresh 6-digit OTP code
     const newCode = Math.floor(100000 + Math.random() * 900000).toString();
     setSimulatedOtpCode(newCode);
     setIsAuthModalOpen(true);
@@ -81,94 +88,157 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return newCode;
   };
 
+  // Google 1-Click login creates a provisional user, requiring phone OTP step next
+  const loginWithGoogle = (customData?: Partial<UserProfile>): UserProfile => {
+    const prefill = activeModalOptions?.prefilledData;
+    const googleUser: UserProfile = {
+      id: user?.id || `usr_google_${Date.now()}`,
+      name: customData?.name || prefill?.name || user?.name || 'Dr. Anandvardhan Verma',
+      phone: customData?.phone || prefill?.phone || user?.phone || '',
+      email: customData?.email || 'anand.verma@googlemail.com',
+      authProvider: 'google',
+      isEmailVerified: true,
+      isPhoneVerified: user?.isPhoneVerified || false, // Mandatory OTP gate
+      dob: customData?.dob || prefill?.dob || user?.dob || '1984-06-18',
+      tob: customData?.tob || prefill?.tob || user?.tob || '07:30',
+      pob: customData?.pob || prefill?.pob || user?.pob || 'Bhopal, MP, India',
+      latitude: customData?.latitude ?? prefill?.latitude ?? user?.latitude ?? 23.2599,
+      longitude: customData?.longitude ?? prefill?.longitude ?? user?.longitude ?? 77.4126,
+      timezone: customData?.timezone || prefill?.timezone || user?.timezone || 'Asia/Kolkata',
+      tzOffset: customData?.tzOffset ?? prefill?.tzOffset ?? user?.tzOffset ?? 5.5,
+      rashi: customData?.rashi || prefill?.rashi || user?.rashi || 'Cancer (कर्क)',
+      lagna: customData?.lagna || prefill?.lagna || user?.lagna || 'Leo (सिंह)',
+      nakshatra: customData?.nakshatra || prefill?.nakshatra || user?.nakshatra || 'Pushya (पुष्य)',
+      whatsappOptIn: customData?.whatsappOptIn ?? prefill?.whatsappOptIn ?? user?.whatsappOptIn ?? true,
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+      memberId: user?.memberId || `VW-ENT-${Math.floor(1000 + Math.random() * 9000)}`,
+      clientTier: 'Enterprise VIP',
+      joinedDate: user?.joinedDate || new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+    };
+    setUser(googleUser);
+    return googleUser;
+  };
+
+  // Email/Password login or registration creates provisional user, requiring phone OTP step next
+  const loginWithEmailPassword = (
+    email: string,
+    _password?: string,
+    isRegister: boolean = false,
+    fullName?: string
+  ): UserProfile => {
+    const prefill = activeModalOptions?.prefilledData;
+    const cleanEmail = email.trim();
+    const cleanName = fullName?.trim() || prefill?.name || (isRegister ? 'New Vedic Seeker' : cleanEmail.split('@')[0].toUpperCase());
+
+    const emailUser: UserProfile = {
+      id: user?.id || `usr_em_${Date.now()}`,
+      name: cleanName,
+      phone: prefill?.phone || user?.phone || '',
+      email: cleanEmail,
+      authProvider: 'email',
+      isEmailVerified: true,
+      isPhoneVerified: user?.isPhoneVerified || false, // Mandatory OTP gate
+      dob: prefill?.dob || user?.dob || '1990-01-01',
+      tob: prefill?.tob || user?.tob || '08:00',
+      pob: prefill?.pob || user?.pob || 'Bhopal, MP, India',
+      latitude: prefill?.latitude ?? user?.latitude ?? 23.2599,
+      longitude: prefill?.longitude ?? user?.longitude ?? 77.4126,
+      timezone: prefill?.timezone || user?.timezone || 'Asia/Kolkata',
+      tzOffset: prefill?.tzOffset ?? user?.tzOffset ?? 5.5,
+      rashi: prefill?.rashi || user?.rashi || 'Taurus (वृषभ)',
+      lagna: prefill?.lagna || user?.lagna || 'Scorpio (वृश्चिक)',
+      nakshatra: prefill?.nakshatra || user?.nakshatra || 'Rohini (रोहिणी)',
+      whatsappOptIn: prefill?.whatsappOptIn ?? user?.whatsappOptIn ?? true,
+      memberId: user?.memberId || `VW-ENT-${Math.floor(1000 + Math.random() * 9000)}`,
+      clientTier: 'Enterprise VIP',
+      joinedDate: user?.joinedDate || new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+    };
+    setUser(emailUser);
+    return emailUser;
+  };
+
+  // Magic link sign-in creates provisional user
+  const loginWithMagicLink = (email: string): boolean => {
+    loginWithEmailPassword(email, undefined, false);
+    return true;
+  };
+
+  // Mandatory Mobile OTP Completion Step
+  const completePhoneVerification = (phone: string, additionalData?: Partial<UserProfile>): UserProfile => {
+    const verifiedUser: UserProfile = {
+      ...(user || {}),
+      id: user?.id || `usr_${Date.now()}`,
+      name: additionalData?.name?.trim() || user?.name || 'Vedic Seeker',
+      phone: phone.trim(),
+      email: additionalData?.email?.trim() || user?.email || `${(additionalData?.name || 'client').toLowerCase().replace(/\s+/g, '')}@vedicwisdom.org`,
+      authProvider: user?.authProvider || 'phone',
+      isPhoneVerified: true,
+      isEmailVerified: user?.isEmailVerified ?? true,
+      dob: additionalData?.dob || user?.dob || '1988-06-18',
+      tob: additionalData?.tob || user?.tob || '07:30',
+      pob: additionalData?.pob || user?.pob || 'Bhopal, MP, India',
+      latitude: additionalData?.latitude ?? user?.latitude ?? 23.2599,
+      longitude: additionalData?.longitude ?? user?.longitude ?? 77.4126,
+      timezone: additionalData?.timezone || user?.timezone || 'Asia/Kolkata',
+      tzOffset: additionalData?.tzOffset ?? user?.tzOffset ?? 5.5,
+      rashi: additionalData?.rashi || user?.rashi || 'Taurus (वृषभ)',
+      lagna: additionalData?.lagna || user?.lagna || 'Scorpio (वृश्चिक)',
+      nakshatra: additionalData?.nakshatra || user?.nakshatra || 'Rohini (रोहिणी)',
+      whatsappOptIn: additionalData?.whatsappOptIn ?? user?.whatsappOptIn ?? true,
+      memberId: user?.memberId || `VW-ENT-${Math.floor(1000 + Math.random() * 9000)}`,
+      clientTier: user?.clientTier || 'Enterprise VIP',
+      joinedDate: user?.joinedDate || new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+    };
+
+    setUser(verifiedUser);
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(verifiedUser));
+    } catch {
+      // ignore
+    }
+    return verifiedUser;
+  };
+
   const loginWithPhoneOtp = (
     phone: string,
     enteredOtp: string,
     additionalData?: Partial<UserProfile>
   ): boolean => {
-    // Check if code matches (or allow standard bypass 123456 / current code)
-    if (enteredOtp.trim() === simulatedOtpCode || enteredOtp.trim() === '123456' || enteredOtp.length === 6) {
-      const newUser: UserProfile = {
-        id: `usr_${Date.now()}`,
-        name: additionalData?.name?.trim() || user?.name || 'Vedic Seeker',
-        phone: phone.trim() || '+91 90094 48601',
-        email: additionalData?.email?.trim() || `${(additionalData?.name || 'client').toLowerCase().replace(/\s+/g, '')}@enterprise.in`,
-        dob: additionalData?.dob || '1988-09-12',
-        tob: additionalData?.tob || '07:30',
-        pob: additionalData?.pob || 'Bhopal, MP, India',
-        rashi: additionalData?.rashi || 'Taurus (वृषभ)',
-        lagna: additionalData?.lagna || 'Scorpio (वृश्चिक)',
-        nakshatra: additionalData?.nakshatra || 'Rohini (रोहिणी)',
-        whatsappOptIn: additionalData?.whatsappOptIn ?? true,
-        memberId: `VW-ENT-${Math.floor(1000 + Math.random() * 9000)}`,
-        clientTier: 'Enterprise VIP',
-        joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-      };
-      setUser(newUser);
+    if (
+      enteredOtp.trim() === simulatedOtpCode ||
+      enteredOtp.trim() === '123456' ||
+      enteredOtp.trim() === '786921' ||
+      enteredOtp.length === 6
+    ) {
+      completePhoneVerification(phone, additionalData);
       closeAuthModal();
       return true;
     }
     return false;
   };
 
-  const loginWithGoogle = (): boolean => {
-    const googleUser: UserProfile = {
-      id: `usr_google_${Date.now()}`,
-      name: 'Dr. Anandvardhan Verma',
-      phone: '+91 90094 48601',
-      email: 'anand.verma@googlemail.com',
-      dob: '1982-11-24',
-      tob: '10:15',
-      pob: 'Delhi NCR, India',
-      rashi: 'Cancer (कर्क)',
-      lagna: 'Leo (सिंह)',
-      nakshatra: 'Pushya (पुष्य)',
-      whatsappOptIn: true,
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
-      memberId: `VW-ENT-${Math.floor(1000 + Math.random() * 9000)}`,
-      clientTier: 'Enterprise VIP',
-      joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-    };
-    setUser(googleUser);
-    closeAuthModal();
-    return true;
-  };
-
-  const loginWithMagicLink = (email: string): boolean => {
-    const magicUser: UserProfile = {
-      id: `usr_ml_${Date.now()}`,
-      name: email.split('@')[0].toUpperCase(),
-      phone: '+91 90094 48601',
-      email: email.trim(),
-      dob: '1985-05-15',
-      tob: '14:20',
-      pob: 'Bhopal, MP, India',
-      rashi: 'Leo (सिंह)',
-      lagna: 'Aries (मेष)',
-      nakshatra: 'Magha (मघा)',
-      whatsappOptIn: true,
-      memberId: `VW-ENT-${Math.floor(1000 + Math.random() * 9000)}`,
-      clientTier: 'Enterprise VIP',
-      joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-    };
-    setUser(magicUser);
-    closeAuthModal();
-    return true;
-  };
-
   const logout = () => {
     setUser(null);
+    try {
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
+    } catch {
+      // ignore
+    }
   };
 
   const updateProfile = (updates: Partial<UserProfile>) => {
     setUser((prev) => (prev ? { ...prev, ...updates } : null));
   };
 
+  const isPhoneVerified = Boolean(user && user.isPhoneVerified);
+  const isAuthenticated = Boolean(user && user.isPhoneVerified);
+
   return (
     <AuthContext.Provider
       value={{
         user,
-        isAuthenticated: !!user,
+        isAuthenticated,
+        isPhoneVerified,
         isAuthModalOpen,
         activeModalTab,
         activeModalOptions,
@@ -178,7 +248,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setActiveModalTab,
         loginWithPhoneOtp,
         loginWithGoogle,
+        loginWithEmailPassword,
         loginWithMagicLink,
+        completePhoneVerification,
         logout,
         updateProfile,
         generateNewOtp

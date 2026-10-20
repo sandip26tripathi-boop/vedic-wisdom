@@ -2,20 +2,17 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext.tsx';
 import { Language } from '../../types/index.ts';
 import { SriYantraMotif } from '../SriYantraMotif.tsx';
+import { GlobalPlaceSearch, SelectedPlace } from '../ui/GlobalPlaceSearch.tsx';
 import { 
-  FileText, 
   Sparkles, 
   User, 
   Calendar, 
   Clock, 
-  MapPin, 
-  Compass, 
   ArrowRight, 
   ShieldCheck, 
-  RefreshCw,
-  Search,
   CheckCircle2,
-  Lock
+  Lock,
+  Globe
 } from 'lucide-react';
 
 interface ReportFormProps {
@@ -23,54 +20,51 @@ interface ReportFormProps {
   onReportGenerated: (reportData: any) => void;
 }
 
-const COMMON_CITIES = [
-  'Bhopal, MP, India', 'Indore, MP, India', 'Jabalpur, MP, India', 'Gwalior, MP, India', 'Ujjain, MP, India',
-  'Mumbai, Maharashtra, India', 'Pune, Maharashtra, India', 'Nagpur, Maharashtra, India', 'Nashik, Maharashtra, India', 'Thane, Maharashtra, India',
-  'Delhi NCR, India', 'Gurugram, Haryana, India', 'Noida, UP, India', 'Faridabad, Haryana, India', 'Ghaziabad, UP, India',
-  'Ahmedabad, Gujarat, India', 'Surat, Gujarat, India', 'Vadodara, Gujarat, India', 'Rajkot, Gujarat, India',
-  'Bengaluru, Karnataka, India', 'Hyderabad, Telangana, India', 'Chennai, Tamil Nadu, India', 'Coimbatore, Tamil Nadu, India',
-  'Kolkata, West Bengal, India', 'Jaipur, Rajasthan, India', 'Jodhpur, Rajasthan, India', 'Udaipur, Rajasthan, India',
-  'Lucknow, UP, India', 'Kanpur, UP, India', 'Varanasi, UP, India', 'Prayagraj, UP, India', 'Agra, UP, India',
-  'Chandigarh, India', 'Ludhiana, Punjab, India', 'Amritsar, Punjab, India', 'Dehradun, Uttarakhand, India',
-  'Patna, Bihar, India', 'Ranchi, Jharkhand, India', 'Jamshedpur, Jharkhand, India', 'Bhubaneswar, Odisha, India',
-  'Raipur, Chhattisgarh, India', 'Kochi, Kerala, India', 'Visakhapatnam, AP, India', 'Vijayawada, AP, India',
-  'Dubai, United Arab Emirates', 'Abu Dhabi, UAE', 'Sharjah, UAE', 'London, United Kingdom', 'Singapore', 'New York, NY, USA'
-];
-
 export const ReportForm: React.FC<ReportFormProps> = ({
   currentLang,
   onReportGenerated
 }) => {
-  const { user, isAuthenticated, openAuthModal } = useAuth();
+  const { user, isPhoneVerified, openAuthModal } = useAuth();
 
   const [fullName, setFullName] = useState(user?.name || '');
   const [gender, setGender] = useState<'Male' | 'Female' | 'Corporate Entity'>('Male');
   const [dob, setDob] = useState(user?.dob || '1990-06-18');
   const [tob, setTob] = useState(user?.tob || '07:30');
-  const [pob, setPob] = useState(user?.pob || 'Bhopal, MP, India');
+  const [pob, setPob] = useState(user?.pob || 'Bhopal, Madhya Pradesh, India');
+  const [coordinates, setCoordinates] = useState<{
+    lat: number;
+    lon: number;
+    timezone: string;
+    tzOffset: number;
+  }>({
+    lat: user?.latitude || 23.2599,
+    lon: user?.longitude || 77.4126,
+    timezone: user?.timezone || 'Asia/Kolkata',
+    tzOffset: user?.tzOffset ?? 5.5
+  });
+
   const [focusArea, setFocusArea] = useState('Career, Enterprise Command & Status (10th Cusp)');
-  
-  const [citySuggestions, setCitySuggestions] = useState<string[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationStep, setGenerationStep] = useState(1);
   const [errorMsg, setErrorMsg] = useState('');
 
-  const handleCityChange = (val: string) => {
-    setPob(val);
-    if (val.trim().length > 1) {
-      const filtered = COMMON_CITIES.filter(c => c.toLowerCase().includes(val.toLowerCase()));
-      setCitySuggestions(filtered);
-    } else {
-      setCitySuggestions([]);
-    }
+  const handlePlaceSelect = (place: SelectedPlace) => {
+    setPob(place.cityName);
+    setCoordinates({
+      lat: place.latitude,
+      lon: place.longitude,
+      timezone: place.timezone,
+      tzOffset: place.tzOffset
+    });
   };
 
-  const handleCitySelect = (cityName: string) => {
-    setPob(cityName);
-    setCitySuggestions([]);
-  };
-
-  const triggerGeneration = async (clientName: string, clientDob: string, clientTob: string, clientPob: string) => {
+  const triggerGeneration = async (
+    clientName: string,
+    clientDob: string,
+    clientTob: string,
+    clientPob: string,
+    coords = coordinates
+  ) => {
     setIsGenerating(true);
     setErrorMsg('');
     setGenerationStep(1);
@@ -90,6 +84,10 @@ export const ReportForm: React.FC<ReportFormProps> = ({
           dob: clientDob,
           tob: clientTob,
           pob: clientPob,
+          latitude: coords.lat,
+          longitude: coords.lon,
+          timezone: coords.timezone,
+          tzOffset: coords.tzOffset,
           focusArea
         })
       });
@@ -117,28 +115,47 @@ export const ReportForm: React.FC<ReportFormProps> = ({
     e.preventDefault();
 
     if (!fullName.trim() || !dob || !tob) {
-      setErrorMsg(currentLang === 'en' ? 'Please fill in all required birth details.' : 'कृपया सभी आवश्यक जन्म विवरण भरें।');
+      setErrorMsg(
+        currentLang === 'en'
+          ? 'Please fill in all required birth details.'
+          : 'कृपया सभी आवश्यक जन्म विवरण भरें।'
+      );
       return;
     }
 
-    // Auth-Gate Trigger (Requirement Module 1.1)
-    if (!isAuthenticated) {
+    // Task 1: Strict Auth & Mobile OTP Verification Funnel Gate
+    // If user is unauthenticated or phone number is not verified, intercept immediately
+    if (!user || !user.isPhoneVerified) {
       openAuthModal({
         prefilledData: {
           name: fullName,
           dob,
           tob,
-          pob
+          pob,
+          latitude: coordinates.lat,
+          longitude: coordinates.lon,
+          timezone: coordinates.timezone,
+          tzOffset: coordinates.tzOffset
         },
         message: currentLang === 'en'
-          ? 'Verify your mobile via 6-digit OTP to authenticate and initiate your AI-Powered Vedic Dossier.'
-          : 'अपनी एआई-संचालित वैदिक रिपोर्ट आरंभ करने हेतु 6-अंकों के ओटीपी से मोबाइल सत्यापित करें।'
+          ? 'Authenticate and complete mandatory 6-digit mobile OTP verification to generate and unlock your comprehensive AI Vedic Dossier.'
+          : 'अपनी विस्तृत एआई वैदिक रिपोर्ट अनलॉक करने हेतु प्रमाणीकरण व 6-अंकों का मोबाइल ओटीपी सत्यापित करें।',
+        onSuccess: (verifiedUser) => {
+          // Instant unlock and execution upon OTP completion
+          triggerGeneration(
+            verifiedUser.name || fullName,
+            dob,
+            tob,
+            pob,
+            coordinates
+          );
+        }
       });
       return;
     }
 
-    // Authenticated user generates directly
-    triggerGeneration(fullName, dob, tob, pob);
+    // Already authenticated and phone-verified user proceeds directly
+    triggerGeneration(fullName, dob, tob, pob, coordinates);
   };
 
   return (
@@ -201,7 +218,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({
               </h4>
 
               <p className="text-xs text-slate-500 dark:text-slate-400 font-mono">
-                {generationStep === 1 && 'Resolving Degree-Minute-Second Ephemeris & Lagna Lord'}
+                {generationStep === 1 && `Resolving GPS Coordinates (${coordinates.lat}°N, ${coordinates.lon}°E) & Ayanamsa`}
                 {generationStep === 2 && 'Analyzing 2-6-10-11 Wealth Combinations with Gemini AI'}
                 {generationStep === 3 && 'Cross-referencing Elemental Balancing & Cardinal Portals'}
                 {generationStep === 4 && 'Formatting Executive Printable PDF Dossier'}
@@ -292,39 +309,26 @@ export const ReportForm: React.FC<ReportFormProps> = ({
               </div>
             </div>
 
-            {/* Row 3: Place of Birth with Search Auto-Complete */}
-            <div className="relative">
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                Place of Birth (City, State, Country) *
-              </label>
-              <div className="relative">
-                <MapPin className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
-                <input
-                  type="text"
-                  required
-                  placeholder="Type to search city, e.g. Bhopal, Indore, Mumbai..."
-                  value={pob}
-                  onChange={(e) => handleCityChange(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
-                />
+            {/* Row 3: Universal Global Place Search with Coordinates Auto-populate (Task 2) */}
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  Place of Birth (Global Auto-Complete & GPS Coordinates) *
+                </label>
+                <span className="text-[10px] text-[#B45309] dark:text-[#F3E5AB] flex items-center gap-1 font-medium">
+                  <Globe className="w-3 h-3 text-[#D4AF37]" />
+                  <span>Open-Meteo World Geocoding</span>
+                </span>
               </div>
 
-              {/* City Suggestions Dropdown */}
-              {citySuggestions.length > 0 && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl z-20 overflow-hidden">
-                  {citySuggestions.map((city, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => handleCitySelect(city)}
-                      className="w-full text-left px-4 py-2 text-xs text-slate-800 dark:text-slate-200 hover:bg-[#D4AF37]/15 flex items-center justify-between"
-                    >
-                      <span>{city}</span>
-                      <Search className="w-3 h-3 text-slate-400" />
-                    </button>
-                  ))}
-                </div>
-              )}
+              <GlobalPlaceSearch
+                value={pob}
+                onChange={handlePlaceSelect}
+                onRawChange={(raw) => setPob(raw)}
+                currentLang={currentLang}
+                placeholder="Search world birth city (e.g. Bhopal, Indore, London, Dubai, New York)..."
+                required
+              />
             </div>
 
             {/* Row 4: Focus Area Selector */}
@@ -356,12 +360,12 @@ export const ReportForm: React.FC<ReportFormProps> = ({
               </div>
             </div>
 
-            {/* Auth Gating Notice if not logged in */}
-            {!isAuthenticated && (
+            {/* Auth Gating Notice if not verified */}
+            {(!user || !user.isPhoneVerified) && (
               <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center gap-2.5 text-xs text-amber-800 dark:text-amber-200">
                 <Lock className="w-4 h-4 text-[#D4AF37] shrink-0" />
                 <span>
-                  <strong>Verification Step:</strong> Clicking below triggers a quick 6-digit OTP verification on your mobile to securely generate and store your dossier.
+                  <strong>Strict Verification Gate:</strong> Clicking below triggers a rapid 2-step verification (Google/Email + 6-digit Mobile OTP) to authenticate and immediately unlock your report.
                 </span>
               </div>
             )}
@@ -372,7 +376,11 @@ export const ReportForm: React.FC<ReportFormProps> = ({
               className="w-full py-3.5 px-4 rounded-xl font-bold text-sm text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 shadow-md shadow-[#D4AF37]/25 flex items-center justify-center gap-2 cursor-pointer transition-all transform hover:-translate-y-0.5"
             >
               <Sparkles className="w-4 h-4" />
-              <span>{isAuthenticated ? 'Generate My AI Astro-Vastu Dossier' : 'Verify Mobile OTP & Generate Dossier'}</span>
+              <span>
+                {user && user.isPhoneVerified
+                  ? 'Generate My AI Astro-Vastu Dossier'
+                  : 'Verify Mobile OTP & Unlock Dossier'}
+              </span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>

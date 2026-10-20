@@ -33,6 +33,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useAuth } from '../context/AuthContext.tsx';
+import { GlobalPlaceSearch, SelectedPlace } from './ui/GlobalPlaceSearch.tsx';
 import { 
   computeExactKundli, 
   VedicKundliResult, 
@@ -51,14 +52,20 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
   currentLang,
   onOpenBooking,
 }) => {
-  const { openAuthModal } = useAuth();
+  const { user, isPhoneVerified, openAuthModal } = useAuth();
   const [activeTab, setActiveTab] = useState<'kundli' | 'panchang' | 'vastu'>('kundli');
   
   // Lead Generation States
-  const [userName, setUserName] = useState('');
-  const [userPhone, setUserPhone] = useState('');
-  const [userCity, setUserCity] = useState('');
-  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [userName, setUserName] = useState(user?.name || '');
+  const [userPhone, setUserPhone] = useState(user?.phone || '');
+  const [userCity, setUserCity] = useState(user?.pob || '');
+  const [isUnlocked, setIsUnlocked] = useState(Boolean(user && user.isPhoneVerified));
+
+  useEffect(() => {
+    if (user && user.isPhoneVerified) {
+      setIsUnlocked(true);
+    }
+  }, [user]);
 
   // Kundli Input States
   const [kundliName, setKundliName] = useState('Arjun Singhania');
@@ -70,10 +77,6 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
     lon: 77.4126,
     tzOffset: 5.5
   });
-
-  // World Place Search States
-  const [isSearchingPlaces, setIsSearchingPlaces] = useState(false);
-  const [worldPlaceResults, setWorldPlaceResults] = useState<Array<{ displayName: string; lat: number; lon: number; tzOffset: number }>>([]);
 
   // Exact Astronomical Vedic Kundli State
   const [kundliResult, setKundliResult] = useState<VedicKundliResult>(() => {
@@ -93,66 +96,6 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
 
   // Lead Generation City Autocomplete
   const [leadCitySuggestions, setLeadCitySuggestions] = useState<string[]>([]);
-  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleWorldPlaceSearch = (query: string) => {
-    setPob(query);
-    if (!query.trim()) {
-      setWorldPlaceResults([]);
-      setIsSearchingPlaces(false);
-      return;
-    }
-
-    // 1. Instant zero-latency offline matching from rich 160+ database
-    const localMatches = searchLocalCities(query, 6);
-    setWorldPlaceResults(localMatches);
-
-    // If local match exists and query matches closely, automatically sync coordinates
-    if (localMatches.length > 0 && query.trim().length >= 3) {
-      const top = localMatches[0];
-      if (top.city.toLowerCase() === query.trim().toLowerCase() || top.displayName.toLowerCase().startsWith(query.trim().toLowerCase())) {
-        setSelectedCoords({ lat: top.lat, lon: top.lon, tzOffset: top.tzOffset });
-      }
-    }
-
-    // 2. Debounced remote OpenStreetMap Nominatim search for global villages/small towns
-    if (searchTimeoutRef.current) {
-      clearTimeout(searchTimeoutRef.current);
-    }
-
-    if (query.trim().length >= 2) {
-      setIsSearchingPlaces(true);
-      searchTimeoutRef.current = setTimeout(async () => {
-        try {
-          const res = await fetch(`/api/geo/search?q=${encodeURIComponent(query)}`);
-          if (res.ok) {
-            const data = await res.json();
-            if (Array.isArray(data.results) && data.results.length > 0) {
-              const combined: Array<{ displayName: string; lat: number; lon: number; tzOffset: number }> = [...data.results];
-              for (const loc of localMatches) {
-                if (!combined.some(c => c.displayName.toLowerCase() === loc.displayName.toLowerCase())) {
-                  combined.push(loc);
-                }
-              }
-              setWorldPlaceResults(combined.slice(0, 8));
-            }
-          }
-        } catch {
-          // Keep localMatches on error
-        } finally {
-          setIsSearchingPlaces(false);
-        }
-      }, 300);
-    } else {
-      setIsSearchingPlaces(false);
-    }
-  };
-
-  const handleSelectWorldPlace = (item: { displayName: string; lat: number; lon: number; tzOffset: number }) => {
-    setPob(item.displayName);
-    setSelectedCoords({ lat: item.lat, lon: item.lon, tzOffset: item.tzOffset });
-    setWorldPlaceResults([]);
-  };
 
   const handleHeadingChange = (deg: number) => {
     const normalized = Math.round((deg + 360) % 360);
@@ -216,22 +159,28 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
 
   const handleUnlockLead = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!userName.trim() || !userPhone.trim()) {
-      openAuthModal({
-        message: currentLang === 'en'
-          ? 'Enter your mobile number to verify via 6-digit OTP and unlock your personalized Kundli & Vimshottari Dasha report.'
-          : 'अपनी जन्म कुंडली व विंशोत्तरी दशा देखने हेतु 6-अंकों के ओटीपी द्वारा मोबाइल सत्यापित करें।',
-        redirectToTab: 'kundli'
-      });
+    if (user && user.isPhoneVerified) {
+      setIsUnlocked(true);
+      try {
+        confetti({
+          particleCount: 60,
+          spread: 60,
+          origin: { y: 0.7 }
+        });
+      } catch {}
       return;
     }
+
     openAuthModal({
       prefilledData: {
-        name: userName,
+        name: userName || kundliName,
         phone: userPhone,
         dob,
         tob,
         pob: userCity || pob,
+        latitude: selectedCoords.lat,
+        longitude: selectedCoords.lon,
+        tzOffset: selectedCoords.tzOffset,
         rashi: calculatedMoon,
         lagna: calculatedLagna,
         nakshatra: calculatedNakshatra
@@ -239,18 +188,18 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
       message: currentLang === 'en'
         ? 'Verify your mobile OTP to save this Kundli to your Client Portal & unlock the full 24-page dossier.'
         : 'इस कुंडली को क्लाइंट पोर्टल में सुरक्षित करने व 24-पृष्ठ की रिपोर्ट अनलॉक करने हेतु ओटीपी सत्यापित करें।',
-      redirectToTab: 'kundli'
+      redirectToTab: 'kundli',
+      onSuccess: () => {
+        setIsUnlocked(true);
+        try {
+          confetti({
+            particleCount: 60,
+            spread: 60,
+            origin: { y: 0.7 }
+          });
+        } catch {}
+      }
     });
-    setIsUnlocked(true);
-    try {
-      confetti({
-        particleCount: 60,
-        spread: 60,
-        origin: { y: 0.7 }
-      });
-    } catch {
-      // ignore
-    }
   };
 
   const handleComputeKundli = (e: React.FormEvent) => {
@@ -289,7 +238,6 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
     setCalculatedLagna(result.lagnaNameEn);
     setCalculatedMoon(result.moonSignEn);
     setCalculatedNakshatra(result.nakshatraEn);
-    setWorldPlaceResults([]);
 
     try {
       confetti({ particleCount: 50, spread: 60 });
@@ -522,92 +470,33 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                   </div>
                 </div>
 
-                <div className="relative">
+                <div>
                   <div className="flex items-center justify-between mb-1">
                     <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                      {tools.kundliEngine.pobLabel}
+                      {tools.kundliEngine.pobLabel} *
                     </label>
                     <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
-                      <Globe className="w-3 h-3" />
-                      <span>{currentLang === 'en' ? 'Global City Search' : 'वैश्विक शहर खोज'}</span>
+                      <Globe className="w-3 h-3 text-[#D4AF37]" />
+                      <span>{currentLang === 'en' ? 'Open-Meteo Global GPS' : 'वैश्विक जीपीएस खोज'}</span>
                     </span>
                   </div>
 
-                  <div className="relative">
-                    <input
-                      type="text"
-                      required
-                      value={pob}
-                      onChange={(e) => handleWorldPlaceSearch(e.target.value)}
-                      placeholder={currentLang === 'en' ? 'Search global city/town (e.g. Dubai, London, Pune, Rewa)...' : 'विश्व के किसी भी नगर/शहर का नाम लिखें...'}
-                      className="w-full pl-3.5 pr-8 py-2.5 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
-                    />
-                    {isSearchingPlaces && (
-                      <div className="absolute right-3 top-2.5">
-                        <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#D4AF37]" />
-                      </div>
-                    )}
-                  </div>
-
-                  {/* World Search Results Dropdown */}
-                  {worldPlaceResults.length > 0 && (
-                    <div className="absolute top-full left-0 right-0 z-30 mt-1.5 bg-white dark:bg-slate-900 border border-[#D4AF37]/50 rounded-xl shadow-2xl overflow-hidden max-h-56 overflow-y-auto">
-                      <div className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
-                        <span>{currentLang === 'en' ? 'Select Verified Location' : 'सत्यापित स्थान चुनें'}</span>
-                        <span>GPS Coordinates</span>
-                      </div>
-                      {worldPlaceResults.map((item, idx) => (
-                        <button
-                          key={idx}
-                          type="button"
-                          onClick={() => handleSelectWorldPlace(item)}
-                          className="w-full px-3 py-2 text-xs text-left hover:bg-[#D4AF37]/15 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2 text-slate-800 dark:text-slate-200 cursor-pointer"
-                        >
-                          <span className="truncate font-medium">{item.displayName}</span>
-                          <span className="text-[10px] font-mono text-slate-400 shrink-0">
-                            {item.lat}°N, {item.lon}°E
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Coordinates & Quick City Presets */}
-                  <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 dark:text-slate-400 mt-1 px-1">
-                    <span>GPS: {selectedCoords.lat}° N, {selectedCoords.lon}° E</span>
-                    <span>TZ: UTC {selectedCoords.tzOffset >= 0 ? `+${selectedCoords.tzOffset}` : selectedCoords.tzOffset}</span>
-                  </div>
-
-                  {/* 1-Click Popular City Chips */}
-                  <div className="pt-2">
-                    <div className="text-[10px] text-slate-400 dark:text-slate-500 mb-1 flex items-center justify-between">
-                      <span>{currentLang === 'en' ? 'Quick City Presets:' : 'त्वरित शहर चयन:'}</span>
-                      <span className="text-[9px] text-[#D4AF37]">{currentLang === 'en' ? '160+ Built-in' : '160+ अंतर्निहित'}</span>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      {[
-                        { label: 'Bhopal', q: 'Bhopal' },
-                        { label: 'Indore', q: 'Indore' },
-                        { label: 'Rewa', q: 'Rewa' },
-                        { label: 'Jabalpur', q: 'Jabalpur' },
-                        { label: 'Delhi', q: 'Delhi' },
-                        { label: 'Mumbai', q: 'Mumbai' },
-                        { label: 'Dubai', q: 'Dubai' }
-                      ].map((item) => (
-                        <button
-                          key={item.label}
-                          type="button"
-                          onClick={() => {
-                            const found = searchLocalCities(item.q, 1)[0];
-                            if (found) handleSelectWorldPlace(found);
-                          }}
-                          className="px-2 py-0.5 rounded-lg text-[10px] bg-slate-100 dark:bg-slate-800 hover:bg-[#D4AF37]/20 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
-                        >
-                          {item.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                  <GlobalPlaceSearch
+                    value={pob}
+                    onChange={(place: SelectedPlace) => {
+                      setPob(place.cityName);
+                      setSelectedCoords({
+                        lat: place.latitude,
+                        lon: place.longitude,
+                        tzOffset: place.tzOffset
+                      });
+                    }}
+                    onRawChange={(raw) => setPob(raw)}
+                    currentLang={currentLang}
+                    placeholder={currentLang === 'en' ? 'Search global city (e.g. Bhopal, London, Dubai, New York)...' : 'विश्व के किसी भी नगर/शहर का नाम लिखें...'}
+                    required
+                    showQuickPills={true}
+                  />
                 </div>
 
                 <button

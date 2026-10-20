@@ -71,6 +71,10 @@ export interface UserProfile {
   dob?: string;
   tob?: string;
   pob?: string;
+  latitude?: number;
+  longitude?: number;
+  timezone?: string;
+  tzOffset?: number;
   rashi?: string;
   lagna?: string;
   nakshatra?: string;
@@ -79,6 +83,9 @@ export interface UserProfile {
   memberId: string;
   clientTier: 'Enterprise VIP' | 'Corporate' | 'Seeker Elite';
   joinedDate: string;
+  isPhoneVerified?: boolean;
+  isEmailVerified?: boolean;
+  authProvider?: 'google' | 'email' | 'phone';
 }
 
 // Client Portal Tabs

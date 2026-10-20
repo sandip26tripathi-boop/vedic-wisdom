@@ -30,7 +30,7 @@ export const DigitalReportsSection: React.FC<DigitalReportsSectionProps> = ({
   onOpenReportModal,
   onOpenGenerateReport,
 }) => {
-  const { addToCart } = useCart();
+  const { addToCart, openCart } = useCart();
   const t = translations[currentLang];
   const dr = t.digitalReports;
 
@@ -162,7 +162,17 @@ export const DigitalReportsSection: React.FC<DigitalReportsSectionProps> = ({
               <div className="pt-3 border-t border-slate-200 dark:border-slate-800 space-y-2">
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={() => onOpenReportModal(report)}
+                    onClick={() => {
+                      addToCart({
+                        id: report.id,
+                        title: currentLang === 'en' ? report.titleEn : report.titleHi,
+                        category: 'Digital Report',
+                        price: parseInt(report.priceInr.replace(/\D/g, ''), 10) || 999,
+                        turnaround: report.deliveryTimeEn,
+                        badge: report.badgeEn
+                      });
+                      openCart();
+                    }}
                     className="flex-1 py-2.5 rounded-xl font-bold text-xs text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 shadow-sm transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
                   >
                     <span>{dr.orderReportBtn}</span>
@@ -171,14 +181,17 @@ export const DigitalReportsSection: React.FC<DigitalReportsSectionProps> = ({
 
                   <button
                     type="button"
-                    onClick={() => addToCart({
-                      id: report.id,
-                      title: currentLang === 'en' ? report.titleEn : report.titleHi,
-                      category: 'Digital Report',
-                      price: parseInt(report.priceInr.replace(/\D/g, ''), 10) || 999,
-                      turnaround: report.deliveryTimeEn,
-                      badge: report.badgeEn
-                    })}
+                    onClick={() => {
+                      addToCart({
+                        id: report.id,
+                        title: currentLang === 'en' ? report.titleEn : report.titleHi,
+                        category: 'Digital Report',
+                        price: parseInt(report.priceInr.replace(/\D/g, ''), 10) || 999,
+                        turnaround: report.deliveryTimeEn,
+                        badge: report.badgeEn
+                      });
+                      openCart();
+                    }}
                     className="p-2.5 rounded-xl border border-[#D4AF37]/50 bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 text-[#B45309] dark:text-[#F3E5AB] transition-colors cursor-pointer"
                     title={currentLang === 'en' ? 'Add Report to Cart' : 'रिपोर्ट कार्ट में जोड़ें'}
                     aria-label="Add Report to Cart"

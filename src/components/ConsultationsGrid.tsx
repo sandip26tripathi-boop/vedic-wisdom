@@ -32,7 +32,7 @@ export const ConsultationsGrid: React.FC<ConsultationsGridProps> = ({
   onOpenBooking,
   onOpenScopeModal,
 }) => {
-  const { addToCart } = useCart();
+  const { addToCart, openCart } = useCart();
   const [activeWing, setActiveWing] = useState<'astrology' | 'vastu'>('astrology');
   const t = translations[currentLang];
   const c = t.consultations;
@@ -258,14 +258,17 @@ export const ConsultationsGrid: React.FC<ConsultationsGridProps> = ({
 
                 <button
                   type="button"
-                  onClick={() => addToCart({
-                    id: service.id,
-                    title: service.title,
-                    category: activeWing === 'astrology' ? 'Astrology Consultation' : 'Astro-Vastu Audit',
-                    price: service.id === 'industrial' ? 25000 : service.id === 'corporate' ? 21000 : service.id === 'residential' ? 11000 : service.id === 'kpCil' ? 5100 : 4500,
-                    turnaround: service.turnaround,
-                    badge: service.badge
-                  })}
+                  onClick={() => {
+                    addToCart({
+                      id: service.id,
+                      title: service.title,
+                      category: activeWing === 'astrology' ? 'Astrology Consultation' : 'Astro-Vastu Audit',
+                      price: service.id === 'industrial' ? 25000 : service.id === 'corporate' ? 21000 : service.id === 'residential' ? 11000 : service.id === 'kpCil' ? 5100 : 4500,
+                      turnaround: service.turnaround,
+                      badge: service.badge
+                    });
+                    openCart();
+                  }}
                   className="p-2.5 rounded-xl border border-[#D4AF37]/50 bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 text-[#B45309] dark:text-[#F3E5AB] transition-colors cursor-pointer"
                   title={currentLang === 'en' ? 'Add to Cart' : 'कार्ट में जोड़ें'}
                   aria-label="Add to Cart"
@@ -274,10 +277,20 @@ export const ConsultationsGrid: React.FC<ConsultationsGridProps> = ({
                 </button>
 
                 <button
-                  onClick={() => onOpenBooking(service.id)}
+                  onClick={() => {
+                    addToCart({
+                      id: service.id,
+                      title: service.title,
+                      category: activeWing === 'astrology' ? 'Astrology Consultation' : 'Astro-Vastu Audit',
+                      price: service.id === 'industrial' ? 25000 : service.id === 'corporate' ? 21000 : service.id === 'residential' ? 11000 : service.id === 'kpCil' ? 5100 : 4500,
+                      turnaround: service.turnaround,
+                      badge: service.badge
+                    });
+                    openCart();
+                  }}
                   className="flex-1 flex items-center justify-center space-x-1 px-3 py-2.5 rounded-xl font-bold text-xs text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 shadow-sm transition-all cursor-pointer"
                 >
-                  <span>{c.bookNow}</span>
+                  <span>{currentLang === 'en' ? 'Book & Pay Now' : 'बुक करें व भुगतान करें'}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>

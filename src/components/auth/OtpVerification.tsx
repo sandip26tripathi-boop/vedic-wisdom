@@ -64,21 +64,6 @@ export const OtpVerification: React.FC<OtpVerificationProps> = ({
     setIsLoading(true);
 
     const fullPhone = `+91 ${cleanNum}`;
-    const waUrl =
-      'https://wa.me/919009448601?text=' +
-      encodeURIComponent(
-        'Namaste Vedic Wisdom, I am ' +
-          cleanName +
-          '. Please verify my mobile number: ' +
-          fullPhone +
-          ' to access services.'
-      );
-
-    try {
-      window.open(waUrl, '_blank');
-    } catch (e) {
-      console.warn('Pop-up prevented', e);
-    }
 
     const verifiedUser = {
       ...(leadData || {}),

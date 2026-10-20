@@ -1,6 +1,23 @@
 import React, { useState } from 'react';
 import { SriYantraMotif } from './SriYantraMotif.tsx';
-import { Sun, Moon, Globe, PhoneCall, Menu, X, ArrowRight, ShieldCheck, ChevronDown, Sparkles, FileText, Compass, GraduationCap, User, LogIn, Lock, Bot, ShoppingBag } from 'lucide-react';
+import { 
+  Sun, 
+  Moon, 
+  Menu, 
+  X, 
+  ArrowRight, 
+  ChevronDown, 
+  Sparkles, 
+  FileText, 
+  GraduationCap, 
+  User, 
+  Bot, 
+  ShoppingBag,
+  HelpCircle,
+  Award,
+  Calculator,
+  Compass
+} from 'lucide-react';
 import { translations } from '../data/translations.ts';
 import { Language, Theme } from '../types/index.ts';
 import { useAuth } from '../context/AuthContext.tsx';
@@ -32,6 +49,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [astroDropdownOpen, setAstroDropdownOpen] = useState(false);
   const [vastuDropdownOpen, setVastuDropdownOpen] = useState(false);
+  const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
 
   const t = translations[currentLang];
 
@@ -79,6 +97,7 @@ export const Header: React.FC<HeaderProps> = ({
     setMobileMenuOpen(false);
     setAstroDropdownOpen(false);
     setVastuDropdownOpen(false);
+    setMoreDropdownOpen(false);
     const element = document.getElementById(anchorId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -88,8 +107,8 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-[#FAF9F6]/95 dark:bg-[#0B0F19]/95 border-b border-[#D4AF37]/25 shadow-xs transition-colors duration-300">
       {/* Top Advisory Hotline Ticker */}
-      <div className="w-full max-w-full overflow-x-hidden bg-gradient-to-r from-[#0B0F19] via-[#1E293B] to-[#0B0F19] text-[#F3E5AB] text-xs py-1.5 px-3 sm:px-4 border-b border-[#D4AF37]/30">
-        <div className="container mx-auto flex items-center justify-between text-[11px] sm:text-xs gap-2">
+      <div className="w-full bg-gradient-to-r from-[#0B0F19] via-[#1E293B] to-[#0B0F19] text-[#F3E5AB] text-xs py-1 px-3 sm:px-4 border-b border-[#D4AF37]/30">
+        <div className="max-w-7xl mx-auto flex items-center justify-between text-[11px] sm:text-xs gap-2">
           <div className="flex items-center space-x-2 min-w-0 flex-1">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
             <span className="font-medium text-slate-200 truncate">
@@ -98,60 +117,51 @@ export const Header: React.FC<HeaderProps> = ({
                 : '100% बिना तोड़-फोड़ औद्योगिक वास्तु एवं गणितीय केपी कस्पल इंटरलिंक ज्योतिष'}
             </span>
             <span className="hidden md:inline-block text-[#D4AF37]">|</span>
-            <span className="hidden md:inline-block text-slate-300 whitespace-nowrap">
-              {currentLang === 'en' ? 'Bhopal • Delhi NCR • Mumbai • Dubai' : 'भोपाल • दिल्ली • मुंबई • दुबई'}
-            </span>
-            <span className="hidden lg:inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-[10px] text-emerald-300 shrink-0">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span className="font-bold">{liveMuhurta.name}</span>
-              <span className="text-slate-400 font-normal">• {liveMuhurta.meaning}</span>
+            <span className="hidden lg:inline-flex items-center space-x-1.5 text-[#D4AF37] font-semibold">
+              <span className={`inline-block w-1.5 h-1.5 rounded-full ${liveMuhurta.isAuspicious ? 'bg-emerald-400' : 'bg-amber-400'}`}></span>
+              <span>{liveMuhurta.name}</span>
             </span>
           </div>
 
-          <div className="flex items-center space-x-3 sm:space-x-4 shrink-0">
+          <div className="flex items-center space-x-3 shrink-0">
             <a 
-              href="tel:+919009448601" 
-              className="flex items-center space-x-1.5 text-amber-300 hover:text-white transition-colors whitespace-nowrap"
+              href="https://wa.me/919009448601" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-[#F3E5AB] hover:text-white transition-colors flex items-center space-x-1 font-mono text-[11px]"
             >
-              <PhoneCall className="w-3.5 h-3.5 text-[#D4AF37]" />
-              <span className="font-semibold tracking-wide">+91 90094 48601</span>
-            </a>
-            <span className="hidden sm:inline-block text-slate-400">•</span>
-            <a 
-              href="mailto:ask.vedicwisdom@gmail.com" 
-              className="hidden sm:inline-block text-slate-300 hover:text-amber-200 transition-colors whitespace-nowrap"
-            >
-              ask.vedicwisdom@gmail.com
+              <span>WhatsApp:</span>
+              <strong className="underline">+91 90094 48601</strong>
             </a>
           </div>
         </div>
       </div>
 
       {/* Main Navigation Bar */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+        <div className="flex items-center justify-between h-16 sm:h-20 gap-2 sm:gap-4">
           
-          {/* Left: Brand Identity Logo */}
+          {/* Left: Brand Logo */}
           <a 
             href="#" 
             onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-            className="flex items-center space-x-3.5 group cursor-pointer"
+            className="flex items-center space-x-2.5 sm:space-x-3 group cursor-pointer shrink-0"
           >
             <div className="relative p-1 rounded-xl bg-gradient-to-br from-[#D4AF37]/30 via-[#B45309]/20 to-transparent border border-[#D4AF37]/40 shadow-sm group-hover:border-[#D4AF37] transition-all duration-300">
-              <SriYantraMotif className="w-10 h-10 transform group-hover:scale-105 transition-transform duration-300" animate={false} />
+              <SriYantraMotif className="w-8 h-8 sm:w-9 sm:h-9 transform group-hover:scale-105 transition-transform duration-300" animate={false} />
             </div>
             <div className="flex flex-col">
-              <span className="font-cinzel text-xl sm:text-2xl font-black tracking-wider text-slate-900 dark:text-white flex items-center gap-1.5">
+              <span className="font-cinzel text-lg sm:text-xl font-black tracking-wider text-slate-900 dark:text-white flex items-center gap-1">
                 VEDIC <span className="gold-gradient-text">WISDOM</span>
               </span>
-              <span className="text-[10px] sm:text-[11px] font-medium tracking-tight text-slate-600 dark:text-slate-400 max-w-[210px] sm:max-w-none truncate">
+              <span className="text-[9px] sm:text-[10px] font-medium tracking-tight text-slate-600 dark:text-slate-400 truncate max-w-[150px] sm:max-w-none">
                 {t.nav.tagline}
               </span>
             </div>
           </a>
 
-          {/* Center: Desktop Navigation Items */}
-          <nav className="hidden lg:flex items-center space-x-1 xl:space-x-3 text-sm font-medium">
+          {/* Center: Desktop Navigation Items (Streamlined to prevent 100% zoom clipping) */}
+          <nav className="hidden lg:flex items-center space-x-1 xl:space-x-1.5 text-xs xl:text-sm font-semibold text-slate-700 dark:text-slate-200">
             
             {/* 1. Astrology Dropdown */}
             <div 
@@ -161,60 +171,37 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <button 
                 onClick={() => handleNavClick('consultations')}
-                className="flex items-center space-x-1 px-3 py-2 rounded-lg text-slate-700 dark:text-slate-200 hover:text-[#B45309] dark:hover:text-[#D4AF37] hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors"
+                className="flex items-center space-x-1 px-2.5 py-2 rounded-lg hover:text-[#B45309] dark:hover:text-[#D4AF37] hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors"
               >
                 <span>{t.nav.astrology}</span>
                 <ChevronDown className="w-3.5 h-3.5 opacity-70" />
               </button>
 
               {astroDropdownOpen && (
-                <div className="absolute top-full left-0 w-72 rounded-xl bg-white dark:bg-[#111827] border border-[#D4AF37]/30 shadow-2xl p-2.5 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="absolute top-full left-0 w-64 rounded-xl bg-white dark:bg-[#111827] border border-[#D4AF37]/30 shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                   <div className="text-[10px] font-semibold text-slate-400 px-2 py-1 uppercase tracking-wider">
-                    {currentLang === 'en' ? 'Predictive Astrology Systems' : 'वैदिक फलित ज्योतिष'}
+                    {currentLang === 'en' ? 'Predictive Astrology' : 'वैदिक फलित ज्योतिष'}
                   </div>
                   <button 
                     onClick={() => { setAstroDropdownOpen(false); handleNavClick('consultations'); }}
-                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors flex flex-col"
+                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors text-xs text-slate-900 dark:text-white"
                   >
-                    <span className="font-semibold text-slate-900 dark:text-white text-xs">
-                      KP System & Cuspal Interlinks (CIL)
-                    </span>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                      Sub-Sub Lord precision for career & IPOs
-                    </span>
+                    <div className="font-bold">KP Cuspal Interlinks (CIL)</div>
+                    <div className="text-[10px] text-slate-500">Sub-Sub Lord precision</div>
                   </button>
                   <button 
                     onClick={() => { setAstroDropdownOpen(false); handleNavClick('consultations'); }}
-                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors flex flex-col"
+                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors text-xs text-slate-900 dark:text-white"
                   >
-                    <span className="font-semibold text-slate-900 dark:text-white text-xs">
-                      Birth Time Rectification (BTR)
-                    </span>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                      Sub-second verification with Ruling Planets
-                    </span>
+                    <div className="font-bold">Birth Time Rectification</div>
+                    <div className="text-[10px] text-slate-500">Ruling planets alignment</div>
                   </button>
                   <button 
                     onClick={() => { setAstroDropdownOpen(false); handleNavClick('consultations'); }}
-                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors flex flex-col"
+                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors text-xs text-slate-900 dark:text-white"
                   >
-                    <span className="font-semibold text-slate-900 dark:text-white text-xs">
-                      Bhrigu Nandi Nadi (BNN) & Jaimini
-                    </span>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                      Karmic debts & Karakamsha soul missions
-                    </span>
-                  </button>
-                  <button 
-                    onClick={() => { setAstroDropdownOpen(false); handleNavClick('consultations'); }}
-                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors flex flex-col"
-                  >
-                    <span className="font-semibold text-slate-900 dark:text-white text-xs">
-                      Lal Kitab Remedial Sessions
-                    </span>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                      Practical, non-invasive planetary corrections
-                    </span>
+                    <div className="font-bold">Lal Kitab Remedial System</div>
+                    <div className="text-[10px] text-slate-500">Non-invasive planetary corrections</div>
                   </button>
                 </div>
               )}
@@ -228,49 +215,37 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <button 
                 onClick={() => handleNavClick('consultations')}
-                className="flex items-center space-x-1 px-3 py-2 rounded-lg text-slate-700 dark:text-slate-200 hover:text-[#B45309] dark:hover:text-[#D4AF37] hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors"
+                className="flex items-center space-x-1 px-2.5 py-2 rounded-lg hover:text-[#B45309] dark:hover:text-[#D4AF37] hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors"
               >
                 <span>{t.nav.astroVastu}</span>
                 <ChevronDown className="w-3.5 h-3.5 opacity-70" />
               </button>
 
               {vastuDropdownOpen && (
-                <div className="absolute top-full left-0 w-72 rounded-xl bg-white dark:bg-[#111827] border border-[#D4AF37]/30 shadow-2xl p-2.5 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="absolute top-full left-0 w-64 rounded-xl bg-white dark:bg-[#111827] border border-[#D4AF37]/30 shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                   <div className="text-[10px] font-semibold text-slate-400 px-2 py-1 uppercase tracking-wider">
-                    {currentLang === 'en' ? 'Non-Demolition Spatial Vastu' : 'शून्य तोड़-फोड़ वास्तु'}
+                    {currentLang === 'en' ? '0% Demolition Spatial Vastu' : 'शून्य तोड़-फोड़ वास्तु'}
                   </div>
                   <button 
                     onClick={() => { setVastuDropdownOpen(false); handleNavClick('consultations'); }}
-                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors flex flex-col"
+                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors text-xs text-slate-900 dark:text-white"
                   >
-                    <span className="font-semibold text-slate-900 dark:text-white text-xs">
-                      🏭 Industrial & Mega Factory Vastu
-                    </span>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                      Boilers, heavy CNC & production flow
-                    </span>
+                    <div className="font-bold">🏭 Industrial & Mega Factory</div>
+                    <div className="text-[10px] text-slate-500">Production flow & machinery balance</div>
                   </button>
                   <button 
                     onClick={() => { setVastuDropdownOpen(false); handleNavClick('consultations'); }}
-                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors flex flex-col"
+                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors text-xs text-slate-900 dark:text-white"
                   >
-                    <span className="font-semibold text-slate-900 dark:text-white text-xs">
-                      🏢 Corporate HQs & Tech Campuses
-                    </span>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                      Boardrooms & liquidity optimization
-                    </span>
+                    <div className="font-bold">🏢 Corporate HQs & Tech Parks</div>
+                    <div className="text-[10px] text-slate-500">Boardrooms & cashflow energy</div>
                   </button>
                   <button 
                     onClick={() => { setVastuDropdownOpen(false); handleNavClick('consultations'); }}
-                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors flex flex-col"
+                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors text-xs text-slate-900 dark:text-white"
                   >
-                    <span className="font-semibold text-slate-900 dark:text-white text-xs">
-                      🏰 Luxury Estates & Farmhouses
-                    </span>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                      Geopathic stress & Kundli-matched aura
-                    </span>
+                    <div className="font-bold">🏰 Luxury Estates & Villas</div>
+                    <div className="text-[10px] text-slate-500">Geopathic stress neutralization</div>
                   </button>
                 </div>
               )}
@@ -279,75 +254,84 @@ export const Header: React.FC<HeaderProps> = ({
             {/* 3. Digital Reports */}
             <button 
               onClick={() => handleNavClick('digital-reports')}
-              className="px-3 py-2 rounded-lg text-slate-700 dark:text-slate-200 hover:text-[#B45309] dark:hover:text-[#D4AF37] hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors flex items-center gap-1"
+              className="px-2.5 py-2 rounded-lg hover:text-[#B45309] dark:hover:text-[#D4AF37] hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors flex items-center gap-1"
             >
               <FileText className="w-3.5 h-3.5 text-[#D4AF37]" />
               <span>{t.nav.digitalReports}</span>
             </button>
 
-            {/* 4. Academy & Courses */}
+            {/* 4. Academy */}
             <button 
               onClick={() => handleNavClick('academy')}
-              className="px-3 py-2 rounded-lg text-slate-700 dark:text-slate-200 hover:text-[#B45309] dark:hover:text-[#D4AF37] hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors flex items-center gap-1"
+              className="px-2.5 py-2 rounded-lg hover:text-[#B45309] dark:hover:text-[#D4AF37] hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors flex items-center gap-1"
             >
               <GraduationCap className="w-3.5 h-3.5 text-emerald-500" />
               <span>{t.nav.academy}</span>
             </button>
 
-            {/* 5. Free Calculators */}
-            <button 
-              onClick={() => handleNavClick('free-calculators')}
-              className="px-3 py-2 rounded-lg text-slate-700 dark:text-slate-200 hover:text-[#B45309] dark:hover:text-[#D4AF37] hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors flex items-center gap-1.5 font-semibold"
+            {/* 5. More ▾ Dropdown (Calculators, Leadership, FAQ, AI Copilot) */}
+            <div 
+              className="relative"
+              onMouseEnter={() => setMoreDropdownOpen(true)}
+              onMouseLeave={() => setMoreDropdownOpen(false)}
             >
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-ping"></span>
-              <span>{t.nav.calculators}</span>
-            </button>
+              <button 
+                className="flex items-center space-x-1 px-2.5 py-2 rounded-lg hover:text-[#B45309] dark:hover:text-[#D4AF37] hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors"
+              >
+                <span>{currentLang === 'en' ? 'More' : 'अन्य'}</span>
+                <ChevronDown className="w-3.5 h-3.5 opacity-70" />
+              </button>
 
-            {/* 6. Leadership */}
-            <button 
-              onClick={() => handleNavClick('leadership')}
-              className="px-3 py-2 rounded-lg text-slate-700 dark:text-slate-200 hover:text-[#B45309] dark:hover:text-[#D4AF37] hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors"
-            >
-              {t.nav.leadership}
-            </button>
-
-            {/* 7. FAQ */}
-            <button 
-              onClick={() => handleNavClick('faq')}
-              className="px-2.5 py-2 rounded-lg text-slate-700 dark:text-slate-200 hover:text-[#B45309] dark:hover:text-[#D4AF37] hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors"
-            >
-              {currentLang === 'en' ? 'FAQ' : 'एफएक्यू'}
-            </button>
-
-            {/* 8. AI Copilot */}
-            <button 
-              onClick={onOpenCopilot}
-              className="px-2.5 py-1.5 rounded-lg text-xs font-bold text-[#B45309] dark:text-[#F3E5AB] bg-[#D4AF37]/15 hover:bg-[#D4AF37]/25 border border-[#D4AF37]/40 flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
-              title="Open Gemini AI AstroCopilot Assistant"
-            >
-              <Bot className="w-3.5 h-3.5 text-[#D4AF37]" />
-              <span>AI Copilot</span>
-            </button>
+              {moreDropdownOpen && (
+                <div className="absolute top-full right-0 w-52 rounded-xl bg-white dark:bg-[#111827] border border-[#D4AF37]/30 shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <button 
+                    onClick={() => { setMoreDropdownOpen(false); handleNavClick('free-calculators'); }}
+                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-slate-200"
+                  >
+                    <Calculator className="w-3.5 h-3.5 text-[#D4AF37]" />
+                    <span>{t.nav.calculators}</span>
+                  </button>
+                  <button 
+                    onClick={() => { setMoreDropdownOpen(false); handleNavClick('leadership'); }}
+                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-slate-200"
+                  >
+                    <Award className="w-3.5 h-3.5 text-amber-500" />
+                    <span>{t.nav.leadership}</span>
+                  </button>
+                  <button 
+                    onClick={() => { setMoreDropdownOpen(false); handleNavClick('faq'); }}
+                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-slate-200"
+                  >
+                    <HelpCircle className="w-3.5 h-3.5 text-sky-500" />
+                    <span>FAQ</span>
+                  </button>
+                  <button 
+                    onClick={() => { setMoreDropdownOpen(false); onOpenCopilot && onOpenCopilot(); }}
+                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors flex items-center gap-2 text-xs font-semibold text-[#B45309] dark:text-[#F3E5AB]"
+                  >
+                    <Bot className="w-3.5 h-3.5 text-[#D4AF37]" />
+                    <span>AI Copilot</span>
+                  </button>
+                  <button 
+                    onClick={() => { setMoreDropdownOpen(false); onOpenGenerateReport && onOpenGenerateReport(); }}
+                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-slate-200"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
+                    <span>AI Dossier</span>
+                  </button>
+                </div>
+              )}
+            </div>
           </nav>
 
-          {/* Right Controls: Language, Theme & Primary CTA */}
-          <div className="flex items-center space-x-2 sm:space-x-3">
-            
-            {/* AI Dossier Button */}
-            <button
-              onClick={onOpenGenerateReport}
-              className="hidden xl:inline-flex items-center space-x-1.5 px-3 py-2 rounded-lg text-xs font-bold text-slate-800 dark:text-white bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 border border-[#D4AF37]/40 shadow-xs cursor-pointer transition-all"
-              title="Generate AI Astro-Vastu Dossier"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
-              <span>AI Dossier</span>
-            </button>
+          {/* Right Controls: Cart, Language, Theme & PROMINENT TOP-RIGHT LOGIN */}
+          <div className="flex items-center space-x-1.5 sm:space-x-2.5 shrink-0">
             
             {/* Language Switcher (EN / HI) */}
             <div className="flex items-center bg-slate-200/80 dark:bg-slate-800/80 rounded-lg p-0.5 border border-slate-300 dark:border-slate-700">
               <button
                 onClick={() => onLanguageChange('en')}
-                className={`px-2 py-1 text-xs font-semibold rounded transition-all cursor-pointer ${
+                className={`px-1.5 sm:px-2 py-1 text-[11px] font-bold rounded transition-all cursor-pointer ${
                   currentLang === 'en'
                     ? 'bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-white shadow-xs'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
@@ -358,7 +342,7 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
               <button
                 onClick={() => onLanguageChange('hi')}
-                className={`px-2 py-1 text-xs font-semibold rounded transition-all cursor-pointer ${
+                className={`px-1.5 sm:px-2 py-1 text-[11px] font-bold rounded transition-all cursor-pointer ${
                   currentLang === 'hi'
                     ? 'bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-white shadow-xs'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
@@ -369,12 +353,11 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             </div>
 
-            {/* Theme Toggle (Day/Night) - default light */}
+            {/* Theme Toggle (Day/Night) */}
             <button
               onClick={onThemeToggle}
-              className="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
+              className="p-1.5 sm:p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
               aria-label="Toggle theme"
-              title={currentTheme === 'dark' ? "Switch to Day Mode (Light)" : "Switch to Night Mode (Dark)"}
             >
               {currentTheme === 'dark' ? (
                 <Sun className="w-4 h-4 text-[#D4AF37]" />
@@ -383,10 +366,10 @@ export const Header: React.FC<HeaderProps> = ({
               )}
             </button>
 
-            {/* Shopping Cart Trigger Button with Dynamic Badge */}
+            {/* Shopping Cart Trigger Button with Dynamic Red Badge */}
             <button
               onClick={openCart}
-              className="relative p-2 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
+              className="relative p-1.5 sm:p-2 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
               aria-label="Open Cart"
               title={currentLang === 'en' ? 'Open Vedic Cart' : 'कार्ट देखें'}
             >
@@ -398,63 +381,51 @@ export const Header: React.FC<HeaderProps> = ({
               )}
             </button>
 
-            {/* Client Portal / Sign In Button */}
+            {/* PROMINENT TOP-RIGHT LOGIN / CLIENT PORTAL BUTTON */}
             {isAuthenticated ? (
               <button
                 onClick={onOpenDashboard}
-                className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-lg text-xs font-bold text-slate-900 dark:text-white bg-amber-500/15 hover:bg-amber-500/25 border border-[#D4AF37]/50 shadow-xs cursor-pointer transition-all"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold text-slate-900 dark:text-white bg-amber-500/20 hover:bg-amber-500/30 border-2 border-[#D4AF37] shadow-sm shadow-[#D4AF37]/30 cursor-pointer transition-all shrink-0"
                 title="Open Client Dashboard"
               >
-                <div className="w-5 h-5 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-white flex items-center justify-center text-[10px] font-bold">
+                <div className="w-5 h-5 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-white flex items-center justify-center text-[10px] font-extrabold">
                   {user?.name ? user.name.charAt(0).toUpperCase() : 'V'}
                 </div>
-                <span className="hidden sm:inline">Client Portal</span>
+                <span className="font-extrabold text-xs">Client Portal</span>
                 <Sparkles className="w-3 h-3 text-[#D4AF37]" />
               </button>
             ) : (
               <button
                 onClick={() => openAuthModal()}
-                className="inline-flex items-center space-x-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 border-2 border-[#D4AF37] hover:bg-[#D4AF37]/10 dark:hover:bg-slate-800 shadow-sm shadow-[#D4AF37]/25 transition-all duration-200 cursor-pointer group"
-                title="Login with Google (Gmail) or WhatsApp"
+                className="inline-flex items-center space-x-1.5 sm:space-x-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-extrabold text-slate-950 dark:text-white bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 border border-[#D4AF37] shadow-md shadow-[#D4AF37]/30 transition-all duration-200 cursor-pointer shrink-0"
+                title="Login with Google or WhatsApp"
               >
                 <div className="flex items-center -space-x-1 shrink-0">
-                  <svg className="w-4 h-4 rounded-full bg-white p-0.5 shadow-2xs border border-slate-200" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.27-2.09 3.66-5.17 3.66-9.12z" />
-                    <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.26 21.36 7.33 24 12 24z" />
-                    <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.58H1.25C.45 8.17 0 9.99 0 12s.45 3.83 1.25 5.42l4.03-3.13z" />
-                    <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.13c.95-2.83 3.6-4.96 6.72-4.96z" />
-                  </svg>
-                  <div className="w-4 h-4 rounded-full bg-emerald-500 text-white flex items-center justify-center border border-white text-[8px] font-black">
+                  <span className="w-4 h-4 rounded-full bg-white flex items-center justify-center p-0.5 shadow-2xs">
+                    <svg className="w-3 h-3" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.27-2.09 3.66-5.17 3.66-9.12z" />
+                      <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.26 21.36 7.33 24 12 24z" />
+                      <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.58H1.25C.45 8.17 0 9.99 0 12s.45 3.83 1.25 5.42l4.03-3.13z" />
+                      <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.13c.95-2.83 3.6-4.96 6.72-4.96z" />
+                    </svg>
+                  </span>
+                  <span className="w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[7px] font-black border border-white">
                     W
-                  </div>
-                </div>
-                <div className="flex flex-col text-left">
-                  <span className="font-extrabold text-[11px] sm:text-xs text-slate-900 dark:text-white leading-tight">
-                    {currentLang === 'en' ? 'Login' : 'लॉगिन'}
-                  </span>
-                  <span className="text-[9px] text-[#B45309] dark:text-[#F3E5AB] font-semibold leading-none hidden sm:inline">
-                    Gmail / WhatsApp
                   </span>
                 </div>
+                <span className="font-black tracking-wide text-slate-950">
+                  {currentLang === 'en' ? 'Login' : 'लॉगिन'}
+                </span>
               </button>
             )}
-
-            {/* Primary Action Button */}
-            <button
-              onClick={() => onOpenBooking()}
-              className="hidden sm:inline-flex items-center space-x-2 px-4 py-2.5 rounded-lg font-semibold text-xs lg:text-sm text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 shadow-md shadow-[#D4AF37]/20 transform hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
-            >
-              <span>{t.nav.bookConsultation}</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
 
             {/* Mobile Menu Toggle Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+              className="lg:hidden p-1.5 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
               aria-label="Open menu"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
@@ -462,7 +433,7 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#FAF9F6] dark:bg-[#0B0F19] border-b border-[#D4AF37]/30 px-5 pt-3 pb-6 space-y-3 animate-in slide-in-from-top-4 duration-200">
+        <div className="lg:hidden bg-[#FAF9F6] dark:bg-[#0B0F19] border-b border-[#D4AF37]/30 px-4 pt-3 pb-6 space-y-3 animate-in slide-in-from-top-4 duration-200">
           {/* Mobile Auth Button */}
           <div className="p-3 rounded-2xl bg-gradient-to-r from-amber-500/15 via-[#D4AF37]/15 to-emerald-500/15 border-2 border-[#D4AF37]/40 shadow-sm">
             {isAuthenticated ? (
@@ -481,24 +452,21 @@ export const Header: React.FC<HeaderProps> = ({
                 onClick={() => { setMobileMenuOpen(false); openAuthModal(); }}
                 className="w-full text-left font-bold text-xs text-slate-900 dark:text-white flex items-center justify-between cursor-pointer"
               >
-                <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-2">
                   <div className="flex items-center -space-x-1">
-                    <svg className="w-5 h-5 rounded-full bg-white p-0.5 shadow-2xs border border-slate-200" viewBox="0 0 24 24">
-                      <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.27-2.09 3.66-5.17 3.66-9.12z" />
-                      <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.26 21.36 7.33 24 12 24z" />
-                      <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.58H1.25C.45 8.17 0 9.99 0 12s.45 3.83 1.25 5.42l4.03-3.13z" />
-                      <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.13c.95-2.83 3.6-4.96 6.72-4.96z" />
-                    </svg>
-                    <div className="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center border border-white text-[10px] font-bold">
+                    <span className="w-5 h-5 rounded-full bg-white flex items-center justify-center p-0.5 border border-slate-200">
+                      G
+                    </span>
+                    <span className="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[9px] font-bold">
                       W
-                    </div>
+                    </span>
                   </div>
                   <div>
                     <div className="font-bold text-xs text-slate-900 dark:text-white">
-                      {currentLang === 'en' ? 'Login with Gmail or WhatsApp' : 'Gmail या WhatsApp से लॉगिन करें'}
+                      {currentLang === 'en' ? 'Login with Google or Mobile' : 'Google या मोबाइल से लॉगिन करें'}
                     </div>
                     <div className="text-[10px] text-[#B45309] dark:text-[#F3E5AB]">
-                      {currentLang === 'en' ? 'Instant 1-Click Verification' : 'त्वरित 1-क्लिक सत्यापन'}
+                      {currentLang === 'en' ? 'Instant Verification' : 'त्वरित सत्यापन'}
                     </div>
                   </div>
                 </div>
@@ -520,6 +488,7 @@ export const Header: React.FC<HeaderProps> = ({
               {totalItems} {currentLang === 'en' ? 'items' : 'आइटम'}
             </span>
           </button>
+
           {/* AI Tools Quick Access Strip */}
           <div className="grid grid-cols-2 gap-2">
             <button
@@ -537,6 +506,7 @@ export const Header: React.FC<HeaderProps> = ({
               <span>AI Dossier</span>
             </button>
           </div>
+
           <div className="flex flex-col space-y-2 pt-2 text-sm">
             <button
               onClick={() => handleNavClick('consultations')}
@@ -558,41 +528,16 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
             <button
               onClick={() => handleNavClick('free-calculators')}
-              className="text-left py-2 px-3 rounded-lg font-medium text-[#B45309] dark:text-[#D4AF37] hover:bg-[#D4AF37]/10 font-bold"
-            >
-              ★ {t.nav.calculators}
-            </button>
-            <button
-              onClick={() => handleNavClick('leadership')}
               className="text-left py-2 px-3 rounded-lg font-medium text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10"
             >
-              {t.nav.leadership}
-            </button>
-            <button
-              onClick={() => handleNavClick('case-studies')}
-              className="text-left py-2 px-3 rounded-lg font-medium text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10"
-            >
-              {t.nav.caseStudies}
+              {t.nav.calculators}
             </button>
             <button
               onClick={() => handleNavClick('faq')}
-              className="text-left py-2 px-3 rounded-lg font-medium text-[#B45309] dark:text-[#D4AF37] hover:bg-[#D4AF37]/10 font-bold"
+              className="text-left py-2 px-3 rounded-lg font-medium text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10"
             >
-              ❓ {currentLang === 'en' ? 'FAQ' : 'अक्सर पूछे जाने वाले प्रश्न'}
+              FAQ
             </button>
-          </div>
-
-          <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-3">
-            <button
-              onClick={() => { setMobileMenuOpen(false); onOpenBooking(); }}
-              className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-semibold text-sm text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309]"
-            >
-              <span>{t.nav.bookConsultation}</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-            <div className="text-center text-xs text-slate-500">
-              Hotline: <a href="tel:+919009448601" className="text-[#B45309] dark:text-[#D4AF37] font-semibold">+91 90094 48601</a>
-            </div>
           </div>
         </div>
       )}

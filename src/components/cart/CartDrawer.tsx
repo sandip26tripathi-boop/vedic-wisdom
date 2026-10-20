@@ -207,17 +207,23 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 <span>{currentLang === 'en' ? '100% Non-Demolition & Scientific Confidentiality Guarantee' : '100% शून्य तोड़-फोड़ एवं पूर्ण गोपनीयता की गारंटी'}</span>
               </div>
 
-              {/* Checkout Action Button */}
+              {/* Proceed to Payment Action Button */}
               <button
                 type="button"
                 onClick={() => {
                   closeCart();
                   onProceedToCheckout();
                 }}
-                className="w-full py-4 px-4 rounded-xl font-bold text-sm text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 shadow-lg shadow-[#D4AF37]/25 flex items-center justify-center space-x-2 transition-all cursor-pointer transform hover:-translate-y-0.5"
+                className="w-full py-4 px-5 rounded-2xl font-black text-sm sm:text-base text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:brightness-105 shadow-xl shadow-[#D4AF37]/30 flex items-center justify-between transition-all cursor-pointer transform hover:-translate-y-0.5 active:translate-y-0"
               >
-                <span>{currentLang === 'en' ? 'Proceed to Secure Checkout' : 'सुरक्षित चेकआउट हेतु आगे बढ़ें'}</span>
-                <ArrowRight className="w-4 h-4" />
+                <div className="flex items-center space-x-2">
+                  <ShieldCheck className="w-5 h-5 text-slate-950" />
+                  <span>{currentLang === 'en' ? 'Proceed to Payment' : 'भुगतान हेतु आगे बढ़ें'}</span>
+                </div>
+                <div className="flex items-center space-x-1.5 font-mono font-black text-base">
+                  <span>₹{total.toLocaleString('en-IN')}</span>
+                  <ArrowRight className="w-4 h-4 ml-1" />
+                </div>
               </button>
             </div>
           )}

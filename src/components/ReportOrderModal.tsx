@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { DigitalReportItem } from '../data/digitalReports.ts';
 import { Language } from '../types/index.ts';
 import { useAuth } from '../context/AuthContext.tsx';
-import { X, FileText, CheckCircle2, Download, Send, ArrowRight, ShieldCheck, Clock, Sparkles } from 'lucide-react';
+import { useCart } from '../context/CartContext.tsx';
+import { X, FileText, CheckCircle2, Download, Send, ArrowRight, ShieldCheck, Clock, Sparkles, ShoppingBag } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 interface ReportOrderModalProps {
@@ -19,6 +20,7 @@ export const ReportOrderModal: React.FC<ReportOrderModalProps> = ({
   currentLang,
 }) => {
   const { user } = useAuth();
+  const { addToCart, openCart } = useCart();
   const [activeTab, setActiveTab] = useState<'order' | 'preview'>('order');
   const [name, setName] = useState(user?.name || '');
   const [phone, setPhone] = useState(user?.phone || '');
@@ -389,14 +391,36 @@ export const ReportOrderModal: React.FC<ReportOrderModalProps> = ({
                   </span>
                 </div>
 
-                {/* Submit Order */}
-                <button
-                  type="submit"
-                  className="w-full py-3.5 rounded-xl font-bold text-xs sm:text-sm text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 shadow-lg shadow-[#D4AF37]/25 transition-all flex items-center justify-center space-x-2 cursor-pointer"
-                >
-                  <span>{currentLang === 'en' ? `Transmit Order (${report.priceInr}) via WhatsApp` : `व्हाट्सएप पर ऑर्डर भेजें (${report.priceInr})`}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
+                {/* Action Buttons: Add to Cart & Proceed to Payment */}
+                <div className="space-y-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      addToCart({
+                        id: report.id,
+                        title: currentLang === 'en' ? report.titleEn : report.titleHi,
+                        category: 'Digital Report',
+                        price: parseInt(report.priceInr.replace(/\D/g, ''), 10) || 999,
+                        turnaround: report.deliveryTimeEn,
+                        badge: report.badgeEn
+                      });
+                      onClose();
+                      openCart();
+                    }}
+                    className="w-full py-3.5 rounded-xl font-bold text-xs sm:text-sm text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:brightness-105 shadow-lg shadow-[#D4AF37]/25 transition-all flex items-center justify-center space-x-2 cursor-pointer"
+                  >
+                    <ShoppingBag className="w-4 h-4 text-slate-950" />
+                    <span>{currentLang === 'en' ? `Add to Cart & Proceed to Payment (${report.priceInr})` : `कार्ट में जोड़ें व भुगतान करें (${report.priceInr})`}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+
+                  <button
+                    type="submit"
+                    className="w-full py-2.5 rounded-xl font-semibold text-xs text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
+                  >
+                    <span>{currentLang === 'en' ? 'Or Request via WhatsApp' : 'अथवा व्हाट्सएप पर विवरण भेजें'}</span>
+                  </button>
+                </div>
 
               </form>
             ) : (

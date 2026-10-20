@@ -27,6 +27,7 @@ export interface AuthContextType {
   loginWithEmailPassword: (email: string, password?: string, isRegister?: boolean, fullName?: string) => UserProfile;
   loginWithMagicLink: (email: string) => boolean;
   completePhoneVerification: (phone: string, additionalData?: Partial<UserProfile>) => UserProfile;
+  signIn: (provider?: string, options?: AuthModalOptions) => Promise<void>;
   logout: () => void;
   updateProfile: (updates: Partial<UserProfile>) => void;
   generateNewOtp: (phone: string) => string;
@@ -228,6 +229,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return false;
   };
 
+  const signIn = async (provider: string = 'google', options?: AuthModalOptions) => {
+    openAuthModal({
+      ...options,
+      initialStep: 'auth'
+    });
+    if (typeof window !== 'undefined') {
+      const event = new CustomEvent('vedic:auth:trigger', { detail: { provider, options } });
+      window.dispatchEvent(event);
+    }
+  };
+
   const logout = () => {
     setUser(null);
     try {
@@ -275,6 +287,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         loginWithEmailPassword,
         loginWithMagicLink,
         completePhoneVerification,
+        signIn,
         logout,
         updateProfile,
         generateNewOtp,
@@ -293,4 +306,11 @@ export const useAuth = () => {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
+};
+
+export const signIn = async (provider: string = 'google', options?: any) => {
+  if (typeof window !== 'undefined') {
+    const event = new CustomEvent('vedic:auth:trigger', { detail: { provider, options } });
+    window.dispatchEvent(event);
+  }
 };

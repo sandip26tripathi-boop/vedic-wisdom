@@ -12,21 +12,28 @@ export interface GoogleProfile {
   email_verified: boolean;
 }
 
-export const authOptions = {
-  providers: [
-    {
-      id: 'google',
-      name: 'Google',
-      type: 'oauth',
-      clientId: process.env.GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-      authorization: {
-        params: {
-          scope: 'openid email profile',
-          prompt: 'select_account',
-        },
+export function GoogleProvider(config: { clientId?: string; clientSecret?: string } = {}) {
+  return {
+    id: 'google',
+    name: 'Google',
+    type: 'oauth',
+    clientId: config.clientId || process.env.GOOGLE_CLIENT_ID || '',
+    clientSecret: config.clientSecret || process.env.GOOGLE_CLIENT_SECRET || '',
+    authorization: {
+      params: {
+        scope: 'openid email profile',
+        prompt: 'select_account',
       },
     },
+  };
+}
+
+export const authOptions = {
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+    }),
   ],
   callbacks: {
     async jwt({ token, user, account }: any) {

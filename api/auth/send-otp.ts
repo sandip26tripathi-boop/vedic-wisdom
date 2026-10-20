@@ -22,8 +22,9 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const { phone, countryCode = '+91' } = req.body || {};
-    const cleanPhone = String(phone || '').replace(/\D/g, '').slice(-10);
+    const { phone, mobileNumber, countryCode = '+91' } = req.body || {};
+    const rawNumber = String(mobileNumber || phone || '');
+    const cleanPhone = rawNumber.replace(/\D/g, '').slice(-10);
 
     if (cleanPhone.length < 10) {
       return res.status(400).json({ success: false, message: 'Please provide a valid 10-digit mobile number.' });
@@ -61,7 +62,7 @@ export default async function handler(req: any, res: any) {
           body: JSON.stringify({
             route: 'otp',
             variables_values: generatedOtp,
-            numbers: cleanPhone
+            numbers: rawNumber.replace('+91', '').trim()
           })
         });
         const smsData: any = await smsResponse.json();
@@ -104,19 +105,23 @@ export default async function handler(req: any, res: any) {
     }
 
     const isProduction = process.env.NODE_ENV === 'production' || Boolean(fast2smsApiKey);
-    const responsePayload: any = {
+
+    if (isProduction) {
+      return res.status(200).json({
+        success: true,
+        message: 'OTP sent to your mobile phone.',
+        verificationToken
+      });
+    }
+
+    return res.status(200).json({
       success: true,
       message: 'OTP sent to your mobile phone.',
       verificationToken,
       expiresIn: 300,
-      isProduction
-    };
-
-    if (!isProduction) {
-      responsePayload.devOtpPreview = generatedOtp;
-    }
-
-    return res.status(200).json(responsePayload);
+      isProduction: false,
+      devOtpPreview: generatedOtp
+    });
   } catch (err: any) {
     return res.status(500).json({ success: false, message: err.message || 'Error sending OTP' });
   }

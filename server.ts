@@ -45,8 +45,9 @@ const OTP_SECRET = process.env.OTP_SECRET_SALT || 'vedic_wisdom_secure_salt_2026
 // API: Send Mobile OTP (/api/auth/send-otp)
 app.post('/api/auth/send-otp', async (req: Request, res: Response) => {
   try {
-    const { phone, countryCode = '+91' } = req.body || {};
-    const cleanPhone = String(phone || '').replace(/\D/g, '').slice(-10);
+    const { phone, mobileNumber, countryCode = '+91' } = req.body || {};
+    const rawNumber = String(mobileNumber || phone || '');
+    const cleanPhone = rawNumber.replace(/\D/g, '').slice(-10);
 
     if (cleanPhone.length < 10) {
       return res.status(400).json({ success: false, message: 'Please provide a valid 10-digit mobile number.' });
@@ -83,7 +84,7 @@ app.post('/api/auth/send-otp', async (req: Request, res: Response) => {
           body: JSON.stringify({
             route: 'otp',
             variables_values: generatedOtp,
-            numbers: cleanPhone
+            numbers: rawNumber.replace('+91', '').trim()
           })
         });
         const smsData: any = await smsResponse.json();
@@ -129,21 +130,22 @@ app.post('/api/auth/send-otp', async (req: Request, res: Response) => {
 
     // In production mode, remove the on-screen "Development Mode OTP" badge completely.
     // Return only `{ success: true, message: "OTP sent to your mobile phone." }`.
-    const responsePayload: any = {
-      success: true,
-      message: smsDispatched
-        ? `Verification code delivered via SMS to ${countryCode} ${cleanPhone}. Valid for 5 minutes.`
-        : 'OTP sent to your mobile phone.',
-      verificationToken,
-      expiresIn: 300,
-      isProduction
-    };
-
-    if (!isProduction) {
-      responsePayload.devOtpPreview = generatedOtp;
+    if (isProduction) {
+      return res.json({
+        success: true,
+        message: 'OTP sent to your mobile phone.',
+        verificationToken
+      });
     }
 
-    return res.json(responsePayload);
+    return res.json({
+      success: true,
+      message: 'OTP sent to your mobile phone.',
+      verificationToken,
+      expiresIn: 300,
+      isProduction: false,
+      devOtpPreview: generatedOtp
+    });
   } catch (err: any) {
     return res.status(500).json({ success: false, message: err.message || 'Error sending OTP' });
   }

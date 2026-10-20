@@ -324,12 +324,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }, 500);
   };
 
-  // STEP 2: Send OTP Handler
+  // STEP 2: Send OTP Handler via Fast2SMS
   const handleSendOtp = async (overridePhone?: string) => {
     const rawNumber = overridePhone || phoneInput;
     const cleanNum = rawNumber.replace(/\D/g, '').slice(-10);
 
-    if (cleanNum.length < 8) {
+    if (cleanNum.length < 10) {
       setErrorMsg(
         currentLang === 'en'
           ? 'Please enter a valid 10-digit mobile number.'
@@ -342,24 +342,34 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     setIsLoading(true);
 
     const fullFormattedPhone = `${countryCode} ${cleanNum}`;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 9000);
 
     try {
       const res = await fetch('/api/auth/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
         body: JSON.stringify({
           phone: cleanNum,
+          mobileNumber: cleanNum,
           countryCode,
           name: fullName || user?.name || activeModalOptions?.prefilledData?.name
         })
       });
 
+      clearTimeout(timeoutId);
       const data = await res.json();
       if (res.ok && data.success) {
         setVerificationToken(data.verificationToken || null);
         setIsProduction(Boolean(data.isProduction));
         setDevOtp(data.devOtpPreview || data.otpPreview || '');
-        setOtpSuccessMessage(data.message || (currentLang === 'en' ? 'OTP sent successfully to your mobile number via SMS.' : 'आपके मोबाइल नंबर पर एसएमएस द्वारा ओटीपी भेजा गया।'));
+        setOtpSuccessMessage(
+          data.message ||
+            (currentLang === 'en'
+              ? 'OTP sent to your mobile phone.'
+              : 'आपके मोबाइल नंबर पर एसएमएस द्वारा ओटीपी भेजा गया।')
+        );
         setIsOtpSent(true);
         setResendTimer(30);
         setCanResend(false);
@@ -371,17 +381,25 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       } else {
         throw new Error(data.message || 'Failed to dispatch verification code via SMS.');
       }
-    } catch {
-      // Local fallback in case network / server is unreachable
-      setDevOtp('123456');
-      setIsOtpSent(true);
-      setResendTimer(30);
-      setCanResend(false);
-      setOtpDigits(['', '', '', '', '', '']);
+    } catch (err: any) {
+      clearTimeout(timeoutId);
+      const isTimeout =
+        err.name === 'AbortError' ||
+        err.message?.toLowerCase().includes('timeout') ||
+        err.message?.toLowerCase().includes('abort') ||
+        err.message?.toLowerCase().includes('network') ||
+        err.message?.toLowerCase().includes('failed to fetch');
 
-      setTimeout(() => {
-        otpInputRefs.current[0]?.focus();
-      }, 150);
+      setErrorMsg(
+        isTimeout
+          ? (currentLang === 'en'
+              ? 'Network timeout while reaching SMS gateway. Please check your internet connection and retry.'
+              : 'एसएमएस गेटवे से संपर्क करने में नेटवर्क विलंब। कृपया कनेक्शन जांचें व पुनः प्रयास करें।')
+          : (err.message ||
+              (currentLang === 'en'
+                ? 'SMS gateway temporarily unavailable. Please retry in a moment.'
+                : 'एसएमएस सेवा अस्थायी रूप से अनुपलब्ध है। कृपया कुछ क्षणों बाद पुनः प्रयास करें।'))
+      );
     } finally {
       setIsLoading(false);
     }
@@ -644,14 +662,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <span>{currentLang === 'en' ? 'Continue with Google' : 'Google से आगे बढ़ें'}</span>
                 </button>
 
-                {/* OPTION 2: Enter Mobile Number Directly */}
+                {/* OPTION 2: Continue with Mobile Number (Fast2SMS) */}
                 <button
                   type="button"
-                  onClick={() => setFunnelStep('otp')}
+                  onClick={() => {
+                    setErrorMsg('');
+                    setFunnelStep('otp');
+                  }}
                   className="w-full py-3.5 px-4 rounded-xl font-bold text-sm text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 shadow-md shadow-[#D4AF37]/25 flex items-center justify-center gap-2.5 transition-all cursor-pointer"
                 >
                   <Smartphone className="w-4 h-4" />
-                  <span>{currentLang === 'en' ? 'Enter Mobile Number (Instant OTP)' : 'मोबाइल नंबर से आगे बढ़ें (ओटीपी)'}</span>
+                  <span>{currentLang === 'en' ? 'Continue with Mobile Number' : 'मोबाइल नंबर से आगे बढ़ें'}</span>
                 </button>
 
                 {/* Aesthetic Divider */}

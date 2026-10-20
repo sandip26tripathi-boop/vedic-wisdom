@@ -10,8 +10,9 @@ const OTP_SECRET = process.env.OTP_SECRET_SALT || 'vedic_wisdom_secure_salt_2026
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { phone, countryCode = '+91' } = body || {};
-    const cleanPhone = String(phone || '').replace(/\D/g, '').slice(-10);
+    const { phone, mobileNumber, countryCode = '+91' } = body || {};
+    const rawNumber = String(mobileNumber || phone || '');
+    const cleanPhone = rawNumber.replace(/\D/g, '').slice(-10);
 
     if (cleanPhone.length < 10) {
       return new Response(
@@ -40,13 +41,13 @@ export async function POST(req: Request) {
         const response = await fetch('https://www.fast2sms.com/dev/bulkV2', {
           method: 'POST',
           headers: {
-            'authorization': fast2smsApiKey,
+            'authorization': process.env.FAST2SMS_API_KEY || '',
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
             route: 'otp',
             variables_values: otpCode,
-            numbers: cleanPhone
+            numbers: rawNumber.replace('+91', '').trim()
           })
         });
 
@@ -65,24 +66,30 @@ export async function POST(req: Request) {
 
     const isProduction = process.env.NODE_ENV === 'production' || Boolean(fast2smsApiKey);
 
-    // In production mode, remove the on-screen "Development Mode OTP" badge completely
-    // Return only `{ success: true, message: "OTP sent to your mobile phone." }`
-    const responsePayload: any = {
-      success: true,
-      message: 'OTP sent to your mobile phone.',
-      verificationToken,
-      expiresIn: 300,
-      isProduction
-    };
-
-    if (!isProduction) {
-      responsePayload.devOtpPreview = otpCode;
+    // In production mode, remove the on-screen "Development Mode OTP" badge completely.
+    // Return only `{ success: true, message: "OTP sent to your mobile phone." }`.
+    if (isProduction) {
+      return new Response(
+        JSON.stringify({
+          success: true,
+          message: 'OTP sent to your mobile phone.',
+          verificationToken
+        }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
     }
 
-    return new Response(JSON.stringify(responsePayload), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: 'OTP sent to your mobile phone.',
+        verificationToken,
+        expiresIn: 300,
+        isProduction: false,
+        devOtpPreview: otpCode
+      }),
+      { status: 200, headers: { 'Content-Type': 'application/json' } }
+    );
   } catch (err: any) {
     return new Response(
       JSON.stringify({ success: false, message: err.message || 'Error sending OTP' }),

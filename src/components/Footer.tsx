@@ -243,6 +243,21 @@ export const Footer: React.FC<FooterProps> = ({
 
         </div>
 
+        {/* Prominent Statutory Legal & Traditional Faith Disclaimer Callout */}
+        <div className="my-8 p-4 sm:p-5 rounded-2xl bg-amber-950/20 border border-amber-500/30 text-slate-300 text-xs leading-relaxed space-y-2">
+          <div className="flex items-center space-x-2 text-amber-400 font-bold text-xs tracking-wide uppercase">
+            <ShieldCheck className="w-4 h-4 text-amber-400 shrink-0" />
+            <span>
+              {currentLang === 'en'
+                ? 'Statutory Legal Disclaimer & Traditional Faith Notice'
+                : 'वैधानिक कानूनी अस्वीकरण एवं पारंपरिक आस्था सूचना'}
+            </span>
+          </div>
+          <p className="text-slate-300 text-xs leading-relaxed">
+            {f.disclaimer}
+          </p>
+        </div>
+
         {/* Bottom Strip */}
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between text-[11px] text-slate-500 gap-4">
           <div>

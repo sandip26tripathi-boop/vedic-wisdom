@@ -57,11 +57,11 @@ export const Hero: React.FC<HeroProps> = ({
             <h1 className="font-cinzel text-3xl sm:text-5xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
               {currentLang === 'en' ? (
                 <>
-                  <span className="gold-gradient-text">Precision Astrology</span> & Non-Demolition Spatial Vastu
+                  <span className="gold-gradient-text">Traditional Vedic Astrology</span> & Non-Demolition Spatial Vastu
                 </>
               ) : (
                 <>
-                  <span className="gold-gradient-text">सटीक फलित ज्योतिष</span> एवं शून्य तोड़-फोड़ ऊर्जा वास्तु
+                  <span className="gold-gradient-text">प्रामाणिक वैदिक ज्योतिष</span> एवं शून्य तोड़-फोड़ ऊर्जा वास्तु
                 </>
               )}
             </h1>
@@ -71,7 +71,7 @@ export const Hero: React.FC<HeroProps> = ({
               {t.hero.subheading}
             </p>
 
-            {/* Non-Demolition & Mathematical Precision Guarantees */}
+            {/* Non-Demolition & Traditional Vedic Guarantees */}
             <div className="flex flex-wrap items-center gap-3 pt-1">
               <div className="flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-emerald-800 dark:text-emerald-300 text-xs font-semibold">
                 <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />

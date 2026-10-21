@@ -491,7 +491,7 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
               <div>
                 <div className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-[#D4AF37]/15 text-[#B45309] dark:text-[#F3E5AB] text-xs font-semibold mb-1">
                   <Star className="w-3.5 h-3.5 text-[#D4AF37]" />
-                  <span>Mathematical KP Placidus System (BTR Verified)</span>
+                  <span>Traditional KP Placidus System (BTR Verified)</span>
                 </div>
                 <h3 className="font-cinzel text-xl font-bold text-slate-900 dark:text-white">
                   Horoscope of {user?.name || 'Vedic Client'}

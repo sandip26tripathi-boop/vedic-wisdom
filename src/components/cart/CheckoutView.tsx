@@ -547,11 +547,18 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
               <div className="space-y-2 pt-2 text-[11px] text-slate-500 dark:text-slate-400">
                 <div className="flex items-center space-x-2">
                   <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
-                  <span>100% Non-Demolition Metallic Remedies & CIL Precision</span>
+                  <span>100% Non-Demolition Metallic Remedies & Classical CIL Guidance</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" />
                   <span>Direct Advisory by Ravindra Pathak & Sandeep Tripathi</span>
+                </div>
+                {/* Legal Disclaimer Box */}
+                <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-[10px] text-amber-900 dark:text-amber-200/90 leading-relaxed">
+                  <strong>{currentLang === 'en' ? 'Legal Notice: ' : 'वैधानिक अस्वीकरण: '}</strong>
+                  {currentLang === 'en'
+                    ? 'All consultations and reports are rooted in ancient Vedic traditions and personal faith. They are intended for spiritual guidance and do not replace professional medical, legal, or financial advice.'
+                    : 'सभी परामर्श व रिपोर्ट्स पारंपरिक वैदिक मान्यताओं एवं धार्मिक आस्था पर आधारित हैं। यह किसी प्रकार के चिकित्सकीय, कानूनी या वित्तीय परामर्श का विकल्प नहीं है।'}
                 </div>
               </div>
 

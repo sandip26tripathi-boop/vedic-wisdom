@@ -45,7 +45,7 @@ You are the dedicated Senior AI Astro-Vastu Copilot for "Vedic Wisdom", an enter
 Headquarters: 178 Maple High Street, Bhopal, MP, India. Hotline / WhatsApp: +91 90094 48601.
 
 Your core mission:
-- Provide rigorous, non-superstitious, mathematical, and practical insights on industrial factory defects, corporate boardroom alignments, and KP astrological timing.
+- Provide rigorous, traditional, scriptural, and practical insights on industrial factory defects, corporate boardroom alignments, and KP astrological timing.
 - Always recommend 0% Non-Demolition remedies (e.g. Copper/Brass/Lead strips, Lecher antenna calibrations, color frequencies, pyramid stabilizers).
 - Keep answers crisp, highly structured (use bullet points and bolding), authoritative, yet humble and ethical.
 - If the question relates to complex industrial machinery, critical M&A timing, or deep Kundli verification, encourage connecting with Sandeep K. Tripathi via WhatsApp.
@@ -69,7 +69,7 @@ Your core mission:
       } else if (lower.includes('money') || lower.includes('payment') || lower.includes('cash') || lower.includes('north') || lower.includes('receivable')) {
         reply = `**Cash Flow & Liquidity Spatial Strategy (North / Kuber Zone):**\n\n1. **Diagnostic Check:** Delayed receivables or sluggish sales often signify clutter, heavy iron scrap, or red/orange colors in the **North (000° - Water)** sector.\n2. **Non-Demolition Protocol:**\n   - Clear all red and maroon files or decor from the North zone; introduce blue or soothing off-white tones.\n   - Place an activated brass Kuber Yantra or energized green aventurine sphere in the North to stimulate client conversions.\n3. **KP Timing:** In KP Astrology, cash inflow is governed by houses **2 (Liquid Wealth)** and **11 (Fulfillment of Desires)**.\n\n*Tap below to transfer your factory coordinates to Sandeep Tripathi's research desk on WhatsApp.*`;
       } else {
-        reply = `**Vedic Wisdom Guidance:**\n\nThank you for reaching out. In our methodology established by **Master Sandeep K. Tripathi** and **Ravindra Pathak**, we evaluate every challenge at the intersection of **KP Cuspal Interlink (CIL) Astrology** and **16-Zone Non-Demolition Energy Vastu**.\n\n- **Spatial Alignment:** Balanced cardinal zones ensure positive prana and frictionless physical operations.\n- **Planetary Timing:** Your current Mahadasha-Antardasha dictates the ideal window for aggressive expansion vs stabilization.\n- **Zero Demolition Guarantee:** We never recommend breaking walls; energetic metal strips, pyramids, and frequency tuning provide 100% mathematical correction.\n\n*Feel free to specify your property type (Factory, Office, Villa) or birth details for deeper analysis.*`;
+        reply = `**Vedic Wisdom Guidance:**\n\nThank you for reaching out. In our methodology established by **Master Sandeep K. Tripathi** and **Ravindra Pathak**, we evaluate every challenge at the intersection of **KP Cuspal Interlink (CIL) Astrology** and **16-Zone Non-Demolition Energy Vastu**.\n\n- **Spatial Alignment:** Balanced cardinal zones ensure positive prana and frictionless physical operations.\n- **Planetary Timing:** Your current Mahadasha-Antardasha dictates the ideal window for aggressive expansion vs stabilization.\n- **Zero Demolition Guarantee:** We never recommend breaking walls; energetic metal strips, pyramids, and frequency tuning provide 100% traditional scriptural correction.\n\n*Feel free to specify your property type (Factory, Office, Villa) or birth details for deeper analysis.*`;
       }
     }
 

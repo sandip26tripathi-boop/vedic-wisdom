@@ -145,7 +145,7 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({
                 </div>
 
                 <span className="text-[11px] font-semibold px-3 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 self-start sm:self-auto">
-                  {currentLang === 'en' ? '12+ Yrs KP & Vastu Researcher' : '12+ वर्ष गणितीय अनुसंधान'}
+                  {currentLang === 'en' ? '12+ Yrs KP & Vastu Researcher' : '12+ वर्ष पारंपरिक शोध'}
                 </span>
               </div>
 
@@ -192,7 +192,7 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({
 
         </div>
 
-        {/* 4 Pillars of Core Scientific Methodology */}
+        {/* 4 Pillars of Core Traditional Methodology */}
         <div className="mt-16 p-8 sm:p-12 rounded-3xl bg-slate-100/80 dark:bg-[#111827]/80 border border-[#D4AF37]/30 shadow-xl">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <h3 className="font-cinzel text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
@@ -200,8 +200,8 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2">
               {currentLang === 'en'
-                ? 'We reject generic superstitions in favor of measurable physical, electromagnetic, and celestial mathematics.'
-                : 'हम अंधविश्वास और भय के स्थान पर मापने योग्य भौतिक, इलेक्ट्रोमैग्नेटिक और खगोलीय गणित का उपयोग करते हैं।'}
+                ? 'Rooted in ancient scriptural wisdom, classical Vastu Shastra, and traditional Vedic philosophies.'
+                : 'प्राचीन वैदिक शास्त्रों, शास्त्रीय वास्तु नियमों और पारंपरिक ज्योतिषीय मान्यताओं पर आधारित।'}
             </p>
           </div>
 

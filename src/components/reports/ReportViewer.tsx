@@ -450,10 +450,10 @@ export const ReportViewer: React.FC<ReportViewerProps> = ({
         <div className="p-4 sm:p-5 rounded-2xl bg-amber-500/10 dark:bg-amber-950/30 border border-amber-500/35 text-amber-900 dark:text-amber-200 space-y-1.5 text-xs">
           <div className="flex items-center gap-2 font-bold text-sm text-[#B45309] dark:text-[#F3E5AB]">
             <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
-            <span>⚠️ Official Disclaimer & Ethical Notice</span>
+            <span>⚠️ Official Legal Disclaimer & Traditional Faith Notice</span>
           </div>
           <p className="leading-relaxed text-[11px] sm:text-xs text-amber-800 dark:text-amber-300">
-            {regulatoryNotice || 'This report is generated through an advanced AI-powered computational Vedic & KP analytics engine based on the mathematical coordinates of your birth details. It is intended for self-awareness, timing assessment, and spiritual guidance. For critical architectural alterations, major industrial audits, or pivotal life decisions, a personal 1-on-1 verification with Principal Researcher Sandeep K. Tripathi or Founder Ravindra Pathak is strongly recommended. Vedic Wisdom upholds strict non-superstitious, evidence-based practices.'}
+            {regulatoryNotice || 'Legal Disclaimer: This diagnostic report and astrological reading are based entirely on traditional Vedic scriptures, ancient astrological beliefs, and cultural faith. All insights, calculations, and remedial recommendations are intended solely for personal spiritual reflection, philosophical understanding, and cultural guidance. This report does not claim scientific empirical certainty and is not a substitute for qualified professional medical, psychiatric, legal, architectural, structural, or financial advice.'}
           </p>
         </div>
 

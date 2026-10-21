@@ -78,7 +78,7 @@ export const CaseStudiesSection: React.FC<CaseStudiesSectionProps> = ({
                 <div className="mb-4 p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-xs">
                   <div className="flex items-center space-x-1.5 text-amber-800 dark:text-amber-300 font-bold mb-1">
                     <Wrench className="w-3.5 h-3.5 text-[#D4AF37]" />
-                    <span>{currentLang === 'en' ? '0% Demolition Remedy Executed:' : 'लागू किया गया वैज्ञानिक उपाय:'}</span>
+                    <span>{currentLang === 'en' ? '0% Demolition Remedy Executed:' : 'लागू किया गया पारंपरिक उपाय:'}</span>
                   </div>
                   <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
                     {item.remedy}

@@ -226,7 +226,7 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
       }
     }
 
-    // High-precision astronomical Vedic computation using Chitrapaksha / Lahiri Ayanamsa
+    // Traditional astronomical Vedic computation using Chitrapaksha / Lahiri Ayanamsa
     const result = computeExactKundli(
       dob,
       tob,

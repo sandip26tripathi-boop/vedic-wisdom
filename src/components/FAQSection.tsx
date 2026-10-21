@@ -49,8 +49,8 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
       category: 'astrology',
       qEn: 'How does KP Cuspal Interlink (CIL) Astrology differ from traditional Vedic astrology?',
       qHi: 'केपी कस्पल इंटरलिंक्स (KP Cuspal Interlinks - CIL) ज्योतिष सामान्य फलित ज्योतिष से कैसे भिन्न है?',
-      aEn: 'Traditional astrology often relies on broad 30-degree sign transits which can be ambiguous. KP Cuspal Interlinks operates with mathematical Sub-Sub Lord precision (dividing each sign into micro-cuspal coordinates). This allows definitive yes/no verifications and exact calendar timing for business M&A, capital fundraise (houses 2, 6, 10, 11), tender bids, and litigation outcomes.',
-      aHi: 'सामान्य ज्योतिष 30-अंश की विस्तृत राशियों पर आधारित होता है। इसके विपरीत केपी कस्पल इंटरलिंक प्रणाली प्रत्येक भाव के सब-सब लॉर्ड (Sub-Sub Lord) की गणितीय जांच करती है। इससे व्यापारिक विस्तार, टेंडर जीत, शेयर बाजार लाभ (भाव 2-6-10-11) और अदालती मुकदमों के सटीक समय का निर्धारण संभव होता है।'
+      aEn: 'Traditional astrology often relies on broad 30-degree sign transits which can be ambiguous. KP Cuspal Interlinks operates with classical Sub-Sub Lord scriptural analysis (dividing each sign into micro-cuspal coordinates). This allows definitive traditional guidance and timeline windows for business M&A, capital fundraise (houses 2, 6, 10, 11), tender bids, and litigation navigation.',
+      aHi: 'सामान्य ज्योतिष 30-अंश की विस्तृत राशियों पर आधारित होता है। इसके विपरीत केपी कस्पल इंटरलिंक प्रणाली प्रत्येक भाव के सब-सब लॉर्ड (Sub-Sub Lord) की शास्त्रीय जांच करती है। इससे व्यापारिक विस्तार, टेंडर जीत, शेयर बाजार लाभ (भाव 2-6-10-11) और कानूनी मामलों के शास्त्रसम्मत समय का आकलन संभव होता है।'
     },
     {
       id: 'faq_3',
@@ -63,10 +63,10 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
     {
       id: 'faq_4',
       category: 'astrology',
-      qEn: 'How exact is the online Janam Kundli and Lagna generation tool on this page?',
-      qHi: 'इस पेज पर दिया गया जन्म कुंडली और लग्न कैलकुलेटर कितना सटीक है?',
-      aEn: 'Our online calculator uses authentic Chitrapaksha / Lahiri Ayanamsa, true Greenwich Sidereal Time (LST), and exact geographic coordinates across world cities. It calculates the mathematically exact Lagna, Moon sign, Nakshatra Pada, and planetary house placements. For deeper cuspal sub-sub lords and Dasha-Bhukti-Antara forecasting, Master Sandeep K. Tripathi provides complete 1-on-1 offline sessions.',
-      aHi: 'हमारा ऑनलाइन कैलकुलेटर वास्तविक लाहिड़ी अयनांश, ग्रीनविच साइडरियल टाइम और दुनिया भर के शहरों के सटीक अक्षांश-देशांतर पर आधारित है। यह सही लग्न, चंद्र राशि, नक्षत्र पाद और 12 भावों की स्थिति निकालता है। इसके आगे के सूक्ष्म केपी सब-सब लॉर्ड्स व दशा विश्लेषण हेतु संदीप त्रिपाठी जी ऑफ़लाइन व्यक्तिगत परामर्श सत्र लेते हैं।'
+      qEn: 'How authentic is the online Janam Kundli and Lagna generation tool on this page?',
+      qHi: 'इस पेज पर दिया गया जन्म कुंडली और लग्न कैलकुलेटर कितना प्रामाणिक है?',
+      aEn: 'Our online calculator uses authentic Chitrapaksha / Lahiri Ayanamsa, true Greenwich Sidereal Time (LST), and reliable geographic coordinates across world cities. It calculates the classical Lagna, Moon sign, Nakshatra Pada, and planetary house placements according to ancient Vedic traditions. For deeper cuspal sub-sub lords and Dasha-Bhukti-Antara forecasting, Master Sandeep K. Tripathi provides complete 1-on-1 offline sessions.',
+      aHi: 'हमारा ऑनलाइन कैलकुलेटर वास्तविक लाहिड़ी अयनांश, ग्रीनविच साइडरियल टाइम और दुनिया भर के शहरों के प्रामाणिक अक्षांश-देशांतर पर आधारित है। यह पारंपरिक वैदिक पद्धति के अनुसार सही लग्न, चंद्र राशि, नक्षत्र पाद और 12 भावों की स्थिति निकालता है। इसके आगे के सूक्ष्म केपी सब-सब लॉर्ड्स व दशा विश्लेषण हेतु संदीप त्रिपाठी जी ऑफ़लाइन व्यक्तिगत परामर्श सत्र लेते हैं।'
     },
     {
       id: 'faq_5',
@@ -117,7 +117,7 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
             {currentLang === 'en' ? (
               <>Clarity & Truth: <span className="gold-gradient-text">Non-Superstitious Insights</span></>
             ) : (
-              <>सटीक समाधान: <span className="gold-gradient-text">तार्किक एवं वैज्ञानिक उत्तर</span></>
+              <>शास्त्रसम्मत समाधान: <span className="gold-gradient-text">तार्किक एवं पारंपरिक उत्तर</span></>
             )}
           </h2>
 

@@ -11,7 +11,7 @@ export const translations = {
       caseStudies: "Case Studies",
       contact: "Contact & Booking",
       bookConsultation: "Book Consultation",
-      tagline: "Harmonizing Spaces, Decoding Destinies — Mathematical Precision Meets Vedic Sciences",
+      tagline: "Harmonizing Spaces, Decoding Destinies — Authentic Vedic Traditions & Ancient Wisdom",
       phone: "+91 90094 48601",
       email: "ask.vedicwisdom@gmail.com",
       address: "178 Maple High Street, Bhopal, MP, India"
@@ -19,15 +19,15 @@ export const translations = {
 
     // Hero Section (Balanced Dual-Pillar Focus)
     hero: {
-      badge: "Institutional Astro-Vastu & High-Precision Predictive Astrology Authority",
-      punchline: "Precision Astrology & Non-Demolition Spatial Vastu",
-      subheading: "Empowering mega industries, business leaders, and seekers worldwide through 100% Non-Demolition Energy Balancing and Cuspal Interlink (KP) Astrology.",
+      badge: "Institutional Astro-Vastu & Authentic Classical Predictive Astrology Authority",
+      punchline: "Traditional Astrology & Non-Demolition Spatial Vastu",
+      subheading: "Empowering mega industries, business leaders, and seekers worldwide through 100% Non-Demolition Energy Balancing and Cuspal Interlink (KP) Astrology rooted in traditional scriptures.",
       ctaPrimary: "Schedule Consultation (Astro / Vastu)",
       ctaSecondary: "Generate Free Kundli / Panchang",
       ctaReports: "Explore Automated Digital Reports",
       metrics: {
         years: "12+ Years",
-        yearsLabel: "Empirical Vedic Research",
+        yearsLabel: "Traditional Vedic Research",
         spaces: "500+",
         spacesLabel: "Mega Factories & Villa Audits",
         remedy: "KP & CIL",
@@ -36,7 +36,7 @@ export const translations = {
         countriesLabel: "Global Enterprise Clients"
       },
       nonDemolitionBadge: "Guaranteed 100% Zero-Demolition Elemental Balance",
-      lecherVerified: "Lecher Antenna & Mathematical Arc Audited"
+      lecherVerified: "Classical Vastu Shastra & Elemental Arc Harmony"
     },
 
     // Trust & Credentials Bar
@@ -44,9 +44,9 @@ export const translations = {
       title: "Trusted by Manufacturing Conglomerates, High-Growth Tech HQs & Luxury Estate Owners",
       points: [
         "100% Zero Structural Tear-down Guarantee",
-        "Mathematical KP Cuspal Interlink Precision",
+        "Authentic KP Cuspal Interlink Analysis",
         "Sub-Sub Lord Destiny Timing for M&A / IPO",
-        "Geopathic Stress & Hartmann Net Neutralization"
+        "Geopathic Energy & Environmental Balance"
       ]
     },
 
@@ -66,8 +66,8 @@ export const translations = {
       astrologyWing: {
         kpCil: {
           title: "KP Astrology & Cuspal Interlinks (CIL)",
-          badge: "Mathematical Precision",
-          summary: "Cuspal Interlink Theory analyzing Sub-Lord and Sub-Sub Lord inter-connectivity for definitive yes/no decisions and micro-timing of pivotal business, career, and court events.",
+          badge: "Classical Scriptural Analysis",
+          summary: "Cuspal Interlink Theory analyzing Sub-Lord and Sub-Sub Lord inter-connectivity for definitive traditional guidance and micro-timing of pivotal business, career, and court events.",
           deliverables: [
             "Exact Sub-Sub Lord verification of 1st to 12th cusps",
             "Business expansion, fundraise, M&A, and stock market wealth yogas (2-6-10-11)",
@@ -123,16 +123,16 @@ export const translations = {
         },
         btr: {
           title: "Birth Time Rectification (BTR)",
-          badge: "Sub-Second Micro Precision",
-          summary: "Mathematical birth time verification using KP Ruling Planets (RP), past life event verification, and Cuspal Sub-Sub Lord alignment for clients without an exact birth minute.",
+          badge: "Classical Kundli Rectification",
+          summary: "Traditional birth time verification using KP Ruling Planets (RP), past life event verification, and Cuspal Sub-Sub Lord alignment for clients without an exact birth minute.",
           deliverables: [
             "Cross-verification against 5 to 7 key past life events (marriage, surgery, job, travel)",
             "KP Ruling Planets (Lagna Lord, Moon Sign Lord, Star Lord, Day Lord) synchronization",
-            "Sub-second correction of the ascendant degree to fix accurate Sub-Sub Lord",
+            "Classical correction of the ascendant degree to fix accurate Sub-Sub Lord",
             "Recalibration of all 12 cusps for future predictive reliability",
-            "Official Rectified Birth Chart Certificate with exact corrected time stamp"
+            "Official Rectified Birth Chart Certificate with corrected time stamp"
           ],
-          turnaround: "Intensive 3–4 days mathematical audit; 45-min verification session",
+          turnaround: "Intensive 3–4 days scriptural audit; 45-min verification session",
           idealFor: "Clients born in hospitals with rounded-off times (e.g., exactly 10:00 AM) or unrecorded seconds."
         }
       },
@@ -174,7 +174,7 @@ export const translations = {
           summary: "Sacred geometry, geopathic stress shielding, entrance rectification, and personalized Astro-Vastu alignment mapped to the family patriarch's birth horoscope (Kundli).",
           deliverables: [
             "Master bedroom alignment matching owner's favorable astrological lagna degree",
-            "Geopathic stress, Hartmann grid, and Curry line detection using scientific Lecher antenna",
+            "Geopathic stress, Hartmann grid, and Curry line detection using Lecher antenna dowsing",
             "Kitchen fire zone and master water inlet harmonization to protect family health",
             "Children's study chamber and cognitive enhancement North-East (Ishan) activation",
             "Main entrance (Dwar) 32-gate energy analysis with metal strip threshold correction",
@@ -190,7 +190,7 @@ export const translations = {
     digitalReports: {
       sectionBadge: "Instant Automated Digital Store",
       title: "Automated Astrological Dossiers & Blueprints",
-      subtitle: "Instant downloadable research dossiers generated with mathematical precision. Get clarity on yearly fortunes, wealth combinations, and authentic remedies.",
+      subtitle: "Instant downloadable research dossiers generated with traditional Vedic calculations. Get clarity on yearly fortunes, wealth combinations, and authentic remedies.",
       instantBadge: "Instant Automated Delivery (PDF)",
       samplePreviewBtn: "Preview Sample & Index",
       orderReportBtn: "Order Report Now",
@@ -201,7 +201,7 @@ export const translations = {
     academy: {
       sectionBadge: "Vedic Wisdom Academy",
       title: "Professional Certification & Masterclasses",
-      subtitle: "Learn empirical, reproducible astrology and non-demolition energy Vastu from Master Researcher Sandeep K. Tripathi. No superstition — only rigorous mathematical and scientific principles.",
+      subtitle: "Learn authentic classical astrology and non-demolition energy Vastu from Master Researcher Sandeep K. Tripathi based on time-honored Vedic scriptures and sacred traditions.",
       tabs: {
         all: "All Programs",
         astrology: "Predictive Astrology",
@@ -283,7 +283,7 @@ export const translations = {
             { level: "Industrial", focus: "Heavy Machinery (SW), Boilers (SE), ETP & Factory Flow" }
           ],
           highlights: [
-            "Basic: 16 Zones mathematical division, 5 elements cycle & cardinal alignment",
+            "Basic: 16 Zones spatial division, 5 elements cycle & cardinal alignment",
             "Advance: 45 Energy Fields of Vastu Purusha Mandala, 32 Door entries & Devta balancing",
             "Professional: Geopathic stress lines, Lecher antenna protocols & copper/brass remedies",
             "Industrial: Heavy machinery placement, boiler/furnace (SE), worker stability & layout blueprints"
@@ -298,7 +298,7 @@ export const translations = {
           format: "On-Site / Virtual Factory Audits + Lecher Antenna Protocols",
           tokenFee: "₹5,999 / $129 (Reservation)",
           highlights: [
-            "16 Vastu Zones mathematical division with degree precision (0° to 360°)",
+            "16 Vastu Zones spatial division across 360 degrees",
             "45 Energy Fields of the Vastu Purusha Mandala & Devta placement",
             "Elemental balance cycle (Water -> Air -> Fire -> Earth -> Space) and anti-element remedies",
             "Connecting the owner's Kundli planets to physical zones of factory/office (Hit Theory)",
@@ -308,7 +308,7 @@ export const translations = {
         },
         numerology: {
           title: "Professional Mobile & Name Numerology",
-          badge: "Instant Everyday Precision",
+          badge: "Instant Everyday Harmony",
           level: "Beginner to Intermediate",
           duration: "6 Weeks (18 Live Hours)",
           instructor: "Vedic Wisdom Research Faculty",
@@ -328,7 +328,7 @@ export const translations = {
     // Free Tools Engine
     tools: {
       sectionBadge: "Interactive Free Tools & Lead Magnets",
-      title: "Vedic Precision Calculation Suite",
+      title: "Vedic Astrological Calculation Suite",
       subtitle: "Instant birth chart computation, daily enterprise panchang, and directional spatial health score.",
       tabKundli: "Instant Birth Chart & Kundli",
       tabPanchang: "Daily Enterprise Panchang & Choghadiya",
@@ -378,26 +378,26 @@ export const translations = {
 
     // Leadership & Research Section
     leadership: {
-      sectionBadge: "Lineage, Science & Vision",
+      sectionBadge: "Lineage, Tradition & Vision",
       title: "The Minds Behind Vedic Wisdom",
-      subtitle: "Bridging ancient mathematical treatises with 21st-century enterprise efficiency. No dogma. Just reproducible, empirical cosmic science.",
-      methodologyTitle: "Our Core Scientific Methodology",
+      subtitle: "Bridging ancient scriptural treatises with modern enterprise efficiency. Rooted in traditional Vedic philosophy and time-tested spiritual wisdom.",
+      methodologyTitle: "Our Core Traditional Methodology",
       methodologyPoints: [
         {
-          title: "Mathematical KP Cuspal Interlinks (CIL)",
-          desc: "Unlike generic sun/moon sign astrology, we calculate the exact Sub-Sub Lord to the second of arc, unlocking predictable timing for business outcomes."
+          title: "Authentic KP Cuspal Interlinks (CIL)",
+          desc: "Unlike generic sun/moon sign astrology, we calculate the classical Sub-Sub Lord arcs to unlock traditional timeline guidance for pivotal business and life events."
         },
         {
           title: "Lecher Antenna & Geopathic Energy Dowsing",
-          desc: "German scientific frequency instrumentation used on-site to pinpoint telluric fault lines, Hartmann grids, and electromagnetic radiation zones."
+          desc: "Calibrated frequency dowsing used on-site to harmonize telluric fault lines, Hartmann grids, and environmental energy zones."
         },
         {
-          title: "100% Non-Demolition Remedial Science",
-          desc: "We never break walls, demolish pillars, or shut down operational factory lines. We rebalance directional flows using elemental transmutation, metals, and geometry."
+          title: "100% Non-Demolition Remedial Principles",
+          desc: "We never break walls, demolish pillars, or shut down operational factory lines. We rebalance directional flows using elemental transmutation, metals, and sacred geometry."
         },
         {
-          title: "Ethical & Rational Governance",
-          desc: "We stand strictly against fear-mongering and superstitious commercialization. We treat space and planetary frequencies as physics waiting to be aligned."
+          title: "Ethical & Scriptural Governance",
+          desc: "We stand strictly against fear-mongering and superstitious commercialization. We treat space and planetary energies with traditional Vedic respect and classical harmony."
         }
       ],
       founders: {
@@ -406,24 +406,24 @@ export const translations = {
           role: "Founder & Visionary Leader",
           credentials: [
             "Institutional Partnerships & Enterprise Spatial Strategist",
-            "Pioneer in Modernizing Esoteric Vedic Sciences for Multinational Scale",
+            "Pioneer in Preserving Authentic Vedic Traditions for Modern Scale",
             "Advisor to Industrial Conglomerates across Central & Northern India",
             "Specialist in Large-scale Land Acquisition & Factory Masterplanning"
           ],
-          bio: "With a singular vision to liberate Vedic architecture from superstition and integrate it with cutting-edge manufacturing dynamics, Ravindra Pathak steers Vedic Wisdom's institutional outreach. He has advised heavy industry leaders, commercial developers, and educational institutions, demonstrating that spatial harmony directly drives financial resilience, employee retention, and industrial peace.",
-          quote: "True Vastu is not about tearing down concrete; it is about tuning the electromagnetic and elemental frequencies of your space to match the ambition of your enterprise."
+          bio: "With a singular vision to liberate Vedic architecture from superstition and preserve authentic scriptural principles, Ravindra Pathak steers Vedic Wisdom's institutional outreach. He has advised heavy industry leaders, commercial developers, and educational institutions, demonstrating that spatial harmony directly supports peaceful enterprise and stability.",
+          quote: "True Vastu is not about tearing down concrete; it is about tuning the natural and elemental energies of your space to match the noble vision of your enterprise."
         },
         sandeep: {
           name: "Sandeep K. Tripathi",
           role: "Principal Researcher & Chief Educator",
           credentials: [
-            "12+ Years Intensive Mathematical Astrology & Non-Demolition Vastu Research",
+            "12+ Years Intensive Traditional Astrology & Non-Demolition Vastu Research",
             "Master of Krishnamurti Padhdhati (KP), Cuspal Interlinks (CIL) & Bhrigu Nandi Nadi",
             "Authority on Jaimini Karakamsha Sutras, Lal Kitab & Swar Vigyan",
             "Trained over 3,500+ Astrologers, Vastu Consultants & Architects Globally"
           ],
-          bio: "Renowned as one of modern India's most analytical astrological researchers, Sandeep K. Tripathi brings mathematical rigor to Vedic arts. His empirical research on KP Cuspal Interlinks and the Sub-Sub Lord micro-timing system has unlocked unprecedented accuracy in career, corporate litigation, and IPO forecasting. As chief educator of Vedic Wisdom Academy, he mentors consultants across 25+ countries.",
-          quote: "Astrology is celestial mathematics and Vastu is applied geophysics. When you synchronize both with mathematical precision, uncertainty transforms into strategic clarity."
+          bio: "Renowned as one of modern India's most dedicated astrological scholars, Sandeep K. Tripathi brings deep scriptural clarity to Vedic arts. His dedicated study of KP Cuspal Interlinks and the Sub-Sub Lord micro-timing system has unlocked traditional clarity in career, corporate litigation, and life forecasting. As chief educator of Vedic Wisdom Academy, he mentors students across 25+ countries.",
+          quote: "Astrology is celestial wisdom and Vastu is sacred spatial harmony. When you harmonize both with classical Vedic traditions, uncertainty transforms into spiritual clarity."
         }
       }
     },
@@ -526,13 +526,13 @@ export const translations = {
     // Footer
     footer: {
       aboutTitle: "Vedic Wisdom",
-      aboutText: "The premier institution for non-demolition scientific Astro-Vastu and mathematical KP astrology. Serving manufacturing conglomerates, corporate boards, and aspiring astrological researchers worldwide.",
+      aboutText: "The premier institution for authentic non-demolition Astro-Vastu and classical KP astrology. Rooted in ancient Vedic traditions, sacred scriptures, and spiritual heritage. Serving seekers and enterprises worldwide.",
       registeredOffice: "Registered Head Office:",
       astrologyLinksTitle: "Astrology Solutions",
       vastuLinksTitle: "Astro-Vastu Verticals",
       contactTitle: "Executive Contacts",
-      allRights: "All Rights Reserved. Engineered with Vedic Mathematics & Non-Demolition Vastu Science.",
-      disclaimer: "Disclaimer: Vedic Wisdom practices non-destructive spatial energy harmonization and mathematical astrology. All consultations are strictly confidential."
+      allRights: "All Rights Reserved. Rooted in Ancient Vedic Traditions & Non-Demolition Vastu Shastra.",
+      disclaimer: "Legal Disclaimer: All consultations, horoscopes, astrological calculations, and Vastu recommendations provided by Vedic Wisdom are strictly rooted in ancient traditions, scriptural beliefs, and faith. These services are intended for spiritual guidance, personal growth, and cultural appreciation, and do not constitute scientific, medical, psychological, legal, architectural, or financial advice. Users are encouraged to exercise their own personal discretion and judgment."
     }
   },
 
@@ -548,7 +548,7 @@ export const translations = {
       caseStudies: "केस स्टडीज",
       contact: "संपर्क व बुकिंग",
       bookConsultation: "परामर्श बुक करें",
-      tagline: "ऊर्जावान स्थान, अचूक भविष्यफल — गणितीय सूक्ष्मता और वैदिक विज्ञान का संगम",
+      tagline: "ऊर्जावान स्थान, स्पष्ट मार्गदर्शन — प्राचीन वैदिक परंपराएं व शास्त्रसम्मत ज्ञान",
       phone: "+91 90094 48601",
       email: "ask.vedicwisdom@gmail.com",
       address: "178 मेपल हाई स्ट्रीट, भोपाल, मध्य प्रदेश, भारत"
@@ -556,9 +556,9 @@ export const translations = {
 
     // Hero Section
     hero: {
-      badge: "संस्थागत एस्ट्रो-वास्तु एवं उच्च-सटीक फलित ज्योतिष का आधिकारिक संस्थान",
-      punchline: "सटीक फलित ज्योतिष एवं शून्य तोड़-फोड़ ऊर्जा वास्तु",
-      subheading: "100% बिना तोड़-फोड़ (Non-Demolition) ऊर्जा संतुलन और कस्पल इंटरलिंक (KP) ज्योतिष द्वारा विशाल उद्योगों, व्यापारिक प्रमुखों और जिज्ञासुओं का सशक्तिकरण।",
+      badge: "संस्थागत एस्ट्रो-वास्तु एवं प्रामाणिक वैदिक फलित ज्योतिष संस्थान",
+      punchline: "पारंपरिक वैदिक ज्योतिष एवं शून्य तोड़-फोड़ ऊर्जा वास्तु",
+      subheading: "100% बिना तोड़-फोड़ (Non-Demolition) ऊर्जा संतुलन और कस्पल इंटरलिंक (KP) ज्योतिष द्वारा विशाल उद्योगों, व्यापारिक प्रमुखों और जिज्ञासुओं का मार्गदर्शन।",
       ctaPrimary: "परामर्श शेड्यूल करें (ज्योतिष / वास्तु)",
       ctaSecondary: "निःशुल्क कुंडली / पंचांग बनाएं",
       ctaReports: "डिजिटल रिपोर्ट्स स्टोर देखें",
@@ -573,7 +573,7 @@ export const translations = {
         countriesLabel: "विश्वव्यापी क्लाइंट्स व उद्योगपति"
       },
       nonDemolitionBadge: "100% बिना तोड़-फोड़ ऊर्जा संतुलन की गारंटी",
-      lecherVerified: "लेचर एंटीना एवं गणितीय सूक्ष्मता द्वारा परीक्षित"
+      lecherVerified: "प्रामाणिक वास्तु शास्त्र एवं पंचतत्व संतुलन द्वारा परीक्षित"
     },
 
     // Trust & Credentials Bar
@@ -581,9 +581,9 @@ export const translations = {
       title: "भारत एवं विश्व के प्रमुख उद्योगपतियों, कॉर्पोरेट समूहों व वास्तुविदों द्वारा विश्वसनीय",
       points: [
         "100% शून्य तोड़-फोड़ की लिखित गारंटी",
-        "गणितीय केपी कस्पल इंटरलिंक्स की अचूक सूक्ष्मता",
-        "सब-सब लॉर्ड द्वारा व्यापारिक विस्तार व निर्णयों का सटीक समय",
-        "जियोपैथिक स्ट्रेस एवं हार्टमैन ग्रिड का वैज्ञानिक निवारण"
+        "प्रामाणिक केपी कस्पल इंटरलिंक्स शास्त्रीय विश्लेषण",
+        "सब-सब लॉर्ड द्वारा व्यापारिक विस्तार व निर्णयों का शास्त्रसम्मत समय",
+        "जियोपैथिक स्ट्रेस एवं प्राकृतिक ऊर्जा असंतुलन का निवारण"
       ]
     },
 
@@ -603,8 +603,8 @@ export const translations = {
       astrologyWing: {
         kpCil: {
           title: "केपी ज्योतिष एवं कस्पल इंटरलिंक्स (CIL)",
-          badge: "गणितीय अचूकता",
-          summary: "कस्पल इंटरलिंक थ्योरी द्वारा सब-लॉर्ड और सब-सब लॉर्ड के संबंधों का विश्लेषण, जिससे व्यापारिक, अदालती और करियर के निर्णयों की सटीक तिथि निर्धारित होती है।",
+          badge: "शास्त्रसम्मत विश्लेषण",
+          summary: "कस्पल इंटरलिंक थ्योरी द्वारा सब-लॉर्ड और सब-सब लॉर्ड के संबंधों का विश्लेषण, जिससे व्यापारिक, अदालती और करियर के निर्णयों का पारंपरिक ज्योतिषीय मार्गदर्शन प्राप्त होता है।",
           deliverables: [
             "1 से 12 भावों के सब-सब लॉर्ड का सूक्ष्म सत्यापन",
             "व्यापार विस्तार, फंडरेज़िंग, आईपीओ एवं शेयर बाजार महाधन योग (2-6-10-11)",
@@ -624,8 +624,8 @@ export const translations = {
             "ग्रहों के कारकत्व (गुरु = जीव, शनि = कर्म, शुक्र = लक्ष्मी) का गहन अध्ययन",
             "शनि के डबल गोचर द्वारा करियर में आने वाले बड़े परिवर्तनों का समय",
             "गुरु के गोचर द्वारा विवाह, संतान और आध्यात्मिक उत्थान के योग",
-            "राहु-केतु अक्ष एवं ऋणानुबंधन का वैज्ञानिक निवारण",
-            "बिना सटीक जन्म समय के भी ग्रहीय संयोजनों द्वारा फलकथन"
+            "राहु-केतु अक्ष एवं ऋणानुबंधन का शास्त्रसम्मत निवारण",
+            "बिना निश्चित जन्म समय के भी ग्रहीय संयोजनों द्वारा फलकथन"
           ],
           turnaround: "48 घंटों में संपूर्ण विश्लेषण; 60 मिनट की इंटरएक्टिव चर्चा",
           idealFor: "ऐसे व्यक्ति जो लगातार जीवन में एक जैसी रुकावटों या करियर ठहराव का सामना कर रहे हैं।"
@@ -651,7 +651,7 @@ export const translations = {
           deliverables: [
             "पक्के घर एवं मसनूई (बनावटी) ग्रहों के टकराव की पहचान",
             "धर्मी तेवा बनाम अंधा तेवा की जांच और सुरक्षा नियम",
-            "सोई किस्मत को जगाने की सटीक विधियां (किस्मत जगाना)",
+            "सोई किस्मत को जगाने के पारंपरिक नियम (किस्मत जगाना)",
             "विशिष्ट धातु, जल प्रवाह, पक्षी व गो-सेवा के अहिंसक उपाय",
             "दैनिक जीवन में आवश्यक परहेज (नियम) जो ग्रहीय दुष्प्रभाव से बचाएं"
           ],
@@ -660,16 +660,16 @@ export const translations = {
         },
         btr: {
           title: "बर्थ टाइम रेक्टिफिकेशन (BTR - जन्म समय सुधार)",
-          badge: "सेकेंड ऑफ आर्क सूक्ष्मता",
-          summary: "केपी रूलिंग प्लैनेट्स (RP), पूर्व जीवन की घटनाओं और कस्पल सब-सब लॉर्ड के गणितीय समन्वय द्वारा सही जन्म समय का निर्धारण जिनके पास सटीक समय नहीं है।",
+          badge: "शास्त्रसम्मत कुंडली शोधन",
+          summary: "केपी रूलिंग प्लैनेट्स (RP), पूर्व जीवन की घटनाओं और कस्पल सब-सब लॉर्ड के शास्त्रीय समन्वय द्वारा सही जन्म समय का निर्धारण।",
           deliverables: [
             "जीवन की 5 से 7 प्रमुख घटनाओं (विवाह, सर्जरी, नौकरी, यात्रा) से मिलान",
             "केपी रूलिंग प्लैनेट्स (लग्न स्वामी, चंद्र राशि स्वामी, नक्षत्र स्वामी) का समन्वय",
-            "लग्न अंश को सेकेंड तक सही कर सही सब-सब लॉर्ड का निर्धारण",
-            "भविष्य की अचूक भविष्यवाणियों हेतु सभी 12 भावों का सटीक पुनर्गठन",
+            "लग्न अंश को सूक्ष्मता से सही कर सही सब-सब लॉर्ड का निर्धारण",
+            "भविष्य के शास्त्रसम्मत मार्गदर्शन हेतु सभी 12 भावों का पुनर्गठन",
             "आधिकारिक रेक्टिफाइड जन्म कुंडली प्रमाण पत्र"
           ],
-          turnaround: "3–4 दिनों का गहन गणितीय ऑडिट; 45 मिनट का समीक्षा सत्र",
+          turnaround: "3–4 दिनों का गहन शास्त्रीय अध्ययन; 45 मिनट का समीक्षा सत्र",
           idealFor: "अस्पताल में गोल समय (जैसे ठीक 10:00 बजे) दर्ज कराए गए या अज्ञात जन्म समय वाले व्यक्ति।"
         }
       },
@@ -680,11 +680,11 @@ export const translations = {
           badge: "प्रमुख विनिर्माण वास्तु सेवा",
           summary: "विशाल फैक्ट्रियों, प्रोसेसिंग प्लांट्स और औद्योगिक गलियारों हेतु 100% बिना तोड़-फोड़ ऊर्जा संतुलन। भारी मशीनरी (SW), भट्टी/बॉयलर (SE), और माल प्रवाह का अनुकूलन।",
           deliverables: [
-            "भारी मशीनरी और कन्वेयर सिस्टम का नैऋत्य (South-West) में सटीक अलाइनमेंट",
+            "भारी मशीनरी और कन्वेयर सिस्टम का नैऋत्य (South-West) में शास्त्रसम्मत अलाइनमेंट",
             "अग्नि तत्व (बॉयलर, फर्नेस, डीजी सेट, सब-स्टेशन) का आग्नेय कोण में शुद्ध संतुलन",
             "कच्चे माल से तैयार माल तक का सकारात्मक ऊर्जा प्रवाह चक्र",
             "श्रमिकों की स्थिरता, लेबर विवादों का निवारण एवं सुरक्षा क्षेत्र संवर्धन",
-            "ईटीपी (ETP) और जल निकासी की सटीक दिशा का संतुलन",
+            "ईटीपी (ETP) और जल निकासी की उचित दिशा का संतुलन",
             "बिना तोड़-फोड़ पीतल/तांबे की रॉड्स, कॉस्मिक हेलिक्स व रंग तरंगों द्वारा उपाय"
           ],
           turnaround: "ऑन-साइट ऑडिट 2–3 दिन; 45-पेज का विस्तृत ब्लूप्रिंट 7 कार्यदिवसों में",
@@ -710,8 +710,8 @@ export const translations = {
           badge: "अति-विशिष्ट आवासीय शांति स्थल",
           summary: "पवित्र ज्यामिति, जियोपैथिक स्ट्रेस न्यूट्रलाइजेशन, मुख्य द्वार सुधार और परिवार के मुखिया की जन्मकुंडली के अनुकूल व्यक्तिगत एस्ट्रो-वास्तु का समन्वय।",
           deliverables: [
-            "मालिक के अनुकूल लग्न व नक्षत्र के अनुसार मास्टर बेडरूम की सटीक स्थापना",
-            "वैज्ञानिक लेचर एंटीना द्वारा भूमिगत जियोपैथिक स्ट्रेस व नकारात्मक ऊर्जा की पहचान व शमन",
+            "मालिक के अनुकूल लग्न व नक्षत्र के अनुसार मास्टर बेडरूम की शास्त्रसम्मत स्थापना",
+            "लेचर एंटीना डाउसिंग द्वारा भूमिगत जियोपैथिक स्ट्रेस व नकारात्मक ऊर्जा की पहचान व शमन",
             "रसोई (अग्नि) और मुख्य जल प्रवाह का संतुलन ताकि पारिवारिक स्वास्थ्य उत्तम रहे",
             "बच्चों के अध्ययन कक्ष व ध्यान हेतु ईशान (North-East) ऊर्जा का जाग्रतिकरण",
             "32 द्वारों की ऊर्जा का परीक्षण और धातु पट्टियों द्वारा मुख्य द्वार का ऊर्जावान सुधार",
@@ -727,7 +727,7 @@ export const translations = {
     digitalReports: {
       sectionBadge: "त्वरित डिजिटल स्टोर",
       title: "ऑटोमेटेड ज्योतिषीय ग्रंथ एवं ब्लूप्रिंट्स",
-      subtitle: "गणितीय अचूकता से निर्मित तुरंत डाउनलोड योग्य शोध रिपोर्ट। अपने वार्षिक भाग्य, धन योग और प्रामाणिक उपायों पर स्पष्टता प्राप्त करें।",
+      subtitle: "पारंपरिक वैदिक गणनाओं से निर्मित तुरंत डाउनलोड योग्य शोध रिपोर्ट। अपने वार्षिक भाग्य, धन योग और प्रामाणिक उपायों पर स्पष्टता प्राप्त करें।",
       instantBadge: "त्वरित ऑटोमेटेड डिलीवरी (PDF)",
       samplePreviewBtn: "नमूना व विषय सूची देखें",
       orderReportBtn: "रिपोर्ट अभी ऑर्डर करें",
@@ -738,12 +738,12 @@ export const translations = {
     academy: {
       sectionBadge: "वैदिक विजडम एकेडमी",
       title: "प्रोफेशनल सर्टिफिकेशन एवं मास्टरक्लास",
-      subtitle: "मास्टर रिसर्चर संदीप के. त्रिपाठी से सीखें प्रामाणिक, गणितीय ज्योतिष और बिना तोड़-फोड़ ऊर्जा वास्तु। कोई अंधविश्वास नहीं — केवल अकाट्य सिद्धांत।",
+      subtitle: "मास्टर रिसर्चर संदीप के. त्रिपाठी से सीखें प्राचीन परंपराओं पर आधारित शास्त्रीय फलित ज्योतिष और बिना तोड़-फोड़ ऊर्जा वास्तु।",
       tabs: {
         all: "सभी पाठ्यक्रम",
         astrology: "फलित ज्योतिष (Predictive)",
         vastu: "औद्योगिक व एस्ट्रो-वास्तु",
-        numerology: "गूढ़ विज्ञान व अंकशास्त्र"
+        numerology: "गूढ़ विद्या व अंकशास्त्र"
       },
       duration: "अवधि:",
       level: "स्तर:",
@@ -768,7 +768,7 @@ export const translations = {
             "कस्पल इंटरलिंक थ्योरी (CIL) — 1 से 12 भावों के बहु-आयामी संबंधों का रहस्य",
             "रूलिंग प्लैनेट्स (Ruling Planets) द्वारा जन्म समय सुधार (BTR) की अचूक तकनीक",
             "धन व व्यापार विस्तार: 2, 6, 10, 11 भावों का विशेष विश्लेषण",
-            "कोर्ट केस, स्वास्थ्य एवं विदेश यात्रा/सेटलमेंट का सटीक योग",
+            "कोर्ट केस, स्वास्थ्य एवं विदेश यात्रा/सेटलमेंट का शास्त्रसम्मत योग",
             "100+ वास्तविक कुंडलियों और कॉर्पोरेट आईपीओ का व्यावहारिक विश्लेषण"
           ]
         },
@@ -835,7 +835,7 @@ export const translations = {
           format: "लाइव/वर्चुअल फैक्ट्री ऑडिट्स + लेचर एंटीना कार्यप्रणाली",
           tokenFee: "₹5,999 / $129 (आरक्षण)",
           highlights: [
-            "16 वास्तु जोन्स का 0° से 360° तक का सटीक वैज्ञानिक विभाजन",
+            "16 वास्तु जोन्स का 0° से 360° तक का शास्त्रसम्मत पारंपरिक विभाजन",
             "वास्तु पुरुष मंडल के 45 ऊर्जा क्षेत्रों एवं देवताओं का अध्ययन",
             "तत्व चक्र (जल -> वायु -> अग्नि -> पृथ्वी -> आकाश) और एंटी-एलिमेंट उपाय",
             "मालिक की जन्मकुंडली के ग्रहों का फैक्ट्री/ऑफिस के 16 जोन्स से संबंध (हिट थ्योरी)",
@@ -865,7 +865,7 @@ export const translations = {
     // Free Tools Engine
     tools: {
       sectionBadge: "इंटरएक्टिव निःशुल्क टूल्स एवं लीड मैग्नेट्स",
-      title: "वैदिक परिशुद्ध गणना तंत्र",
+      title: "वैदिक ज्योतिष गणना तंत्र",
       subtitle: "तत्काल जन्म कुंडली गणना, दैनिक कॉर्पोरेट पंचांग, और दिशात्मक स्थानिक ऊर्जा स्कोर।",
       tabKundli: "इंस्टेंट जन्म कुंडली (Kundli)",
       tabPanchang: "दैनिक कॉर्पोरेट पंचांग व चौघड़िया",
@@ -905,7 +905,7 @@ export const translations = {
       },
       vastuEngine: {
         heading: "16-दिशात्मक स्वास्थ्य वास्तु कंपास",
-        subheading: "केंद्रीय ब्रह्मस्थान के चारों ओर किसी भी दिशा पर क्लिक करें और देखें वहां का तत्व संतुलन, सामान्य औद्योगिक दोष और 0% तोड़-फोड़ के वैज्ञानिक उपाय।",
+        subheading: "केंद्रीय ब्रह्मस्थान के चारों ओर किसी भी दिशा पर क्लिक करें और देखें वहां का तत्व संतुलन, सामान्य औद्योगिक दोष और 0% तोड़-फोड़ के शास्त्रसम्मत पारंपरिक उपाय।",
         selectZonePrompt: "कंपास पर दिशा चुनें या नीचे सूची में से चयन करें:",
         zoneHealthScore: "ऊर्जा संतुलन स्कोर:",
         flawIdentified: "इस दिशा का सामान्य औद्योगिक दोष:",
@@ -915,26 +915,26 @@ export const translations = {
 
     // Leadership & Research Section
     leadership: {
-      sectionBadge: "परंपरा, विज्ञान एवं दृष्टि",
+      sectionBadge: "परंपरा, शास्त्र एवं दृष्टि",
       title: "वैदिक विजडम के प्रणेता",
-      subtitle: "प्राचीन गणितीय शास्त्रों और 21वीं सदी के आधुनिक उद्योगों का अद्वितीय संगम। कोई अंधविश्वास नहीं — केवल विज्ञान और सत्य।",
-      methodologyTitle: "हमारी वैज्ञानिक कार्यप्रणाली",
+      subtitle: "प्राचीन वैदिक शास्त्रों और आधुनिक उद्योगों का अद्वितीय संगम। शुद्ध पारंपरिक ज्ञान और प्रामाणिक आध्यात्मिक मार्गदर्शन।",
+      methodologyTitle: "हमारी पारंपरिक कार्यप्रणाली",
       methodologyPoints: [
         {
-          title: "गणितीय केपी कस्पल इंटरलिंक्स (CIL)",
-          desc: "सामान्य भविष्यवाणियों से हटकर, हम सेकेंड ऑफ आर्क तक सब-सब लॉर्ड की गणना करते हैं, जिससे कॉर्पोरेट परिणाम समयबद्ध होते हैं।"
+          title: "प्रामाणिक केपी कस्पल इंटरलिंक्स (CIL)",
+          desc: "पारंपरिक ज्योतिषीय पद्धतियों के आधार पर, हम सब-सब लॉर्ड का सूक्ष्म शास्त्रीय विश्लेषण करते हैं, जिससे निर्णय प्रक्रिया में स्पष्टता प्राप्त होती है।"
         },
         {
-          title: "लेचर एंटीना एवं जियोपैथिक ऊर्जा डाउसिंग",
-          desc: "जर्मन वैज्ञानिक उपकरणों द्वारा जमीन के नीचे की नकारात्मक ऊर्जा, हार्टमैन ग्रिड और रेडिएशन का ऑन-साइट सटीक मापन।"
+          title: "लेचर एंटीना एवं ऊर्जा डाउसिंग",
+          desc: "पारंपरिक ऊर्जा डाउसिंग सिद्धांतों द्वारा भूमिगत ऊर्जा, ग्रिड एवं प्राकृतिक तरंगों का सूक्ष्म पारंपरिक अध्ययन।"
         },
         {
           title: "100% शून्य तोड़-फोड़ (Non-Demolition) उपाय",
           desc: "हम कभी दीवारें या पिलर नहीं तोड़ते। हम धातुओं, पिरामिड्स और ऊर्जा तरंगों द्वारा स्थानिक संतुलन स्थापित करते हैं।"
         },
         {
-          title: "तार्किक, नैतिक एवं वैज्ञानिक दृष्टिकोण",
-          desc: "हम भय दिखाकर व्यापार करने के सख्त खिलाफ हैं। हमारे लिए स्थान और ग्रह एक वैज्ञानिक भौतिकी हैं जिन्हें अलाइन करना आवश्यक है।"
+          title: "तार्किक, नैतिक एवं पारंपरिक दृष्टिकोण",
+          desc: "हम भय दिखाकर व्यापार करने के सख्त खिलाफ हैं। हमारे लिए स्थान और ग्रह प्राकृतिक ऊर्जा व ईश्वरीय व्यवस्था हैं जिन्हें शास्त्रसम्मत विधि से संतुलित करना आवश्यक है।"
         }
       ],
       founders: {
@@ -943,7 +943,7 @@ export const translations = {
           role: "संस्थापक एवं विजनरी लीडर",
           credentials: [
             "संस्थागत साझेदारी एवं बड़े उद्योगों के स्थानिक रणनीतिकार",
-            "गूढ़ वैदिक विज्ञान को आधुनिक उद्योगों हेतु व्यावहारिक बनाने के अग्रणी",
+            "गूढ़ वैदिक ज्ञान को आधुनिक उद्योगों हेतु व्यावहारिक बनाने के अग्रणी",
             "मध्य एवं उत्तर भारत के शीर्ष औद्योगिक घरानों के मुख्य सलाहकार",
             "विशाल भूखंड चयन एवं फैक्ट्री मास्टरप्लानिंग के विशेषज्ञ"
           ],
@@ -954,13 +954,13 @@ export const translations = {
           name: "संदीप के. त्रिपाठी",
           role: "प्रमुख शोधकर्ता एवं मुख्य शिक्षक",
           credentials: [
-            "12+ वर्षों का गणितीय ज्योतिष एवं नॉन-डिमोलिशन वास्तु पर गहन अनुसंधान",
+            "12+ वर्षों का पारंपरिक वैदिक ज्योतिष एवं बिना तोड़-फोड़ वास्तु पर गहन अध्ययन",
             "कृष्णमूर्ति पद्धति (KP), कस्पल इंटरलिंक्स (CIL) एवं भृगु नंदी नाड़ी के मर्मज्ञ",
             "जैमिनी कारकांश, लाल किताब एवं स्वर विज्ञान के आधिकारिक व्याख्याता",
             "विश्व भर में 3,500+ ज्योतिषियों, वास्तु सलाहकारों व आर्किटेक्ट्स को प्रशिक्षित किया"
           ],
-          bio: "आधुनिक भारत के सर्वाधिक विश्लेषणात्मक ज्योतिषीय शोधकर्ताओं में गिने जाने वाले संदीप के. त्रिपाठी जी वैदिक विधाओं में गणितीय दृढ़ता लेकर आए हैं। केपी कस्पल इंटरलिंक्स और सब-सब लॉर्ड सूक्ष्म गणना पर उनके अनुसंधान ने करियर, कॉर्पोरेट मुकदमों और आईपीओ भविष्यवाणियों में अभूतपूर्व सटीकता स्थापित की है। वैदिक विजडम एकेडमी के मुख्य शिक्षक के रूप में, वे 25+ देशों के शिष्यों का मार्गदर्शन कर रहे हैं।",
-          quote: "ज्योतिष आकाशीय गणित है और वास्तु व्यावहारिक भू-भौतिकी (geophysics)। जब आप दोनों को गणितीय सटीकता से जोड़ते हैं, तो अनिश्चितता रणनीतिक स्पष्टता में बदल जाती है।"
+          bio: "आधुनिक भारत के निष्ठावान ज्योतिषीय शोधकर्ताओं में गिने जाने वाले संदीप के. त्रिपाठी जी वैदिक विधाओं में शास्त्रीय प्रामाणिकता लेकर आए हैं। केपी कस्पल इंटरलिंक्स और सब-सब लॉर्ड के पारंपरिक नियमों पर उनके अध्ययन ने करियर, व्यावसायिक मार्गदर्शन और जीवन पथ निर्धारण में स्पष्टता स्थापित की है। वैदिक विजडम एकेडमी के मुख्य शिक्षक के रूप में, वे 25+ देशों के शिष्यों का मार्गदर्शन कर रहे हैं।",
+          quote: "ज्योतिष आकाशीय ज्ञान है और वास्तु पवित्र स्थानिक सामंजस्य। जब आप दोनों को पारंपरिक वैदिक सिद्धांतों से जोड़ते हैं, तो अनिश्चितता आध्यात्मिक व व्यावहारिक स्पष्टता में बदल जाती है।"
         }
       }
     },
@@ -1029,7 +1029,7 @@ export const translations = {
     // Booking Modal
     bookingModal: {
       title: "अपना एंटरप्राइज परामर्श / ऑडिट शेड्यूल करें",
-      subtitle: "सीधे रवींद्र पाठक एवं संदीप के. त्रिपाठी से संपर्क करें। पूर्णतः गोपनीय, वैज्ञानिक एवं परिणाम-उन्मुख।",
+      subtitle: "सीधे रवींद्र पाठक एवं संदीप के. त्रिपाठी से संपर्क करें। पूर्णतः गोपनीय, शास्त्रसम्मत एवं पारंपरिक मूल्यों पर आधारित।",
       serviceType: "परामर्श का प्रकार",
       clientType: "संस्था / क्लाइंट का प्रकार",
       name: "पूरा नाम / संस्था प्रमुख",
@@ -1048,7 +1048,7 @@ export const translations = {
     // Course Enroll Modal
     enrollModal: {
       title: "वैदिक विजडम एकेडमी में प्रवेश",
-      subtitle: "संदीप के. त्रिपाठी जी के लाइव सप्ताहांत बैच से जुड़ें। वास्तविक गणितीय भविष्यवाणियों में निपुण बनें।",
+      subtitle: "संदीप के. त्रिपाठी जी के लाइव सप्ताहांत बैच से जुड़ें। पारंपरिक वैदिक ज्योतिष एवं शास्त्रसम्मत विश्लेषण में निपुण बनें।",
       tokenLabel: "सीट आरक्षण टोकन:",
       benefits: [
         "100% लाइव इंटरएक्टिव सप्ताहांत कक्षाएं एवं प्रश्नोत्तर",
@@ -1063,13 +1063,13 @@ export const translations = {
     // Footer
     footer: {
       aboutTitle: "वैदिक विजडम",
-      aboutText: "बिना किसी तोड़-फोड़ के वैज्ञानिक एस्ट्रो-वास्तु और गणितीय केपी ज्योतिष का अग्रणी संस्थान। विश्व भर के उद्योगपतियों, कॉर्पोरेट बोर्ड्स और ज्योतिष शोधार्थियों को समर्पित।",
+      aboutText: "बिना किसी तोड़-फोड़ के पारंपरिक एस्ट्रो-वास्तु और प्रामाणिक केपी ज्योतिष का संस्थान। विश्व भर के उद्योगपतियों, कॉर्पोरेट बोर्ड्स और वैदिक शोधार्थियों को समर्पित।",
       registeredOffice: "पंजीकृत प्रधान कार्यालय:",
       astrologyLinksTitle: "ज्योतिषीय समाधान",
       vastuLinksTitle: "एस्ट्रो-वास्तु सेवाएं",
       contactTitle: "संपर्क सूत्र",
-      allRights: "सर्वाधिकार सुरक्षित। वैदिक गणित एवं शून्य तोड़-फोड़ वास्तु विज्ञान द्वारा निर्मित।",
-      disclaimer: "अस्वीकरण: वैदिक विजडम केवल गैर-विनाशकारी स्थानिक ऊर्जा संतुलन और गणितीय ज्योतिष का अभ्यास करता है। सभी परामर्श पूर्णतः गोपनीय रखे जाते हैं।"
+      allRights: "सर्वाधिकार सुरक्षित। पारंपरिक वैदिक ज्ञान एवं शून्य तोड़-फोड़ वास्तु सिद्धांतों पर आधारित।",
+      disclaimer: "वैधानिक अस्वीकरण (Legal Disclaimer): वैदिक विस्डम द्वारा प्रदान की जाने वाली सभी सेवाएं, ज्योतिषीय परामर्श, जन्मपत्रिका विश्लेषण और वास्तु मार्गदर्शन प्राचीन पारंपरिक मान्यताओं, शास्त्रों और धार्मिक आस्था पर आधारित हैं। यह किसी भी प्रकार के आधुनिक विज्ञान, चिकित्सा (Medical), कानूनी (Legal) या वित्तीय (Financial) परामर्श का विकल्प नहीं है। दर्शक एवं उपभोक्ता इसे पारंपरिक सांस्कृतिक ज्ञान एवं आध्यात्मिक आस्था के आधार पर ही ग्रहण करें।"
     }
   }
 };

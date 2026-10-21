@@ -260,7 +260,7 @@ Return ONLY valid JSON with this exact schema:
         tzOffset: tzOffset ?? 5.5
       },
       data: generatedReport,
-      regulatoryNotice: 'Official Disclaimer & Ethical Notice: This report is generated through an advanced AI-powered computational Vedic & KP analytics engine based on the mathematical coordinates of your birth details. It is intended for self-awareness, timing assessment, and spiritual guidance. For critical architectural alterations, major industrial audits, or pivotal life decisions, a personal 1-on-1 verification with Principal Researcher Sandeep K. Tripathi or Founder Ravindra Pathak is strongly recommended. Vedic Wisdom upholds strict non-superstitious, evidence-based practices.'
+      regulatoryNotice: 'Official Disclaimer & Traditional Faith Notice: This report is generated through computational Vedic & KP analytics based on astronomical positions and traditional scriptures. It is intended for self-awareness, personal spiritual guidance, and cultural appreciation. This report does not claim scientific empirical certainty and is not a substitute for qualified professional medical, legal, architectural, structural, or financial advice. Vedic Wisdom upholds authentic, traditional scriptural practices.'
     };
 
     return res.status(200).json(reportResponse);

@@ -179,7 +179,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({
               Generate AI Astro-Vastu Dossier
             </h3>
             <p className="text-xs text-slate-500">
-              High-Precision KP Cuspal Interlink & 16-Zone Spatial Diagnostic Report
+              Classical KP Cuspal Interlink & 16-Zone Spatial Diagnostic Report
             </p>
           </div>
         </div>
@@ -395,7 +395,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({
       <div className="px-6 py-3.5 bg-slate-100 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 flex flex-wrap items-center justify-between gap-2">
         <span className="flex items-center gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-          Mathematical Placidus Ephemeris Engine
+          Traditional Classical Ephemeris Engine
         </span>
         <span>100% Non-Demolition Vastu Prescriptions</span>
       </div>

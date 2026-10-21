@@ -162,7 +162,7 @@ export const ReportOrderModal: React.FC<ReportOrderModalProps> = ({
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(9);
       doc.setTextColor(71, 85, 105);
-      const note = 'This report incorporates pure Cuspal Interlink (CIL) Sub-Sub Lord precision, combined with 16-Zone Non-Demolition Elemental Vastu remedies. Every diagnostic finding is mapped mathematically to planetary transits and environmental energy grids.';
+      const note = 'This report incorporates classical Cuspal Interlink (CIL) Sub-Sub Lord analysis, combined with 16-Zone Non-Demolition Elemental Vastu remedies. Rooted in traditional Vedic scriptures, astrological beliefs, and faith-based cultural heritage.';
       const lines = doc.splitTextToSize(note, 160);
       doc.text(lines, 25, y + 18);
 
@@ -386,8 +386,8 @@ export const ReportOrderModal: React.FC<ReportOrderModalProps> = ({
                   <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
                   <span>
                     {currentLang === 'en'
-                      ? 'Automated high-precision KP computation audited by Sandeep K. Tripathi\'s research team.'
-                      : 'संदीप के. त्रिपाठी जी की शोध टीम द्वारा गणितीय रूप से सत्यापित रिपोर्ट।'}
+                      ? 'Traditional KP computation guided by Sandeep K. Tripathi\'s research team based on ancient scriptures.'
+                      : 'संदीप के. त्रिपाठी जी की शोध टीम द्वारा पारंपरिक शास्त्रों व आस्था के आधार पर तैयार रिपोर्ट।'}
                   </span>
                 </div>
 

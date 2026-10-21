@@ -449,11 +449,11 @@ Return ONLY valid JSON with this exact schema:
           .trim();
         generatedReport = JSON.parse(cleanedText);
       } catch (geminiError) {
-        console.warn('Gemini API call encountered error, using mathematical fallback:', geminiError);
+        console.warn('Gemini API call encountered error, using computational fallback:', geminiError);
       }
     }
 
-    // High-precision computational fallback if AI response was not obtained
+    // Traditional computational fallback if AI response was not obtained
     if (!generatedReport) {
       generatedReport = {
         snapshot: {
@@ -540,7 +540,7 @@ Return ONLY valid JSON with this exact schema:
       pob: pob || 'Bhopal, MP, India',
       focusArea: focusArea || 'Full Life & Spatial Blueprint',
       data: generatedReport,
-      regulatoryNotice: 'Official Disclaimer & Ethical Notice: This report is generated through an advanced AI-powered computational Vedic & KP analytics engine based on the mathematical coordinates of your birth details. It is intended for self-awareness, timing assessment, and spiritual guidance. For critical architectural alterations, major industrial audits, or pivotal life decisions, a personal 1-on-1 verification with Principal Researcher Sandeep K. Tripathi or Founder Ravindra Pathak is strongly recommended. Vedic Wisdom upholds strict non-superstitious, evidence-based practices.'
+      regulatoryNotice: 'Official Disclaimer & Traditional Faith Notice: This report is generated through computational Vedic & KP analytics based on astronomical positions and traditional scriptures. It is intended for self-awareness, personal spiritual guidance, and cultural appreciation. This report does not claim scientific empirical certainty and is not a substitute for qualified professional medical, legal, architectural, structural, or financial advice. Vedic Wisdom upholds authentic, traditional scriptural practices.'
     };
 
     return res.json(reportResponse);
@@ -586,7 +586,7 @@ You are "Vedic Wisdom AstroCopilot", an elite AI Spatial Vastu & KP Predictive A
 Headquarters: 178 Maple High Street, Bhopal, MP, India. Hotline / WhatsApp: +91 90094 48601.
 
 Your core mission:
-- Provide rigorous, non-superstitious, mathematical, and practical insights on industrial factory defects, corporate boardroom alignments, and KP astrological timing.
+- Provide rigorous, traditional, scriptural, and practical insights on industrial factory defects, corporate boardroom alignments, and KP astrological timing.
 - Always recommend 0% Non-Demolition remedies (e.g. Copper/Brass/Lead strips, Lecher antenna calibrations, color frequencies, pyramid stabilizers).
 - Keep answers crisp, highly structured (use bullet points and bolding), authoritative, yet humble and ethical.
 - If the question relates to complex industrial machinery, critical M&A timing, or deep Kundli verification, encourage connecting with Sandeep K. Tripathi via the WhatsApp button.
@@ -612,7 +612,7 @@ Your core mission:
       } else if (lower.includes('money') || lower.includes('payment') || lower.includes('cash') || lower.includes('north') || lower.includes('receivable')) {
         reply = `**Cash Flow & Liquidity Spatial Strategy (North / Kuber Zone):**\n\n1. **Diagnostic Check:** Delayed receivables or sluggish sales often signify clutter, heavy iron scrap, or red/orange colors in the **North (000° - Water)** sector.\n2. **Non-Demolition Protocol:**\n   - Clear all red and maroon files or decor from the North zone; introduce blue or soothing off-white tones.\n   - Place an activated brass Kuber Yantra or energized green aventurine sphere in the North to stimulate client conversions.\n3. **KP Timing:** In KP Astrology, cash inflow is governed by houses **2 (Liquid Wealth)** and **11 (Fulfillment of Desires)**.\n\n*Tap below to transfer your factory coordinates to Sandeep Tripathi's research desk on WhatsApp.*`;
       } else {
-        reply = `**Vedic Wisdom Guidance:**\n\nThank you for reaching out. In our methodology established by **Master Sandeep K. Tripathi** and **Ravindra Pathak**, we evaluate every challenge at the intersection of **KP Cuspal Interlink (CIL) Astrology** and **16-Zone Non-Demolition Energy Vastu**.\n\n- **Spatial Alignment:** Balanced cardinal zones ensure positive prana and frictionless physical operations.\n- **Planetary Timing:** Your current Mahadasha-Antardasha dictates the ideal window for aggressive expansion vs stabilization.\n- **Zero Demolition Guarantee:** We never recommend breaking walls; energetic metal strips, pyramids, and frequency tuning provide 100% mathematical correction.\n\n*Feel free to specify your property type (Factory, Office, Villa) or birth details for deeper analysis.*`;
+        reply = `**Vedic Wisdom Guidance:**\n\nThank you for reaching out. In our methodology established by **Master Sandeep K. Tripathi** and **Ravindra Pathak**, we evaluate every challenge at the intersection of **KP Cuspal Interlink (CIL) Astrology** and **16-Zone Non-Demolition Energy Vastu**.\n\n- **Spatial Alignment:** Balanced cardinal zones ensure positive prana and frictionless physical operations.\n- **Planetary Timing:** Your current Mahadasha-Antardasha dictates the ideal window for aggressive expansion vs stabilization.\n- **Zero Demolition Guarantee:** We never recommend breaking walls; energetic metal strips, pyramids, and frequency tuning provide 100% traditional scriptural correction.\n\n*Feel free to specify your property type (Factory, Office, Villa) or birth details for deeper analysis.*`;
       }
     }
 

@@ -316,7 +316,7 @@ export const GlobalPlaceSearch: React.FC<GlobalPlaceSearchProps> = ({
         <div className="pt-2">
           <div className="flex items-center justify-between text-[10px] text-slate-400 mb-1">
             <span>{currentLang === 'en' ? 'Quick Presets:' : 'त्वरित चयन:'}</span>
-            <span className="text-[9px] text-[#D4AF37] font-semibold">{currentLang === 'en' ? 'Global High-Precision GPS' : 'सटीक जीपीएस'}</span>
+            <span className="text-[9px] text-[#D4AF37] font-semibold">{currentLang === 'en' ? 'Global Geographic Coordinates' : 'विश्वसनीय जीपीएस'}</span>
           </div>
           <div className="flex flex-wrap items-center gap-1.5">
             {[

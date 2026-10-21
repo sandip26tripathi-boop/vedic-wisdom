@@ -114,8 +114,8 @@ export const Header: React.FC<HeaderProps> = ({
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
             <span className="font-medium text-slate-200 truncate">
               {currentLang === 'en' 
-                ? 'Empirical 100% Non-Demolition Industrial Vastu & KP Cuspal Interlink (CIL) Astrology'
-                : '100% बिना तोड़-फोड़ औद्योगिक वास्तु एवं गणितीय केपी कस्पल इंटरलिंक ज्योतिष'}
+                ? 'Authentic 100% Non-Demolition Industrial Vastu & Classical KP Cuspal Interlink (CIL) Astrology'
+                : '100% बिना तोड़-फोड़ औद्योगिक वास्तु एवं प्रामाणिक केपी कस्पल इंटरलिंक ज्योतिष'}
             </span>
             <span className="hidden md:inline-block text-[#D4AF37]">|</span>
             <span className="hidden lg:inline-flex items-center space-x-1.5 text-[#D4AF37] font-semibold">
@@ -188,7 +188,7 @@ export const Header: React.FC<HeaderProps> = ({
                     className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors text-xs text-slate-900 dark:text-white"
                   >
                     <div className="font-bold">KP Cuspal Interlinks (CIL)</div>
-                    <div className="text-[10px] text-slate-500">Sub-Sub Lord precision</div>
+                    <div className="text-[10px] text-slate-500">Sub-Sub Lord analysis</div>
                   </button>
                   <button 
                     onClick={() => { setAstroDropdownOpen(false); handleNavClick('consultations'); }}

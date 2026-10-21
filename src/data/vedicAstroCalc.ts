@@ -1,5 +1,5 @@
 /**
- * High-Precision Astronomical Vedic Astrological Engine
+ * Traditional Astronomical Vedic Astrological Engine
  * Computes exact Lagna (Ascendant), Moon sign, Nakshatra, Pada, and all 9 Graha longitudes
  * using Chitrapaksha / Lahiri Ayanamsa, True Greenwich Sidereal Time (LST), and Paul Schlyter's
  * Geocentric Keplerian Ephemeris with Lunar Perturbations (Evection, Variation, Yearly Equation).

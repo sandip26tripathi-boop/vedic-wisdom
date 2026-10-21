@@ -44,7 +44,7 @@ export const ACADEMY_SYLLABUS_REGISTRY: Record<string, CourseSyllabusData> = {
         title: 'Fundamentals of KP System, Placidus House Division & Ruling Planets',
         details: [
           'Placidus House System vs Sripati / Equal House divisions',
-          'Mathematical derivation of House Cusps & Sign, Star, Sub-Lord arcs',
+          'Classical derivation of House Cusps & Sign, Star, Sub-Lord arcs',
           'Ruling Planets (RP) technique for instantaneous question decoding',
           'Ayanamsha accuracy: Krishnamurti Ayanamsha calibration'
         ]
@@ -54,7 +54,7 @@ export const ACADEMY_SYLLABUS_REGISTRY: Record<string, CourseSyllabusData> = {
         title: 'The Power of Sub-Lord & Sub-Sub Lord Theory in Precise Timing',
         details: [
           'Sub-Lord as the definitive decision filter (Yes vs No)',
-          'Sub-Sub Lord precision for exact calendar day prediction',
+          'Sub-Sub Lord analysis for calendar timing windows',
           'Significators of Houses: A, B, C, D 4-fold planetary signification',
           'Dasha-Bhukti-Antara-Sookshma micro-event synchronization'
         ]
@@ -135,7 +135,7 @@ export const ACADEMY_SYLLABUS_REGISTRY: Record<string, CourseSyllabusData> = {
     ],
     practicalOutcomes: [
       'Deliver accurate predictive statements within 60 seconds of seeing a chart.',
-      'Decode karmic debts and career patterns without dependency on complex mathematical divisions.'
+      'Decode karmic debts and career patterns without dependency on complex technical calculations.'
     ]
   },
   jaimini: {
@@ -149,7 +149,7 @@ export const ACADEMY_SYLLABUS_REGISTRY: Record<string, CourseSyllabusData> = {
         number: 1,
         title: 'The 7 Chara Karakas (Atmakaraka, Amatyakaraka, etc.)',
         details: [
-          'Mathematical derivation of 7 Chara Karakas based on planetary degrees',
+          'Classical derivation of 7 Chara Karakas based on planetary degrees',
           'Atmakaraka (AK) — The soul planet and ultimate life purpose',
           'Amatyakaraka (AmK) — Career advisor planet and wealth driver',
           'Bhratrikaraka, Matrikaraka, Pitrikaraka, Gnatikaraka, and Darakaraka'
@@ -230,7 +230,7 @@ export const ACADEMY_SYLLABUS_REGISTRY: Record<string, CourseSyllabusData> = {
         number: 1,
         title: '16 Zonal Energies, 5 Elements (Pancha Tattva) & Heavy Machinery Layouts',
         details: [
-          'Exact 360-degree mathematical division of space into 16 cardinal/intercardinal zones',
+          '360-degree classical division of space into 16 cardinal/intercardinal zones',
           'Pancha Tattva cycle of creation, destruction, and exhaustion (Water, Air, Fire, Earth, Space)',
           'Heavy CNC machinery and raw material placement in South-West (Nairutya - Earth)'
         ]
@@ -246,10 +246,10 @@ export const ACADEMY_SYLLABUS_REGISTRY: Record<string, CourseSyllabusData> = {
       },
       {
         number: 3,
-        title: 'Geopathic Stress Neutralization & Aura Testing using Scientific Lecher Antenna',
+        title: 'Geopathic Energy Neutralization & Aura Testing using Lecher Antenna',
         details: [
           'Hartmann Grid, Curry Lines, and underground water vein detection',
-          'Scientific operation of Lecher Antenna (calibrating to 7.8 Hz, 12.0 Hz, 15.3 Hz)',
+          'Traditional operation of Lecher Antenna for environmental frequency resonance',
           'Aura energy measurement of executive cabins and manufacturing floors'
         ]
       },
@@ -295,7 +295,7 @@ export const ACADEMY_SYLLABUS_REGISTRY: Record<string, CourseSyllabusData> = {
       },
       {
         number: 3,
-        title: 'Scientific Name Spelling Correction aligned with Astrological Lagna',
+        title: 'Traditional Name Spelling Alignment with Astrological Lagna',
         details: [
           'Chaldean and Pythagorean numerology sound vibration principles',
           'Optimizing individual and brand names to 1 (Sun), 5 (Mercury), or 6 (Venus)',
@@ -305,7 +305,7 @@ export const ACADEMY_SYLLABUS_REGISTRY: Record<string, CourseSyllabusData> = {
     ],
     practicalOutcomes: [
       'Optimize personal and corporate mobile numbers for wealth and authority.',
-      'Scientifically balance commercial brand names without legal name change confusion.'
+      'Harmoniously balance commercial brand names without legal name change confusion.'
     ]
   }
 };

@@ -27,7 +27,7 @@ export const digitalReportsData: DigitalReportItem[] = [
     badgeEn: "Most Popular Annual Dossier",
     badgeHi: "सर्वाधिक लोकप्रिय वार्षिक ग्रंथ",
     descriptionEn: "Complete 12-month month-by-month predictive roadmap combining Tajika Annual Solar Return chart, KP Sub-Lord transits, and Dasha timeline to capture opportunities and avoid financial setbacks.",
-    descriptionHi: "12 महीनों का माह-वार भविष्यफल रोडमैप जिसमें ताजिक वर्षफल, केपी सब-लॉर्ड गोचर और दशा का गहन गणितीय विश्लेषण शामिल है ताकि आप सही समय पर बड़े निर्णय ले सकें।",
+    descriptionHi: "12 महीनों का माह-वार भविष्यफल रोडमैप जिसमें ताजिक वर्षफल, केपी सब-लॉर्ड गोचर और दशा का गहन पारंपरिक विश्लेषण शामिल है ताकि आप सही समय पर बड़े निर्णय ले सकें।",
     priceInr: "₹999",
     priceUsd: "$19",
     pagesEn: "38–45 Pages PDF",
@@ -44,7 +44,7 @@ export const digitalReportsData: DigitalReportItem[] = [
       "मुंथा स्वामी की स्थिति एवं वर्षेश का संपूर्ण बल विश्लेषण",
       "माह-वार आर्थिक प्रवाह, स्वास्थ्य और करियर स्कोर सूचकांक",
       "शनि व गुरु के महत्वपूर्ण गोचर एवं दृष्टि परिवर्तन की सही तिथियां",
-      "वर्ष भर के लिए अनुकूल तिमाही लाल किताब के सटीक उपाय"
+      "वर्ष भर के लिए अनुकूल तिमाही लाल किताब के शास्त्रसम्मत उपाय"
     ],
     icon: "Calendar",
     sampleTopicsEn: [
@@ -66,7 +66,7 @@ export const digitalReportsData: DigitalReportItem[] = [
     titleHi: "व्यापार, धन एवं करियर ब्लूप्रिंट",
     badgeEn: "High-Ticket Enterprise Dossier",
     badgeHi: "कॉर्पोरेट व उद्यमी विशेष",
-    descriptionEn: "Mathematical KP Cuspal Interlink analysis of 2nd (wealth), 6th (debts & competitive victory), 10th (status & authority), and 11th (net profit) houses to blueprint your next 5-year growth trajectory.",
+    descriptionEn: "Classical KP Cuspal Interlink analysis of 2nd (wealth), 6th (debts & competitive victory), 10th (status & authority), and 11th (net profit) houses to blueprint your next 5-year growth trajectory.",
     descriptionHi: "द्वितीय (धन), षष्ठ (प्रतिस्पर्धा विजय), दशम (प्रतिष्ठा व पद), एवं एकादश (शुद्ध लाभ) भावों का केपी कस्पल इंटरलिंक विश्लेषण जो आपके अगले 5 वर्षों की विकास योजना तैयार करता है।",
     priceInr: "₹1,499",
     priceUsd: "$29",
@@ -82,7 +82,7 @@ export const digitalReportsData: DigitalReportItem[] = [
     ],
     highlightsHi: [
       "दशम और एकादश कस्प के सब-सब लॉर्ड का सूक्ष्म संबंध",
-      "शेयर बाजार निवेश, फंडरेज़िंग एवं ऋण मुक्ति का सटीक समय",
+      "शेयर बाजार निवेश, फंडरेज़िंग एवं ऋण मुक्ति का अनुकूल समय",
       "सह-संस्थापकों (Co-founders) का कुंडली मिलान एवं व्यावसायिक तालमेल",
       "कंपनी ब्रांडिंग हेतु अनुकूल रंग, अंक और धातु तत्व"
     ],
@@ -105,9 +105,9 @@ export const digitalReportsData: DigitalReportItem[] = [
     titleEn: "Lal Kitab Remedial & Karmic Correction Guide",
     titleHi: "लाल किताब उपाय एवं कर्म सुधार मार्गदर्शिका",
     badgeEn: "Practical Non-Invasive Remedies",
-    badgeHi: "सटीक एवं व्यावहारिक उपाय",
+    badgeHi: "शास्त्रसम्मत एवं व्यावहारिक उपाय",
     descriptionEn: "Authentic 1952 Farman principles decoding your chart's blind planets (Andha Teva), sleeping destiny (Soi Kismat), and ancestral debts (Rina) with safe, non-violent, zero-dogma remedial protocols.",
-    descriptionHi: "1952 के प्रामाणिक लाल किताब सिद्धांतों पर आधारित। अंधे तेवे की पहचान, सोई किस्मत को जगाना और पितृ ऋण मुक्ति हेतु अहिंसक, सुरक्षित एवं शत-प्रतिशत वैज्ञानिक उपाय।",
+    descriptionHi: "1952 के प्रामाणिक लाल किताब सिद्धांतों पर आधारित। अंधे तेवे की पहचान, सोई किस्मत को जगाना और पितृ ऋण मुक्ति हेतु अहिंसक, सुरक्षित एवं शत-प्रतिशत शास्त्रसम्मत पारंपरिक उपाय।",
     priceInr: "₹799",
     priceUsd: "$15",
     pagesEn: "30–35 Pages PDF",
@@ -122,9 +122,9 @@ export const digitalReportsData: DigitalReportItem[] = [
     ],
     highlightsHi: [
       "मसनूई (बनावटी) ग्रहों के टकराव की पहचान और शमन",
-      "सुरक्षित तत्व दान: विशेष धातु, पक्षी/गो-सेवा के सटीक नियम",
+      "सुरक्षित तत्व दान: विशेष धातु, पक्षी/गो-सेवा के शास्त्रीय नियम",
       "दैनिक आचरण में आवश्यक परहेज (नियम) जो दुर्भाग्य से बचाएं",
-      "राहु-केतु व शनि की पीड़ा का बिना भयभीत किए सटीक समाधान"
+      "राहु-केतु व शनि की पीड़ा का बिना भयभीत किए शास्त्रसम्मत समाधान"
     ],
     icon: "ShieldAlert",
     sampleTopicsEn: [
@@ -144,10 +144,10 @@ export const digitalReportsData: DigitalReportItem[] = [
     id: "marriageMatch",
     titleEn: "Marriage Compatibility & 36-Guna Milan Dossier",
     titleHi: "विवाह अनुकूलता एवं 36-गुण मिलान विस्तृत ग्रंथ",
-    badgeEn: "Deep Psychological & Astro Synergy",
+    badgeEn: "Deep Relational & Astro Synergy",
     badgeHi: "गहन वैवाहिक एवं मानसिक तालमेल",
     descriptionEn: "Far beyond standard Ashta-Koota points: rigorous KP Cuspal Interlink analysis of 7th (spouse), 2nd (family harmony), and 11th (fulfillment of desire) cusps with Mangal Dosha and emotional compatibility.",
-    descriptionHi: "केवल 36 गुणों की सामान्य गणना नहीं, बल्कि 7वें (जीवनसाथी), 2रे (कुटुंब सुख) और 11वें (इच्छापूर्ति) भावों का केपी कस्पल इंटरलिंक और मंगल दोष का गहन मनोवैज्ञानिक मिलान।",
+    descriptionHi: "केवल 36 गुणों की सामान्य गणना नहीं, बल्कि 7वें (जीवनसाथी), 2रे (कुटुंब सुख) और 11वें (इच्छापूर्ति) भावों का केपी कस्पल इंटरलिंक और मंगल दोष का गहन शास्त्रीय मिलान।",
     priceInr: "₹899",
     priceUsd: "$17",
     pagesEn: "40–45 Pages PDF",
@@ -174,7 +174,7 @@ export const digitalReportsData: DigitalReportItem[] = [
       "Pre-Wedding Elemental Balancing Remedies"
     ],
     sampleTopicsHi: [
-      "मानसिक एवं वैचारिक सामंजस्य (मनोवैज्ञानिक तालमेल)",
+      "मानसिक एवं वैचारिक सामंजस्य (पारस्परिक तालमेल)",
       "संतान सुख एवं पारिवारिक वंश वृद्धि के ग्रह योग",
       "विवाह उपरांत एक-दूसरे के करियर में भाग्य वृद्धि",
       "विवाह पूर्व करने योग्य विशिष्ट वैदिक शांति उपाय"

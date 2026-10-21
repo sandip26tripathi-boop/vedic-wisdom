@@ -6,21 +6,21 @@ Vedic Wisdom bridges timeless Vedic scriptural traditions with modern non-destru
 
 ## Core Offerings
 
-- [Industrial & Factory Vastu Consultations](https://thevedicwisdom.vercel.app/#consultations): On-site diagnostic evaluations for industrial manufacturing plants, corporate tech hubs, and luxury estates using calibrated Lecher Antenna and 16-zone elemental energy rebalancing with zero physical demolition.
-- [Classical KP Astrology Consultations](https://thevedicwisdom.vercel.app/#consultations): Deep-dive predictive astrological sessions using Krishnamurti Padhdhati (KP System), Cuspal Interlinks (CIL), Sub-Sub Lords, and Bhrigu Nandi Nadi transits.
-- [AI Vedic Dossier Generator](https://thevedicwisdom.vercel.app/#digital-reports): Instant computational Vedic birth chart calculation, Vimshottari Dasha mapping, and high-resolution downloadable PDF dossiers.
-- [Free Calculators & Panchang](https://thevedicwisdom.vercel.app/#free-calculators): Real-time Surya Siddhanta panchang, Choghadiya auspicious windows, Rahu Kaal timers, and North-Indian interactive Kundli chart generator.
-- [Vedic Wisdom Academy](https://thevedicwisdom.vercel.app/#academy): Masterclasses and practical certification curricula in KP Cuspal Interlinks, Industrial Vastu, and Lecher Antenna measurement.
+- [Industrial & Factory Vastu Consultations](https://vedic-wisdom-ant.vercel.app/#consultations): On-site diagnostic evaluations for industrial manufacturing plants, corporate tech hubs, and luxury estates using calibrated Lecher Antenna and 16-zone elemental energy rebalancing with zero physical demolition.
+- [Classical KP Astrology Consultations](https://vedic-wisdom-ant.vercel.app/#consultations): Deep-dive predictive astrological sessions using Krishnamurti Padhdhati (KP System), Cuspal Interlinks (CIL), Sub-Sub Lords, and Bhrigu Nandi Nadi transits.
+- [AI Vedic Dossier Generator](https://vedic-wisdom-ant.vercel.app/#digital-reports): Instant computational Vedic birth chart calculation, Vimshottari Dasha mapping, and high-resolution downloadable PDF dossiers.
+- [Free Calculators & Panchang](https://vedic-wisdom-ant.vercel.app/#free-calculators): Real-time Surya Siddhanta panchang, Choghadiya auspicious windows, Rahu Kaal timers, and North-Indian interactive Kundli chart generator.
+- [Vedic Wisdom Academy](https://vedic-wisdom-ant.vercel.app/#academy): Masterclasses and practical certification curricula in KP Cuspal Interlinks, Industrial Vastu, and Lecher Antenna measurement.
 
 ## Leadership & Advisory Desk
 
-- [Leadership & Heritage](https://thevedicwisdom.vercel.app/#leadership): Guided by founder Ravindra Pathak (40+ years Vedic heritage) and principal researcher Sandeep K. Tripathi (12+ years KP System & Cuspal Interlinks researcher).
+- [Leadership & Heritage](https://vedic-wisdom-ant.vercel.app/#leadership): Guided by founder Ravindra Pathak (40+ years Vedic heritage) and principal researcher Sandeep K. Tripathi (12+ years KP System & Cuspal Interlinks researcher).
 - [WhatsApp Research Hotline](https://wa.me/919009448601): Direct offline advisory desk (+91 90094 48601) for factory visit scheduling, kundli verification, and confidential client inquiries.
 
 ## Statutory Legal Disclaimer
 
-- [Compliance & Disclaimers](https://thevedicwisdom.vercel.app/#disclaimer): All consultations, evaluations, and digital dossiers provided by Vedic Wisdom are based strictly on traditional Vedic scriptures and faith-based practices. They are intended for personal guidance, spiritual enrichment, and cultural heritage. They do not constitute licensed medical, legal, structural, or financial advice.
+- [Compliance & Disclaimers](https://vedic-wisdom-ant.vercel.app/#disclaimer): All consultations, evaluations, and digital dossiers provided by Vedic Wisdom are based strictly on traditional Vedic scriptures and faith-based practices. They are intended for personal guidance, spiritual enrichment, and cultural heritage. They do not constitute licensed medical, legal, structural, or financial advice.
 
 ## Optional Extended Documentation
 
-- [Full Agentic Knowledge Base](https://thevedicwisdom.vercel.app/llms-full.txt): Complete reference catalog for automated LLMs and autonomous browsing agents.
+- [Full Agentic Knowledge Base](https://vedic-wisdom-ant.vercel.app/llms-full.txt): Complete reference catalog for automated LLMs and autonomous browsing agents.

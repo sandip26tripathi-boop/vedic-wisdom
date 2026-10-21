@@ -31,8 +31,8 @@ Vedic Wisdom is a premier advisory platform specializing in traditional Vedic As
 All consultations, astrological calculations, and Vastu recommendations are rooted entirely in traditional Vedic scriptures, classical oral lineage, and personal spiritual faith. These services are provided solely for personal guidance and spiritual enrichment. Vedic Wisdom makes no absolute guarantees and does not provide financial, legal, architectural, engineering, or medical advice.
 
 ## Contact Information
-- Website: https://thevedicwisdom.vercel.app
-- Alternate Domain: https://vedic-wisdom-ant.vercel.app
+- Website: https://vedic-wisdom-ant.vercel.app
+- Alternate Domain: https://thevedicwisdom.vercel.app
 - WhatsApp Research Desk: +91 90094 48601
 - Email: ask.vedicwisdom@gmail.com
 - Central Research Office: Bhopal, Madhya Pradesh, India

@@ -3,7 +3,7 @@
   "name": "Vedic Wisdom AI Catalog",
   "version": "1.0.0",
   "description": "Agentic API, tools, and services catalog for Vedic Wisdom traditional astrology and non-demolition spatial Vastu services.",
-  "homepage": "https://thevedicwisdom.vercel.app",
+  "homepage": "https://vedic-wisdom-ant.vercel.app",
   "publisher": {
     "name": "Vedic Wisdom Advisory Desk",
     "founders": ["Ravindra Pathak", "Sandeep K. Tripathi"],
@@ -16,7 +16,7 @@
       "id": "janam-kundli-calculation",
       "name": "Janam Kundli Calculation Engine",
       "description": "Calculates North-Indian Vedic birth charts using Lahiri / Chitrapaksha Ayanamsa and KP Cuspal sub-lords.",
-      "endpoint": "https://thevedicwisdom.vercel.app/#free-calculators",
+      "endpoint": "https://vedic-wisdom-ant.vercel.app/#free-calculators",
       "parameters": {
         "name": { "type": "string", "required": true },
         "dob": { "type": "string", "format": "date", "required": true },
@@ -28,25 +28,25 @@
       "id": "panchang-muhurta",
       "name": "Surya Siddhanta Daily Panchang & Choghadiya",
       "description": "Real-time Tithi, Nakshatra, Yoga, Karana, and Choghadiya muhurtas.",
-      "endpoint": "https://thevedicwisdom.vercel.app/#free-calculators"
+      "endpoint": "https://vedic-wisdom-ant.vercel.app/#free-calculators"
     },
     {
       "id": "16-zone-vastu-audit",
       "name": "16-Zone Spatial Vastu Diagnostic Tool",
       "description": "Interactive rotational dial providing zone-specific elemental analysis and 100% non-demolition remedies.",
-      "endpoint": "https://thevedicwisdom.vercel.app/#free-calculators"
+      "endpoint": "https://vedic-wisdom-ant.vercel.app/#free-calculators"
     },
     {
       "id": "digital-reports-generator",
       "name": "Automated Vedic Dossier Generator",
       "description": "Generates downloadable personalized multi-page PDF astrological and Vastu dossiers.",
-      "endpoint": "https://thevedicwisdom.vercel.app/#digital-reports"
+      "endpoint": "https://vedic-wisdom-ant.vercel.app/#digital-reports"
     },
     {
       "id": "offline-factory-consultation",
       "name": "Offline Industrial & Site Vastu Consultation",
       "description": "On-site engineering inspection using Lecher Antenna across India, UAE, and GCC countries.",
-      "endpoint": "https://thevedicwisdom.vercel.app/#consultations"
+      "endpoint": "https://vedic-wisdom-ant.vercel.app/#consultations"
     }
   ],
   "disclaimer": "All consultations, evaluations, and digital dossiers provided by Vedic Wisdom are based strictly on traditional Vedic scriptures and faith-based practices. They are intended for personal guidance, spiritual enrichment, and cultural heritage."

@@ -12,19 +12,21 @@ import { useAutoLogout } from './hooks/useAutoLogout.ts';
 import { Header } from './components/Header.tsx';
 import { Hero } from './components/Hero.tsx';
 import { TrustBar } from './components/TrustBar.tsx';
-import { OfflineWorkflowSection } from './components/OfflineWorkflowSection.tsx';
-import { ConsultationsGrid } from './components/ConsultationsGrid.tsx';
-import { DigitalReportsSection } from './components/DigitalReportsSection.tsx';
-import { AcademyDirectory } from './components/AcademyDirectory.tsx';
-import { AstroToolsEngine } from './components/AstroToolsEngine.tsx';
-import { LeadershipSection } from './components/LeadershipSection.tsx';
-import { CaseStudiesSection } from './components/CaseStudiesSection.tsx';
-import { FAQSection } from './components/FAQSection.tsx';
-import { FloatingWhatsApp } from './components/FloatingWhatsApp.tsx';
 import { Footer } from './components/Footer.tsx';
 import { DigitalReportItem, digitalReportsData } from './data/digitalReports.ts';
 import { Sparkles, ArrowLeft, ShieldCheck, AlertTriangle, X } from 'lucide-react';
 import { SriYantraMotif } from './components/SriYantraMotif.tsx';
+
+// Code-split heavy below-the-fold sections for instant initial render (95+ Mobile PageSpeed)
+const OfflineWorkflowSection = lazy(() => import('./components/OfflineWorkflowSection.tsx').then(m => ({ default: m.OfflineWorkflowSection })));
+const ConsultationsGrid = lazy(() => import('./components/ConsultationsGrid.tsx').then(m => ({ default: m.ConsultationsGrid })));
+const DigitalReportsSection = lazy(() => import('./components/DigitalReportsSection.tsx').then(m => ({ default: m.DigitalReportsSection })));
+const AstroToolsEngine = lazy(() => import('./components/AstroToolsEngine.tsx').then(m => ({ default: m.AstroToolsEngine })));
+const AcademyDirectory = lazy(() => import('./components/AcademyDirectory.tsx').then(m => ({ default: m.AcademyDirectory })));
+const LeadershipSection = lazy(() => import('./components/LeadershipSection.tsx').then(m => ({ default: m.LeadershipSection })));
+const CaseStudiesSection = lazy(() => import('./components/CaseStudiesSection.tsx').then(m => ({ default: m.CaseStudiesSection })));
+const FAQSection = lazy(() => import('./components/FAQSection.tsx').then(m => ({ default: m.FAQSection })));
+const FloatingWhatsApp = lazy(() => import('./components/FloatingWhatsApp.tsx').then(m => ({ default: m.FloatingWhatsApp })));
 
 // Code-split heavy interactive modals & secondary views for 95+ Mobile Performance
 const BookingModal = lazy(() => import('./components/BookingModal.tsx').then(m => ({ default: m.BookingModal })));
@@ -331,55 +333,58 @@ function MainApp() {
             {/* 2. Enterprise Trust & Credibility Strip */}
             <TrustBar currentLang={currentLang} />
 
-            {/* 2.5. Offline Empirical Execution Workflow (Online Coordinates to On-Site Rectification) */}
-            <OfflineWorkflowSection
-              currentLang={currentLang}
-              onOpenBooking={handleOpenBooking}
-            />
+            {/* Below-the-fold content code-split with Suspense for ultra-fast mobile FCP/LCP */}
+            <Suspense fallback={<div className="py-20 flex justify-center"><div className="w-8 h-8 rounded-full border-2 border-amber-600 border-t-transparent animate-spin" /></div>}>
+              {/* 2.5. Offline Empirical Execution Workflow (Online Coordinates to On-Site Rectification) */}
+              <OfflineWorkflowSection
+                currentLang={currentLang}
+                onOpenBooking={handleOpenBooking}
+              />
 
-            {/* 3. Dual Consultation Ecosystem [ Astrology Consultations | Astro-Vastu Audits ] */}
-            <ConsultationsGrid
-              currentLang={currentLang}
-              onOpenBooking={handleOpenBooking}
-              onOpenScopeModal={handleOpenScope}
-            />
+              {/* 3. Dual Consultation Ecosystem [ Astrology Consultations | Astro-Vastu Audits ] */}
+              <ConsultationsGrid
+                currentLang={currentLang}
+                onOpenBooking={handleOpenBooking}
+                onOpenScopeModal={handleOpenScope}
+              />
 
-            {/* 4. Automated Digital Astro Reports (Instant Download Engine) */}
-            <DigitalReportsSection
-              currentLang={currentLang}
-              onOpenReportModal={handleOpenReportModal}
-              onOpenGenerateReport={handleOpenGenerateReport}
-            />
+              {/* 4. Automated Digital Astro Reports (Instant Download Engine) */}
+              <DigitalReportsSection
+                currentLang={currentLang}
+                onOpenReportModal={handleOpenReportModal}
+                onOpenGenerateReport={handleOpenGenerateReport}
+              />
 
-            {/* 5. Interactive Free Tools & Lead Magnets (Instant Kundli, Panchang & Choghadiya, Vastu Compass) */}
-            <AstroToolsEngine
-              currentLang={currentLang}
-              onOpenBooking={handleOpenBooking}
-            />
+              {/* 5. Interactive Free Tools & Lead Magnets (Instant Kundli, Panchang & Choghadiya, Vastu Compass) */}
+              <AstroToolsEngine
+                currentLang={currentLang}
+                onOpenBooking={handleOpenBooking}
+              />
 
-            {/* 6. Vedic Wisdom Academy Professional Course Directory */}
-            <AcademyDirectory
-              currentLang={currentLang}
-              onOpenEnroll={handleOpenEnroll}
-            />
+              {/* 6. Vedic Wisdom Academy Professional Course Directory */}
+              <AcademyDirectory
+                currentLang={currentLang}
+                onOpenEnroll={handleOpenEnroll}
+              />
 
-            {/* 7. Leadership, Lineage & Research Methodology */}
-            <LeadershipSection
-              currentLang={currentLang}
-              onOpenBooking={handleOpenBooking}
-            />
+              {/* 7. Leadership, Lineage & Research Methodology */}
+              <LeadershipSection
+                currentLang={currentLang}
+                onOpenBooking={handleOpenBooking}
+              />
 
-            {/* 8. Industrial Turnaround Case Studies */}
-            <CaseStudiesSection
-              currentLang={currentLang}
-              onOpenBooking={handleOpenBooking}
-            />
+              {/* 8. Industrial Turnaround Case Studies */}
+              <CaseStudiesSection
+                currentLang={currentLang}
+                onOpenBooking={handleOpenBooking}
+              />
 
-            {/* 9. Authentic Vedic & Non-Demolition Vastu FAQ Section */}
-            <FAQSection
-              currentLang={currentLang}
-              onOpenBooking={handleOpenBooking}
-            />
+              {/* 9. Authentic Vedic & Non-Demolition Vastu FAQ Section */}
+              <FAQSection
+                currentLang={currentLang}
+                onOpenBooking={handleOpenBooking}
+              />
+            </Suspense>
           </main>
 
           {/* 4-Column Luxury Footer */}
@@ -395,10 +400,12 @@ function MainApp() {
       )}
 
       {/* Intelligent Floating WhatsApp Chatbot & Community Drawer */}
-      <FloatingWhatsApp 
-        currentLang={currentLang} 
-        onOpenCopilot={() => setIsCopilotOpen(true)}
-      />
+      <Suspense fallback={null}>
+        <FloatingWhatsApp 
+          currentLang={currentLang} 
+          onOpenCopilot={() => setIsCopilotOpen(true)}
+        />
+      </Suspense>
 
       {/* Modals & Slide-Overs wrapped in Suspense for Zero Initial Load Impact */}
       <Suspense fallback={null}>

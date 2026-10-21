@@ -261,11 +261,11 @@ export const Footer: React.FC<FooterProps> = ({
         </div>
 
         {/* Bottom Strip */}
-        <div className="pt-8 flex flex-col md:flex-row items-center justify-between text-[11px] text-slate-500 gap-4">
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between text-[11px] text-slate-400 gap-4">
           <div>
-            © 2026 <span className="text-slate-300 font-semibold">Vedic Wisdom</span>. {f.allRights}
+            © 2026 <span className="text-slate-200 font-semibold">Vedic Wisdom</span>. {f.allRights}
           </div>
-          <div className="text-center md:text-right max-w-lg text-[10px] text-slate-500">
+          <div className="text-center md:text-right max-w-lg text-[10px] text-slate-400">
             {f.disclaimer}
           </div>
         </div>

@@ -12,6 +12,18 @@
       "dest": "/sitemap.xml"
     },
     {
+      "src": "/llms.txt",
+      "dest": "/llms.txt"
+    },
+    {
+      "src": "/llms-full.txt",
+      "dest": "/llms-full.txt"
+    },
+    {
+      "src": "/ai-catalog.json",
+      "dest": "/ai-catalog.json"
+    },
+    {
       "src": "/assets/(.*)",
       "dest": "/assets/$1"
     },

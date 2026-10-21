@@ -283,7 +283,7 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-10">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/30 text-xs font-bold text-[#B45309] dark:text-[#F3E5AB]">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/30 text-xs font-bold text-amber-950 dark:text-[#F3E5AB]">
             <Sparkles className="w-4 h-4 text-[#D4AF37]" />
             <span>{tools.sectionBadge}</span>
           </div>
@@ -339,7 +339,7 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
         {/* Lead Capture Banner if not unlocked */}
         {!isUnlocked && (
           <div className="max-w-3xl mx-auto mb-10 p-6 rounded-3xl bg-gradient-to-r from-amber-500/10 via-[#D4AF37]/15 to-amber-500/10 border border-[#D4AF37]/40 shadow-xl text-center">
-            <div className="flex items-center justify-center space-x-2 text-xs font-bold text-[#B45309] dark:text-[#F3E5AB] uppercase tracking-wider mb-2">
+            <div className="flex items-center justify-center space-x-2 text-xs font-bold text-amber-950 dark:text-[#F3E5AB] uppercase tracking-wider mb-2">
               <ShieldCheck className="w-4 h-4" />
               <span>{currentLang === 'en' ? 'Unlock Instant Full Vedic Intelligence Report' : 'निःशुल्क पूर्ण वैदिक रिपोर्ट अनलॉक करें'}</span>
             </div>
@@ -438,7 +438,7 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                   <Grid className="w-5 h-5 text-[#D4AF37]" />
                   <span>{currentLang === 'en' ? 'Birth Chart Inputs' : 'जन्म कुंडली इनपुट'}</span>
                 </h3>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-900 dark:text-emerald-300 font-bold">
                   LAHIRI AYANAMSA
                 </span>
               </div>
@@ -550,7 +550,7 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                     {kundliName} • {dob} {tob} • {pob}
                   </p>
                 </div>
-                <span className="text-[10px] px-3 py-1 rounded-full bg-[#D4AF37]/15 text-[#B45309] dark:text-[#F3E5AB] font-bold">
+                <span className="text-[10px] px-3 py-1 rounded-full bg-[#D4AF37]/15 text-amber-950 dark:text-[#F3E5AB] font-bold">
                   D1 RASHI (LAGNA)
                 </span>
               </div>
@@ -562,16 +562,16 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                   <div className="font-bold text-slate-900 dark:text-white mt-0.5">{kundliResult.lagnaNameEn} ({kundliResult.lagnaDegree}°)</div>
                 </div>
                 <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                  <div className="text-[10px] text-slate-500 uppercase">{tools.kundliEngine.moonSignHeading}</div>
-                  <div className="font-bold text-[#B45309] dark:text-[#D4AF37] mt-0.5">{kundliResult.moonSignEn} ({kundliResult.moonDegree}°)</div>
+                  <div className="text-[10px] text-slate-600 dark:text-slate-300 uppercase font-semibold">{tools.kundliEngine.moonSignHeading}</div>
+                  <div className="font-bold text-amber-950 dark:text-[#D4AF37] mt-0.5">{kundliResult.moonSignEn} ({kundliResult.moonDegree}°)</div>
                 </div>
                 <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                  <div className="text-[10px] text-slate-500 uppercase">{tools.kundliEngine.sunSignHeading}</div>
-                  <div className="font-bold text-amber-600 dark:text-amber-400 mt-0.5">{kundliResult.planets.find(p => p.symbol === 'Su')?.rashiNameEn.split(' ')[0] || 'Leo'}</div>
+                  <div className="text-[10px] text-slate-600 dark:text-slate-300 uppercase font-semibold">{tools.kundliEngine.sunSignHeading}</div>
+                  <div className="font-bold text-amber-950 dark:text-amber-300 mt-0.5">{kundliResult.planets.find(p => p.symbol === 'Su')?.rashiNameEn.split(' ')[0] || 'Leo'}</div>
                 </div>
                 <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                  <div className="text-[10px] text-slate-500 uppercase">{tools.kundliEngine.nakshatraHeading}</div>
-                  <div className="font-bold text-emerald-600 dark:text-emerald-400 mt-0.5 truncate">{kundliResult.nakshatraEn}</div>
+                  <div className="text-[10px] text-slate-600 dark:text-slate-300 uppercase font-semibold">{tools.kundliEngine.nakshatraHeading}</div>
+                  <div className="font-bold text-emerald-900 dark:text-emerald-300 mt-0.5 truncate">{kundliResult.nakshatraEn}</div>
                 </div>
               </div>
 
@@ -691,7 +691,7 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                 <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-[10px]">
                   {kundliResult.planets.map((p, idx) => (
                     <div key={idx} className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 text-center">
-                      <div className="font-bold text-[#D4AF37]">{p.symbol} - {currentLang === 'en' ? p.nameEn.split(' ')[0] : p.nameHi}</div>
+                      <div className="font-bold text-amber-950 dark:text-[#D4AF37]">{p.symbol} - {currentLang === 'en' ? p.nameEn.split(' ')[0] : p.nameHi}</div>
                       <div className="text-slate-800 dark:text-slate-100 font-semibold truncate">{p.rashiNameEn.split(' ')[0]}</div>
                       <div className="text-slate-600 dark:text-slate-300 font-mono text-[9px] font-semibold">{p.degInRashi.toFixed(1)}° • H{p.house}</div>
                     </div>
@@ -808,7 +808,7 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
 
               {/* Executive Advisory */}
               <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs leading-relaxed">
-                <div className="font-bold text-[#B45309] dark:text-[#D4AF37] mb-1 flex items-center gap-1.5">
+                <div className="font-bold text-amber-950 dark:text-[#F3E5AB] mb-1 flex items-center gap-1.5">
                   <TrendingUp className="w-4 h-4" />
                   <span>{tools.panchangEngine.advisory}</span>
                 </div>
@@ -872,7 +872,7 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                   <Compass className="w-5 h-5 text-[#D4AF37]" />
                   <span>{tools.vastuEngine.heading}</span>
                 </h3>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#D4AF37]/15 text-[#B45309] dark:text-[#F3E5AB] font-bold">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#D4AF37]/15 text-amber-950 dark:text-[#F3E5AB] font-bold">
                   16 ZONES
                 </span>
               </div>
@@ -896,7 +896,7 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                     className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 cursor-pointer ${
                       isLiveCompass
                         ? 'bg-emerald-500 text-white shadow-xs'
-                        : 'bg-[#D4AF37]/20 text-[#B45309] dark:text-[#F3E5AB] hover:bg-[#D4AF37]/30 border border-[#D4AF37]/40'
+                        : 'bg-[#D4AF37]/20 text-amber-950 dark:text-[#F3E5AB] font-bold hover:bg-[#D4AF37]/30 border border-[#D4AF37]/40'
                     }`}
                   >
                     <Compass className={`w-3 h-3 ${isLiveCompass ? 'animate-spin' : ''}`} />
@@ -967,7 +967,7 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
 
               {/* Central Brahmasthan Info */}
               <div className="p-3.5 rounded-2xl bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-xs">
-                <div className="font-bold text-[#B45309] dark:text-[#F3E5AB] flex items-center gap-1.5 mb-1">
+                <div className="font-bold text-amber-950 dark:text-[#F3E5AB] flex items-center gap-1.5 mb-1">
                   <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
                   <span>{currentLang === 'en' ? 'Brahmasthan (Cosmic Nexus)' : 'ब्रह्मस्थान (कॉस्मिक नाभि)'}</span>
                 </div>

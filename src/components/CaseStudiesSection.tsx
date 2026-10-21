@@ -31,7 +31,7 @@ export const CaseStudiesSection: React.FC<CaseStudiesSectionProps> = ({
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-14">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-bold text-emerald-700 dark:text-emerald-400">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-xs font-bold text-emerald-900 dark:text-emerald-200">
             <TrendingUp className="w-4 h-4" />
             <span>{cs.sectionBadge}</span>
           </div>
@@ -54,7 +54,7 @@ export const CaseStudiesSection: React.FC<CaseStudiesSectionProps> = ({
             >
               <div>
                 {/* Header */}
-                <div className="flex items-center space-x-2 text-xs text-[#B45309] dark:text-[#D4AF37] font-semibold mb-2">
+                <div className="flex items-center space-x-2 text-xs text-amber-950 dark:text-[#F3E5AB] font-bold mb-2">
                   <MapPin className="w-3.5 h-3.5" />
                   <span>{item.location}</span>
                 </div>
@@ -101,12 +101,12 @@ export const CaseStudiesSection: React.FC<CaseStudiesSectionProps> = ({
 
               {/* Card Footer Badge */}
               <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300">
+                <span className="text-[11px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-950 dark:text-emerald-200">
                   {item.roi}
                 </span>
                 <button
                   onClick={() => onOpenBooking('industrial')}
-                  className="text-xs font-semibold text-[#B45309] dark:text-[#D4AF37] hover:underline flex items-center gap-1 cursor-pointer"
+                  className="text-xs font-bold text-amber-950 dark:text-[#F3E5AB] hover:underline flex items-center gap-1 cursor-pointer"
                 >
                   <span>{currentLang === 'en' ? 'Audit Plant' : 'ऑडिट कराएं'}</span>
                   <ArrowRight className="w-3.5 h-3.5" />

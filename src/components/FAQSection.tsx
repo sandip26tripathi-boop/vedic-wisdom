@@ -108,7 +108,7 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
         
         {/* Section Header */}
         <div className="text-center space-y-3 mb-10">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/35 text-xs font-bold text-[#B45309] dark:text-[#F3E5AB]">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/35 text-xs font-bold text-amber-950 dark:text-[#F3E5AB]">
             <HelpCircle className="w-4 h-4 text-[#D4AF37]" />
             <span>{currentLang === 'en' ? 'Frequently Asked Questions' : 'अक्सर पूछे जाने वाले प्रश्न'}</span>
           </div>

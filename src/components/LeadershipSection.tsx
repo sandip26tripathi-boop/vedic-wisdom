@@ -75,7 +75,7 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({
                   </div>
                 </div>
 
-                <span className="text-[11px] font-semibold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 self-start sm:self-auto">
+                <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-950 dark:text-emerald-200 border border-emerald-500/40 self-start sm:self-auto">
                   {currentLang === 'en' ? 'Institutional Strategist' : 'संस्थागत रणनीतिकार'}
                 </span>
               </div>
@@ -144,7 +144,7 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({
                   </div>
                 </div>
 
-                <span className="text-[11px] font-semibold px-3 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 self-start sm:self-auto">
+                <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-amber-500/20 text-amber-950 dark:text-amber-200 border border-amber-500/40 self-start sm:self-auto">
                   {currentLang === 'en' ? '12+ Yrs KP & Vastu Researcher' : '12+ वर्ष पारंपरिक शोध'}
                 </span>
               </div>

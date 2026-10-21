@@ -55,7 +55,7 @@ export const DigitalReportsSection: React.FC<DigitalReportsSectionProps> = ({
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-10">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/30 text-xs font-bold text-[#B45309] dark:text-[#F3E5AB]">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/30 text-xs font-bold text-amber-950 dark:text-[#F3E5AB]">
             <Sparkles className="w-4 h-4 text-[#D4AF37]" />
             <span>{dr.sectionBadge}</span>
           </div>
@@ -193,7 +193,7 @@ export const DigitalReportsSection: React.FC<DigitalReportsSectionProps> = ({
                       });
                       openCart();
                     }}
-                    className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2.5 rounded-xl border border-[#D4AF37]/50 bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 text-[#B45309] dark:text-[#F3E5AB] transition-colors cursor-pointer"
+                    className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2.5 rounded-xl border border-[#D4AF37]/50 bg-[#D4AF37]/15 hover:bg-[#D4AF37]/25 text-amber-950 dark:text-[#F3E5AB] font-bold transition-colors cursor-pointer"
                     title={currentLang === 'en' ? 'Add Report to Cart' : 'रिपोर्ट कार्ट में जोड़ें'}
                     aria-label={`Add ${currentLang === 'en' ? report.titleEn : report.titleHi} to Cart`}
                   >

@@ -70,7 +70,7 @@ export const OfflineWorkflowSection: React.FC<OfflineWorkflowSectionProps> = ({
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-14">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/35 text-xs font-bold text-[#B45309] dark:text-[#F3E5AB]">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/35 text-xs font-bold text-amber-950 dark:text-[#F3E5AB]">
             <Building2 className="w-4 h-4 text-[#D4AF37]" />
             <span>{currentLang === 'en' ? 'Empirical Offline Delivery Model' : 'विश्वसनीय ऑफ़लाइन कार्यप्रणाली'}</span>
           </div>
@@ -98,7 +98,7 @@ export const OfflineWorkflowSection: React.FC<OfflineWorkflowSectionProps> = ({
               className="relative rounded-3xl p-7 bg-white dark:bg-[#111827] border border-[#D4AF37]/35 shadow-xl hover:shadow-2xl transition-all flex flex-col justify-between group hover:-translate-y-1 duration-300"
             >
               {/* Step Number Watermark */}
-              <div className="absolute top-4 right-5 text-4xl font-mono font-black text-slate-100 dark:text-slate-800/80 pointer-events-none select-none">
+              <div aria-hidden="true" className="absolute top-4 right-5 text-4xl font-mono font-black text-slate-100 dark:text-slate-800/80 pointer-events-none select-none">
                 {item.step}
               </div>
 

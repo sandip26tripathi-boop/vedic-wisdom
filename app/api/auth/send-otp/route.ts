@@ -100,34 +100,12 @@ export async function POST(req: Request) {
 
     const maskedPhone = `+91 ${cleanPhone.slice(0, 2)}******${cleanPhone.slice(-2)}`;
 
-    // If Fast2SMS key is present, try real SMS
-    const fast2smsApiKey = process.env.FAST2SMS_API_KEY || process.env.SMS_API_KEY;
-    if (fast2smsApiKey) {
-      try {
-        await fetch('https://www.fast2sms.com/dev/bulkV2', {
-          method: 'POST',
-          headers: {
-            'authorization': fast2smsApiKey,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            route: 'otp',
-            variables_values: otpCode,
-            numbers: cleanPhone
-          })
-        });
-      } catch (e) {
-        console.warn('SMS dispatch error', e);
-      }
-    }
-
     return new Response(
       JSON.stringify({
         success: true,
-        message: `6-digit verification code sent to ${maskedPhone}.`,
+        message: `Verification code dispatched for ${maskedPhone}.`,
         target: maskedPhone,
-        channel: 'mobile',
-        devOtpPreview: otpCode
+        channel: 'mobile'
       }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );

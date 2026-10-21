@@ -17,10 +17,9 @@ export default async function handler(req: any, res: any) {
 
       return res.status(200).json({
         success: true,
-        message: `6-digit verification code sent to ${maskedEmail}.`,
+        message: `Verification link sent to ${maskedEmail}.`,
         target: maskedEmail,
-        channel: 'email',
-        devOtpPreview: otpCode
+        channel: 'email'
       });
     }
 
@@ -30,10 +29,9 @@ export default async function handler(req: any, res: any) {
 
     return res.status(200).json({
       success: true,
-      message: `6-digit verification code sent to ${channel === 'whatsapp' ? `WhatsApp (${maskedPhone})` : maskedPhone}.`,
+      message: `Verification link sent to ${channel === 'whatsapp' ? `WhatsApp (${maskedPhone})` : maskedPhone}.`,
       target: channel === 'whatsapp' ? `WhatsApp: ${maskedPhone}` : maskedPhone,
-      channel: channel || 'mobile',
-      devOtpPreview: otpCode
+      channel: channel || 'whatsapp'
     });
   } catch (err: any) {
     return res.status(500).json({ success: false, message: err.message || 'Error processing request' });

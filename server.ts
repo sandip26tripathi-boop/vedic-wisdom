@@ -150,36 +150,11 @@ app.post('/api/auth/send-otp', async (req: Request, res: Response) => {
       attempts: 0
     });
 
-    // Real Mobile SMS Gateway integration if FAST2SMS_API_KEY is available
-    const fast2smsApiKey = process.env.FAST2SMS_API_KEY || process.env.SMS_API_KEY;
-    if (channel !== 'whatsapp' && fast2smsApiKey) {
-      try {
-        await fetch('https://www.fast2sms.com/dev/bulkV2', {
-          method: 'POST',
-          headers: {
-            'authorization': fast2smsApiKey,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            route: 'otp',
-            variables_values: otpCode,
-            numbers: cleanPhone
-          })
-        });
-        console.log(`[SMS Gateway] Dispatched SMS to ${cleanPhone}`);
-      } catch (smsErr: any) {
-        console.warn(`[SMS Gateway Error]:`, smsErr.message);
-      }
-    } else {
-      console.log(`[Vedic Auth ${channel === 'whatsapp' ? 'WhatsApp' : 'Mobile'} OTP] Generated for +91 ${cleanPhone}: [${otpCode}]`);
-    }
-
     return res.json({
       success: true,
-      message: `6-digit verification code sent to ${channel === 'whatsapp' ? `WhatsApp (${masked})` : masked}.`,
+      message: `Verification link dispatched for ${channel === 'whatsapp' ? `WhatsApp (${masked})` : masked}.`,
       target: channel === 'whatsapp' ? `WhatsApp: ${masked}` : masked,
-      channel: channel || 'mobile',
-      devOtpPreview: otpCode
+      channel: channel || 'whatsapp'
     });
       channel: 'mobile',
       devOtpPreview: otpCode

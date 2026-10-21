@@ -308,7 +308,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({
                   />
                 </div>
                 <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 block">
-                  *Accurate time ensures exact Sub-Sub Lord house boundary calculation.
+                  *Precise time facilitates systematic Sub-Sub Lord house boundary calculation.
                 </span>
               </div>
             </div>
@@ -397,7 +397,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
           Traditional Classical Ephemeris Engine
         </span>
-        <span>100% Non-Demolition Vastu Prescriptions</span>
+        <span>Complete Non-Demolition Vastu Prescriptions</span>
       </div>
     </div>
   );

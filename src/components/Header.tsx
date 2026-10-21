@@ -23,6 +23,7 @@ import { translations } from '../data/translations.ts';
 import { Language, Theme } from '../types/index.ts';
 import { useAuth } from '../context/AuthContext.tsx';
 import { useCart } from '../context/CartContext.tsx';
+import { CurrencyToggle } from '../context/CurrencyContext.tsx';
 
 interface HeaderProps {
   currentLang: Language;
@@ -114,8 +115,8 @@ export const Header: React.FC<HeaderProps> = ({
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
             <span className="font-medium text-slate-200 truncate">
               {currentLang === 'en' 
-                ? 'Authentic 100% Non-Demolition Industrial Vastu & Classical KP Cuspal Interlink (CIL) Astrology'
-                : '100% बिना तोड़-फोड़ औद्योगिक वास्तु एवं प्रामाणिक केपी कस्पल इंटरलिंक ज्योतिष'}
+                ? 'Authentic Non-Demolition Spatial Vastu & Classical KP Cuspal Interlink (CIL) Astrology'
+                : 'बिना तोड़-फोड़ स्थानिक वास्तु एवं प्रामाणिक केपी कस्पल इंटरलिंक ज्योतिष'}
             </span>
             <span className="hidden md:inline-block text-[#D4AF37]">|</span>
             <span className="hidden lg:inline-flex items-center space-x-1.5 text-[#D4AF37] font-semibold">
@@ -329,6 +330,9 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Right Controls: Cart, Language, Theme & PROMINENT TOP-RIGHT LOGIN */}
           <div className="flex items-center space-x-1 sm:space-x-2 shrink-0">
             
+            {/* Currency Switcher (INR / USD) */}
+            <CurrencyToggle className="hidden sm:inline-flex" />
+
             {/* Language Switcher (EN / HI) - Desktop (Hidden on mobile, accessible in mobile drawer & footer) */}
             <div className="hidden md:flex items-center bg-slate-200/80 dark:bg-slate-800/80 rounded-lg p-0.5 border border-slate-300 dark:border-slate-700">
               <button
@@ -548,6 +552,14 @@ export const Header: React.FC<HeaderProps> = ({
               {totalItems} {currentLang === 'en' ? 'items' : 'आइटम'}
             </span>
           </button>
+
+          {/* Mobile Currency & Language Bar */}
+          <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+            <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
+              {currentLang === 'en' ? 'Currency & Timezone:' : 'मुद्रा व समय क्षेत्र:'}
+            </span>
+            <CurrencyToggle />
+          </div>
 
           {/* AI Tools Quick Access Strip */}
           <div className="grid grid-cols-2 gap-2">

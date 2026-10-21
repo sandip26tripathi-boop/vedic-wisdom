@@ -90,7 +90,7 @@ export const ReportOrderModal: React.FC<ReportOrderModalProps> = ({
       `*Time of Birth:* ${tob}\n` +
       `*Place of Birth:* ${pob}\n` +
       (isMarriage ? `*Partner Name:* ${partnerName}\n*Partner DOB:* ${partnerDob}\n*Partner TOB:* ${partnerTob}\n*Partner POB:* ${partnerPob}\n` : '') +
-      `*Delivery Guarantee:* Automated 2-Hour Dispatch\n\n` +
+      `*Delivery Commitment:* Automated 2-Hour Dispatch\n\n` +
       `Please confirm order and send invoice / payment link.`;
 
     setTimeout(() => {
@@ -381,7 +381,7 @@ export const ReportOrderModal: React.FC<ReportOrderModalProps> = ({
                   </div>
                 )}
 
-                {/* Guarantee Banner */}
+                {/* Commitment Banner */}
                 <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-xs text-emerald-800 dark:text-emerald-300 flex items-center space-x-2">
                   <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
                   <span>

@@ -7,6 +7,7 @@ import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Language, Theme } from './types/index.ts';
 import { AuthProvider, useAuth } from './context/AuthContext.tsx';
 import { CartProvider, useCart } from './context/CartContext.tsx';
+import { CurrencyProvider } from './context/CurrencyContext.tsx';
 import { useRequireAuth } from './hooks/useRequireAuth.ts';
 import { useAutoLogout } from './hooks/useAutoLogout.ts';
 import { Header } from './components/Header.tsx';
@@ -16,17 +17,24 @@ import { Footer } from './components/Footer.tsx';
 import { DigitalReportItem, digitalReportsData } from './data/digitalReports.ts';
 import { Sparkles, ArrowLeft, ShieldCheck, AlertTriangle, X } from 'lucide-react';
 import { SriYantraMotif } from './components/SriYantraMotif.tsx';
+import { StatutoryDisclaimerBanner } from './components/common/StatutoryDisclaimerBanner.tsx';
+import type { LegalDocType } from './components/legal/LegalModal.tsx';
 
 // Code-split heavy below-the-fold sections for instant initial render (95+ Mobile PageSpeed)
+const ExpertProfile = lazy(() => import('./components/trust/ExpertProfile.tsx').then(m => ({ default: m.ExpertProfile })));
+const FloorPlanUploadWizard = lazy(() => import('./components/intake/FloorPlanUploadWizard.tsx').then(m => ({ default: m.FloorPlanUploadWizard })));
+const ServiceGrid = lazy(() => import('./components/services/ServiceGrid.tsx').then(m => ({ default: m.ServiceGrid })));
+const TieredPricing = lazy(() => import('./components/pricing/TieredPricing.tsx').then(m => ({ default: m.TieredPricing })));
 const OfflineWorkflowSection = lazy(() => import('./components/OfflineWorkflowSection.tsx').then(m => ({ default: m.OfflineWorkflowSection })));
 const ConsultationsGrid = lazy(() => import('./components/ConsultationsGrid.tsx').then(m => ({ default: m.ConsultationsGrid })));
 const DigitalReportsSection = lazy(() => import('./components/DigitalReportsSection.tsx').then(m => ({ default: m.DigitalReportsSection })));
 const AstroToolsEngine = lazy(() => import('./components/AstroToolsEngine.tsx').then(m => ({ default: m.AstroToolsEngine })));
 const AcademyDirectory = lazy(() => import('./components/AcademyDirectory.tsx').then(m => ({ default: m.AcademyDirectory })));
 const LeadershipSection = lazy(() => import('./components/LeadershipSection.tsx').then(m => ({ default: m.LeadershipSection })));
-const CaseStudiesSection = lazy(() => import('./components/CaseStudiesSection.tsx').then(m => ({ default: m.CaseStudiesSection })));
-const FAQSection = lazy(() => import('./components/FAQSection.tsx').then(m => ({ default: m.FAQSection })));
-const FloatingWhatsApp = lazy(() => import('./components/FloatingWhatsApp.tsx').then(m => ({ default: m.FloatingWhatsApp })));
+const CaseStudiesSection = lazy(() => import('./components/home/CaseStudiesSection.tsx').then(m => ({ default: m.CaseStudiesSection })));
+const BlogSection = lazy(() => import('./components/blog/BlogSection.tsx').then(m => ({ default: m.BlogSection })));
+const FAQSection = lazy(() => import('./components/home/FAQSection.tsx').then(m => ({ default: m.FAQSection })));
+const FloatingWhatsAppButton = lazy(() => import('./components/common/FloatingWhatsAppButton.tsx').then(m => ({ default: m.FloatingWhatsAppButton })));
 
 // Code-split heavy interactive modals & secondary views for 95+ Mobile Performance
 const BookingModal = lazy(() => import('./components/BookingModal.tsx').then(m => ({ default: m.BookingModal })));
@@ -40,6 +48,9 @@ const ReportForm = lazy(() => import('./components/reports/ReportForm.tsx').then
 const ReportViewer = lazy(() => import('./components/reports/ReportViewer.tsx').then(m => ({ default: m.ReportViewer })));
 const CartDrawer = lazy(() => import('./components/cart/CartDrawer.tsx').then(m => ({ default: m.CartDrawer })));
 const CheckoutView = lazy(() => import('./components/cart/CheckoutView.tsx').then(m => ({ default: m.CheckoutView })));
+const SampleReportModal = lazy(() => import('./components/reports/SampleReportModal.tsx').then(m => ({ default: m.SampleReportModal })));
+const CompassCalibrationModal = lazy(() => import('./components/interactive/CompassCalibrationModal.tsx').then(m => ({ default: m.CompassCalibrationModal })));
+const LegalModal = lazy(() => import('./components/legal/LegalModal.tsx').then(m => ({ default: m.LegalModal })));
 
 function MainApp() {
   const [currentLang, setCurrentLang] = useState<Language>('en');
@@ -49,7 +60,7 @@ function MainApp() {
   const { isAuthModalOpen, sessionExpiredNotification, clearSessionExpiredNotification, openAuthModal } = useAuth();
   const { isCartOpen } = useCart();
 
-  // Task 3: 15-Minute Inactivity Auto-Logout Tracker
+  // 15-Minute Inactivity Auto-Logout Tracker
   useAutoLogout({
     timeoutMs: 15 * 60 * 1000 // 15 minutes of inactivity
   });
@@ -75,6 +86,11 @@ function MainApp() {
 
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState<DigitalReportItem | null>(digitalReportsData[0]);
+
+  // Elite Commercial Consultancy Modals
+  const [isSampleReportOpen, setIsSampleReportOpen] = useState(false);
+  const [isCompassModalOpen, setIsCompassModalOpen] = useState(false);
+  const [activeLegalDoc, setActiveLegalDoc] = useState<LegalDocType | null>(null);
 
   // Handle theme updates
   useEffect(() => {
@@ -172,7 +188,13 @@ function MainApp() {
   return (
     <div className={`w-full max-w-full overflow-x-clip min-h-screen flex flex-col font-sans transition-colors duration-300 ${currentLang === 'hi' ? 'font-hindi' : ''} bg-[#FAF9F6] dark:bg-[#0B0F19] text-slate-800 dark:text-slate-100`}>
       
-      {/* Task 3: Inactivity Session Expired Floating Notification Toast */}
+      {/* Global Statutory Disclaimer Banner */}
+      <StatutoryDisclaimerBanner 
+        currentLang={currentLang}
+        onOpenDisclaimerModal={() => setActiveLegalDoc('disclaimer')}
+      />
+
+      {/* Inactivity Session Expired Floating Notification Toast */}
       {sessionExpiredNotification && (
         <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 max-w-lg w-full px-4 animate-in slide-in-from-top-4 duration-300">
           <div className="p-3.5 rounded-2xl bg-amber-500/95 dark:bg-amber-600/95 text-slate-950 shadow-2xl border border-amber-300 flex items-center justify-between gap-3 text-xs font-semibold backdrop-blur-sm">
@@ -233,6 +255,8 @@ function MainApp() {
             onThemeToggle={handleThemeToggle}
             onOpenBooking={handleOpenBooking}
             onScrollTo={handleScrollTo}
+            onOpenLegalDoc={(doc) => setActiveLegalDoc(doc)}
+            onOpenCompassModal={() => setIsCompassModalOpen(true)}
           />
         </div>
       ) : activeView === 'dashboard' ? (
@@ -304,6 +328,8 @@ function MainApp() {
             onThemeToggle={handleThemeToggle}
             onOpenBooking={handleOpenBooking}
             onScrollTo={handleScrollTo}
+            onOpenLegalDoc={(doc) => setActiveLegalDoc(doc)}
+            onOpenCompassModal={() => setIsCompassModalOpen(true)}
           />
         </div>
       ) : (
@@ -335,51 +361,85 @@ function MainApp() {
 
             {/* Below-the-fold content code-split with Suspense for ultra-fast mobile FCP/LCP */}
             <Suspense fallback={<div className="py-20 flex justify-center"><div className="w-8 h-8 rounded-full border-2 border-amber-600 border-t-transparent animate-spin" /></div>}>
-              {/* 2.5. Offline Empirical Execution Workflow (Online Coordinates to On-Site Rectification) */}
+              
+              {/* 2.2. Expert Profile & Lineage Seal (Sandeep K. Tripathi, M.Sc. Math) */}
+              <ExpertProfile
+                currentLang={currentLang}
+                onOpenBooking={handleOpenBooking}
+                onOpenConsultationScope={() => handleOpenScope('general')}
+              />
+
+              {/* 2.4. 4-Step Floor Plan Intake Wizard (Interactive CAD/Sketch & DPDP Compliance) */}
+              <FloorPlanUploadWizard
+                currentLang={currentLang}
+                onProceedToCheckout={() => handleProceedToCheckout()}
+              />
+
+              {/* 2.6. Property-Specific Spatial Services Grid (Flat, Villa, Commercial, Kundli, Astro-Vastu) */}
+              <ServiceGrid
+                currentLang={currentLang}
+                onOpenBooking={handleOpenBooking}
+                onOpenSampleReport={() => setIsSampleReportOpen(true)}
+              />
+
+              {/* 2.8. Tiered Consultation Architecture (Tier 0 Free Hook, Tier 1, 2, 3 with SLAs) */}
+              <TieredPricing
+                currentLang={currentLang}
+                onOpenBooking={handleOpenBooking}
+                onOpenSampleReport={() => setIsSampleReportOpen(true)}
+              />
+
+              {/* 3. Offline Empirical Execution Workflow (Online Coordinates to On-Site Rectification) */}
               <OfflineWorkflowSection
                 currentLang={currentLang}
                 onOpenBooking={handleOpenBooking}
               />
 
-              {/* 3. Dual Consultation Ecosystem [ Astrology Consultations | Astro-Vastu Audits ] */}
+              {/* 4. Dual Consultation Ecosystem [ Astrology Consultations | Astro-Vastu Audits ] */}
               <ConsultationsGrid
                 currentLang={currentLang}
                 onOpenBooking={handleOpenBooking}
                 onOpenScopeModal={handleOpenScope}
               />
 
-              {/* 4. Automated Digital Astro Reports (Instant Download Engine) */}
+              {/* 5. Automated Digital Astro Reports (Instant Download Engine) */}
               <DigitalReportsSection
                 currentLang={currentLang}
                 onOpenReportModal={handleOpenReportModal}
                 onOpenGenerateReport={handleOpenGenerateReport}
               />
 
-              {/* 5. Interactive Free Tools & Lead Magnets (Instant Kundli, Panchang & Choghadiya, Vastu Compass) */}
+              {/* 6. Interactive Free Tools & Lead Magnets (Instant Kundli, Panchang & Choghadiya, Vastu Compass) */}
               <AstroToolsEngine
                 currentLang={currentLang}
                 onOpenBooking={handleOpenBooking}
               />
 
-              {/* 6. Vedic Wisdom Academy Professional Course Directory */}
+              {/* 7. Vedic Wisdom Academy Professional Course Directory */}
               <AcademyDirectory
                 currentLang={currentLang}
                 onOpenEnroll={handleOpenEnroll}
               />
 
-              {/* 7. Leadership, Lineage & Research Methodology */}
+              {/* 8. Leadership, Lineage & Research Methodology */}
               <LeadershipSection
                 currentLang={currentLang}
                 onOpenBooking={handleOpenBooking}
               />
 
-              {/* 8. Industrial Turnaround Case Studies */}
+              {/* 9. Property-Specific Case Studies (Redacted Real-World Spatial Rectifications) */}
               <CaseStudiesSection
                 currentLang={currentLang}
                 onOpenBooking={handleOpenBooking}
               />
 
-              {/* 9. Authentic Vedic & Non-Demolition Vastu FAQ Section */}
+              {/* 10. Educational Research & Vastu Knowledge Base Articles */}
+              <BlogSection
+                currentLang={currentLang}
+                onOpenBooking={handleOpenBooking}
+              />
+
+              {/* 11. Consumer Hesitation FAQ Accordion (5 Core Objections) */}
               <FAQSection
                 currentLang={currentLang}
                 onOpenBooking={handleOpenBooking}
@@ -395,15 +455,17 @@ function MainApp() {
             onThemeToggle={handleThemeToggle}
             onOpenBooking={handleOpenBooking}
             onScrollTo={handleScrollTo}
+            onOpenLegalDoc={(doc) => setActiveLegalDoc(doc)}
+            onOpenCompassModal={() => setIsCompassModalOpen(true)}
           />
         </>
       )}
 
-      {/* Intelligent Floating WhatsApp Chatbot & Community Drawer */}
+      {/* Direct Pre-Filled WhatsApp Support & Consultation Desk */}
       <Suspense fallback={null}>
-        <FloatingWhatsApp 
+        <FloatingWhatsAppButton 
           currentLang={currentLang} 
-          onOpenCopilot={() => setIsCopilotOpen(true)}
+          onOpenConsultation={() => handleOpenBooking('general')}
         />
       </Suspense>
 
@@ -440,7 +502,7 @@ function MainApp() {
           />
         )}
 
-        {/* Interactive Modals */}
+        {/* Interactive Consultation Booking Modal */}
         {isBookingOpen && (
           <BookingModal
             isOpen={isBookingOpen}
@@ -450,6 +512,7 @@ function MainApp() {
           />
         )}
 
+        {/* Consultation Scope Explainer Modal */}
         {isScopeOpen && (
           <ConsultationScopeModal
             isOpen={isScopeOpen}
@@ -460,6 +523,7 @@ function MainApp() {
           />
         )}
 
+        {/* Academy Course Enrollment Modal */}
         {isEnrollOpen && (
           <CourseEnrollModal
             isOpen={isEnrollOpen}
@@ -469,11 +533,44 @@ function MainApp() {
           />
         )}
 
+        {/* Digital Astro Report Order Modal */}
         {isReportModalOpen && (
           <ReportOrderModal
             isOpen={isReportModalOpen}
             onClose={() => setIsReportModalOpen(false)}
             report={selectedReport}
+            currentLang={currentLang}
+          />
+        )}
+
+        {/* Sample Report Preview Modal (Dual Tabs: 16-Zone Blueprint & KP Cycle Matrix) */}
+        {isSampleReportOpen && (
+          <SampleReportModal
+            isOpen={isSampleReportOpen}
+            onClose={() => setIsSampleReportOpen(false)}
+            currentLang={currentLang}
+            onOpenBooking={() => {
+              setIsSampleReportOpen(false);
+              handleOpenBooking('residential');
+            }}
+          />
+        )}
+
+        {/* Interactive 16-Zone Compass Calibration Modal */}
+        {isCompassModalOpen && (
+          <CompassCalibrationModal
+            isOpen={isCompassModalOpen}
+            onClose={() => setIsCompassModalOpen(false)}
+            currentLang={currentLang}
+          />
+        )}
+
+        {/* In-App Statutory Legal & DPDP Compliance Modal */}
+        {activeLegalDoc && (
+          <LegalModal
+            isOpen={Boolean(activeLegalDoc)}
+            onClose={() => setActiveLegalDoc(null)}
+            initialDoc={activeLegalDoc}
             currentLang={currentLang}
           />
         )}
@@ -485,10 +582,12 @@ function MainApp() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <CartProvider>
-        <MainApp />
-      </CartProvider>
-    </AuthProvider>
+    <CurrencyProvider>
+      <AuthProvider>
+        <CartProvider>
+          <MainApp />
+        </CartProvider>
+      </AuthProvider>
+    </CurrencyProvider>
   );
 }

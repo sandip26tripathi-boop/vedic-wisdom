@@ -202,10 +202,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </div>
               </div>
 
-              {/* Guarantees strip */}
+              {/* Compliance & Commitment strip */}
               <div className="flex items-center space-x-2 text-[11px] text-slate-500 dark:text-slate-400">
                 <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
-                <span>{currentLang === 'en' ? '100% Non-Demolition & Traditional Confidentiality Guarantee' : '100% शून्य तोड़-फोड़ एवं पूर्ण गोपनीयता की गारंटी'}</span>
+                <span>{currentLang === 'en' ? 'Strict Non-Demolition Spatial Vastu & Confidentiality Commitment' : 'बिना तोड़-फोड़ वास्तु एवं सुदृढ़ गोपनीयता प्रतिबद्धता'}</span>
               </div>
 
               {/* Proceed to Payment Action Button */}

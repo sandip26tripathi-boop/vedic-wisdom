@@ -46,7 +46,7 @@ export const ACADEMY_SYLLABUS_REGISTRY: Record<string, CourseSyllabusData> = {
           'Placidus House System vs Sripati / Equal House divisions',
           'Classical derivation of House Cusps & Sign, Star, Sub-Lord arcs',
           'Ruling Planets (RP) technique for instantaneous question decoding',
-          'Ayanamsha accuracy: Krishnamurti Ayanamsha calibration'
+          'Ayanamsha precision: Krishnamurti Ayanamsha calibration'
         ]
       },
       {
@@ -134,7 +134,7 @@ export const ACADEMY_SYLLABUS_REGISTRY: Record<string, CourseSyllabusData> = {
       }
     ],
     practicalOutcomes: [
-      'Deliver accurate predictive statements within 60 seconds of seeing a chart.',
+      'Deliver classical observational statements within 60 seconds of seeing a chart.',
       'Decode karmic debts and career patterns without dependency on complex technical calculations.'
     ]
   },
@@ -176,7 +176,7 @@ export const ACADEMY_SYLLABUS_REGISTRY: Record<string, CourseSyllabusData> = {
     ],
     practicalOutcomes: [
       'Master the classical Karakamsha method for identifying true soul mission.',
-      'Accurately predict status rise and public acclaim through Arudha analysis.'
+      'Evaluate status rise and public acclaim through Arudha analysis.'
     ]
   },
   lalKitab: {
@@ -192,7 +192,7 @@ export const ACADEMY_SYLLABUS_REGISTRY: Record<string, CourseSyllabusData> = {
         details: [
           'Concept of 12 Fixed Houses (Pakka Ghar) independent of signs',
           'Masnui (artificial) planetary unions: Sun + Saturn = Ketu, Mercury + Venus = Sun',
-          'Drishti (aspect) grammar: 100%, 50%, 25% aspect rules in Lal Kitab'
+          'Drishti (aspect) grammar: Full, half, quarter aspect rules in Lal Kitab'
         ]
       },
       {
@@ -209,7 +209,7 @@ export const ACADEMY_SYLLABUS_REGISTRY: Record<string, CourseSyllabusData> = {
         title: 'The Science of Non-Demolition, Practical Lal Kitab Upayas (Precautions & Remedies)',
         details: [
           'Rules of performing upayas: Daytime execution, uninterrupted 43-day cycles',
-          'Custom non-demolition cures: Silver square slabs, copper coins, sea salt, yellow grain',
+          'Custom non-demolition measures: Silver square slabs, copper coins, sea salt, yellow grain',
           'Precautions (Parhez) that prevent awakening dormant malefic planetary forces'
         ]
       }
@@ -265,7 +265,7 @@ export const ACADEMY_SYLLABUS_REGISTRY: Record<string, CourseSyllabusData> = {
     ],
     practicalOutcomes: [
       'Conduct complete 16-zone industrial audits for multi-acre factories.',
-      'Neutralize severe geopathic stress and machine vibrations with 100% zero-demolition guarantee.'
+      'Neutralize severe geopathic stress and machine vibrations with non-demolition measures.'
     ]
   },
   numerology: {

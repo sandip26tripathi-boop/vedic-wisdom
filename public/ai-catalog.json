@@ -33,7 +33,7 @@
     {
       "id": "16-zone-vastu-audit",
       "name": "16-Zone Spatial Vastu Diagnostic Tool",
-      "description": "Interactive rotational dial providing zone-specific elemental analysis and 100% non-demolition remedies.",
+      "description": "Interactive rotational dial providing zone-specific elemental analysis and complete non-demolition remedies.",
       "endpoint": "https://vedic-wisdom-ant.vercel.app/#free-calculators"
     },
     {

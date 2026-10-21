@@ -397,7 +397,7 @@ export const ReportViewer: React.FC<ReportViewerProps> = ({
           <div className="flex items-center space-x-2 border-b border-[#D4AF37]/25 pb-2">
             <Layers className="w-4 h-4 text-[#D4AF37]" />
             <h4 className="font-cinzel text-base font-bold text-slate-900 dark:text-white tracking-wide uppercase">
-              Section 4: Tailored Practical Remedies (100% Non-Demolition)
+              Section 4: Tailored Practical Remedies (Complete Non-Demolition)
             </h4>
           </div>
 

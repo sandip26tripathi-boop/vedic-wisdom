@@ -504,8 +504,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <span className="text-[10px] text-slate-400 dark:text-slate-500 leading-tight block">
                 <ShieldCheck className="w-3 h-3 text-emerald-500 inline-block mr-1 -mt-0.5" />
                 {currentLang === 'en'
-                  ? 'Official Google Auth. Zero SMS or OTP required. 100% Free.'
-                  : 'आधिकारिक Google ऑथेंटिकेशन। किसी SMS या OTP की आवश्यकता नहीं। 100% निःशुल्क।'}
+                  ? 'Official Google Auth. Zero SMS or OTP required. Completely Free.'
+                  : 'आधिकारिक Google ऑथेंटिकेशन। किसी SMS या OTP की आवश्यकता नहीं। पूर्णतः निःशुल्क।'}
               </span>
             </div>
           </div>

@@ -196,7 +196,7 @@ export const OtpVerification: React.FC<OtpVerificationProps> = ({
         <div className="pt-2 text-center">
           <span className="text-[10px] text-slate-400 inline-flex items-center gap-1">
             <ShieldCheck className="w-3 h-3 text-emerald-500" />
-            <span>DPDP Act Compliant • 100% Confidential</span>
+            <span>DPDP Act Compliant • Strictly Confidential</span>
           </span>
         </div>
       </div>

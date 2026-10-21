@@ -21,7 +21,7 @@ export const translations = {
     hero: {
       badge: "Institutional Astro-Vastu & Authentic Classical Predictive Astrology Authority",
       punchline: "Traditional Astrology & Non-Demolition Spatial Vastu",
-      subheading: "Empowering mega industries, business leaders, and seekers worldwide through 100% Non-Demolition Energy Balancing and Cuspal Interlink (KP) Astrology rooted in traditional scriptures.",
+      subheading: "Empowering mega industries, business leaders, and seekers worldwide through Complete Non-Demolition Energy Balancing and Cuspal Interlink (KP) Astrology rooted in traditional scriptures.",
       ctaPrimary: "Schedule Consultation (Astro / Vastu)",
       ctaSecondary: "Generate Free Kundli / Panchang",
       ctaReports: "Explore Automated Digital Reports",
@@ -35,7 +35,7 @@ export const translations = {
         countries: "25+ Countries",
         countriesLabel: "Global Enterprise Clients"
       },
-      nonDemolitionBadge: "Guaranteed 100% Zero-Demolition Elemental Balance",
+      nonDemolitionBadge: "Complete Non-Demolition Elemental Balance Commitment",
       lecherVerified: "Classical Vastu Shastra & Elemental Arc Harmony"
     },
 
@@ -43,9 +43,9 @@ export const translations = {
     trust: {
       title: "Trusted by Manufacturing Conglomerates, High-Growth Tech HQs & Luxury Estate Owners",
       points: [
-        "100% Zero Structural Tear-down Guarantee",
+        "Strict Non-Demolition Spatial Commitment",
         "Authentic KP Cuspal Interlink Analysis",
-        "Sub-Sub Lord Destiny Timing for M&A / IPO",
+        "Sub-Sub Lord Cyclical Horizon Timing for M&A / IPO",
         "Geopathic Energy & Environmental Balance"
       ]
     },
@@ -128,7 +128,7 @@ export const translations = {
           deliverables: [
             "Cross-verification against 5 to 7 key past life events (marriage, surgery, job, travel)",
             "KP Ruling Planets (Lagna Lord, Moon Sign Lord, Star Lord, Day Lord) synchronization",
-            "Classical correction of the ascendant degree to fix accurate Sub-Sub Lord",
+            "Classical correction of the ascendant degree to fix verified Sub-Sub Lord",
             "Recalibration of all 12 cusps for future predictive reliability",
             "Official Rectified Birth Chart Certificate with corrected time stamp"
           ],
@@ -141,7 +141,7 @@ export const translations = {
         industrial: {
           title: "Industrial & Manufacturing Plants",
           badge: "Flagship Manufacturing Practice",
-          summary: "100% Non-demolition energy alignment for mega factories, processing units, and industrial corridors. Optimizing heavy machinery vibration, heat/furnace zones (SE), and raw-to-finished goods flow.",
+          summary: "Complete Non-demolition energy alignment for mega factories, processing units, and industrial corridors. Optimizing heavy machinery vibration, heat/furnace zones (SE), and raw-to-finished goods flow.",
           deliverables: [
             "Heavy machinery & automated conveyor alignment in Earth/South-West zones",
             "Fire element (Boilers, furnaces, DG sets, high-voltage substations) in pure South-East Agni zone",
@@ -237,7 +237,7 @@ export const translations = {
         },
         bnn: {
           title: "Complete Bhrigu Nandi Nadi (BNN) Predictive Course",
-          badge: "Rapid & Accurate Predictions",
+          badge: "Classical Observational Predictions",
           level: "Beginner to Advanced",
           duration: "10 Weeks (30 Live Hours)",
           instructor: "Sandeep K. Tripathi",
@@ -392,7 +392,7 @@ export const translations = {
           desc: "Calibrated frequency dowsing used on-site to harmonize telluric fault lines, Hartmann grids, and environmental energy zones."
         },
         {
-          title: "100% Non-Demolition Remedial Principles",
+          title: "Complete Non-Demolition Remedial Principles",
           desc: "We never break walls, demolish pillars, or shut down operational factory lines. We rebalance directional flows using elemental transmutation, metals, and sacred geometry."
         },
         {
@@ -464,11 +464,11 @@ export const translations = {
           challenge: "Repeated batch quality rejection by regulatory inspectors; persistent labor union disputes halting primary production lines.",
           remedy: "Treated ETP water runoff channel crossing Brahmasthan with zinc energy baffles; energized raw-material intake axis in Vayu/North-West quadrant.",
           results: [
-            "100% compliance audit clearance on subsequent WHO inspection",
+            "Subsequent compliance audit clearance on subsequent WHO inspection",
             "Labor union charter resolved in 3 single sittings without strikes",
             "Export volumes doubled over next two quarters"
           ],
-          roi: "100% Non-Demolition Implementation"
+          roi: "Complete Non-Demolition Implementation"
         }
       ]
     },
@@ -514,7 +514,7 @@ export const translations = {
       subtitle: "Join Master Sandeep K. Tripathi's live weekend cohort. Master real predictive algorithms.",
       tokenLabel: "Seat Reservation Token:",
       benefits: [
-        "100% Live Interactive Weekend Batches with Q&A",
+        "Live Interactive Weekend Batches with Q&A",
         "Lifetime Access to High-Definition Class Recordings",
         "Exclusive Private Mastermind Community with Sandeep Tripathi",
         "Official Vedic Wisdom Certificate of Mastery",
@@ -532,7 +532,7 @@ export const translations = {
       vastuLinksTitle: "Astro-Vastu Verticals",
       contactTitle: "Executive Contacts",
       allRights: "All Rights Reserved. Rooted in Ancient Vedic Traditions & Non-Demolition Vastu Shastra.",
-      disclaimer: "Legal Disclaimer: All consultations, horoscopes, astrological calculations, and Vastu recommendations provided by Vedic Wisdom are strictly rooted in ancient traditions, scriptural beliefs, and faith. These services are intended for spiritual guidance, personal growth, and cultural appreciation, and do not constitute scientific, medical, psychological, legal, architectural, or financial advice. Users are encouraged to exercise their own personal discretion and judgment."
+      disclaimer: "Disclaimer: Consultations and spatial reports are traditional advisory practices rooted in classical Indian observational sciences. They are intended solely for personal, directional, and architectural planning. They do not substitute for certified medical, psychological, legal, financial, or licensed structural engineering advice. Individual perspectives and experiences may vary."
     }
   },
 
@@ -558,7 +558,7 @@ export const translations = {
     hero: {
       badge: "संस्थागत एस्ट्रो-वास्तु एवं प्रामाणिक वैदिक फलित ज्योतिष संस्थान",
       punchline: "पारंपरिक वैदिक ज्योतिष एवं शून्य तोड़-फोड़ ऊर्जा वास्तु",
-      subheading: "100% बिना तोड़-फोड़ (Non-Demolition) ऊर्जा संतुलन और कस्पल इंटरलिंक (KP) ज्योतिष द्वारा विशाल उद्योगों, व्यापारिक प्रमुखों और जिज्ञासुओं का मार्गदर्शन।",
+      subheading: "संपूर्ण बिना तोड़-फोड़ (Non-Demolition) ऊर्जा संतुलन और कस्पल इंटरलिंक (KP) ज्योतिष द्वारा विशाल उद्योगों, व्यापारिक प्रमुखों और जिज्ञासुओं का मार्गदर्शन।",
       ctaPrimary: "परामर्श शेड्यूल करें (ज्योतिष / वास्तु)",
       ctaSecondary: "निःशुल्क कुंडली / पंचांग बनाएं",
       ctaReports: "डिजिटल रिपोर्ट्स स्टोर देखें",
@@ -572,7 +572,7 @@ export const translations = {
         countries: "25+ देश",
         countriesLabel: "विश्वव्यापी क्लाइंट्स व उद्योगपति"
       },
-      nonDemolitionBadge: "100% बिना तोड़-फोड़ ऊर्जा संतुलन की गारंटी",
+      nonDemolitionBadge: "संपूर्ण बिना तोड़-फोड़ ऊर्जा संतुलन प्रतिबद्धता",
       lecherVerified: "प्रामाणिक वास्तु शास्त्र एवं पंचतत्व संतुलन द्वारा परीक्षित"
     },
 
@@ -580,7 +580,7 @@ export const translations = {
     trust: {
       title: "भारत एवं विश्व के प्रमुख उद्योगपतियों, कॉर्पोरेट समूहों व वास्तुविदों द्वारा विश्वसनीय",
       points: [
-        "100% शून्य तोड़-फोड़ की लिखित गारंटी",
+        "शून्य तोड़-फोड़ की सुदृढ़ प्रतिबद्धता",
         "प्रामाणिक केपी कस्पल इंटरलिंक्स शास्त्रीय विश्लेषण",
         "सब-सब लॉर्ड द्वारा व्यापारिक विस्तार व निर्णयों का शास्त्रसम्मत समय",
         "जियोपैथिक स्ट्रेस एवं प्राकृतिक ऊर्जा असंतुलन का निवारण"
@@ -678,7 +678,7 @@ export const translations = {
         industrial: {
           title: "औद्योगिक एवं विनिर्माण संयंत्र",
           badge: "प्रमुख विनिर्माण वास्तु सेवा",
-          summary: "विशाल फैक्ट्रियों, प्रोसेसिंग प्लांट्स और औद्योगिक गलियारों हेतु 100% बिना तोड़-फोड़ ऊर्जा संतुलन। भारी मशीनरी (SW), भट्टी/बॉयलर (SE), और माल प्रवाह का अनुकूलन।",
+          summary: "विशाल फैक्ट्रियों, प्रोसेसिंग प्लांट्स और औद्योगिक गलियारों हेतु संपूर्ण बिना तोड़-फोड़ ऊर्जा संतुलन। भारी मशीनरी (SW), भट्टी/बॉयलर (SE), और माल प्रवाह का अनुकूलन।",
           deliverables: [
             "भारी मशीनरी और कन्वेयर सिस्टम का नैऋत्य (South-West) में शास्त्रसम्मत अलाइनमेंट",
             "अग्नि तत्व (बॉयलर, फर्नेस, डीजी सेट, सब-स्टेशन) का आग्नेय कोण में शुद्ध संतुलन",
@@ -929,7 +929,7 @@ export const translations = {
           desc: "पारंपरिक ऊर्जा डाउसिंग सिद्धांतों द्वारा भूमिगत ऊर्जा, ग्रिड एवं प्राकृतिक तरंगों का सूक्ष्म पारंपरिक अध्ययन।"
         },
         {
-          title: "100% शून्य तोड़-फोड़ (Non-Demolition) उपाय",
+          title: "संपूर्ण शून्य तोड़-फोड़ (Non-Demolition) उपाय",
           desc: "हम कभी दीवारें या पिलर नहीं तोड़ते। हम धातुओं, पिरामिड्स और ऊर्जा तरंगों द्वारा स्थानिक संतुलन स्थापित करते हैं।"
         },
         {
@@ -1001,11 +1001,11 @@ export const translations = {
           challenge: "सरकारी ड्रग निरीक्षकों द्वारा बैच रिजेक्शन; लगातार लेबर यूनियन हड़तालों से मुख्य उत्पादन बंद रहना।",
           remedy: "ब्रह्मस्थान को काटने वाली ईटीपी ड्रेन को जिंक एनर्जी बैफल्स द्वारा सुधारा; कच्चे माल के इनटेक को वायव्य दिशा में ऊर्जावान बनाया।",
           results: [
-            "अगले डब्ल्यूएचओ (WHO) ऑडिट में 100% अनुपालन प्रमाण पत्र प्राप्त",
+            "अगले डब्ल्यूएचओ (WHO) ऑडिट में सफल अनुपालन प्रमाण पत्र प्राप्त",
             "बिना हड़ताल के 3 बैठकों में लेबर यूनियन की समस्याएं सुलझीं",
-            "अगले 6 महीनों में निर्यात में 100% की वृद्धि दर्ज"
+            "अगले 6 महीनों में निर्यात में दोगुनी वृद्धि दर्ज"
           ],
-          roi: "100% बिना तोड़-फोड़ के कार्यान्वयन"
+          roi: "संपूर्ण बिना तोड़-फोड़ के कार्यान्वयन"
         }
       ]
     },
@@ -1051,7 +1051,7 @@ export const translations = {
       subtitle: "संदीप के. त्रिपाठी जी के लाइव सप्ताहांत बैच से जुड़ें। पारंपरिक वैदिक ज्योतिष एवं शास्त्रसम्मत विश्लेषण में निपुण बनें।",
       tokenLabel: "सीट आरक्षण टोकन:",
       benefits: [
-        "100% लाइव इंटरएक्टिव सप्ताहांत कक्षाएं एवं प्रश्नोत्तर",
+        "लाइव इंटरएक्टिव सप्ताहांत कक्षाएं एवं प्रश्नोत्तर",
         "हाई-डेफिनिशन क्लास रिकॉर्डिंग्स का आजीवन एक्सेस",
         "संदीप त्रिपाठी जी के साथ विशेष निजी मास्टरमाइंड कम्युनिटी",
         "वैदिक विजडम का आधिकारिक मास्टरी सर्टिफिकेशन",
@@ -1069,7 +1069,7 @@ export const translations = {
       vastuLinksTitle: "एस्ट्रो-वास्तु सेवाएं",
       contactTitle: "संपर्क सूत्र",
       allRights: "सर्वाधिकार सुरक्षित। पारंपरिक वैदिक ज्ञान एवं शून्य तोड़-फोड़ वास्तु सिद्धांतों पर आधारित।",
-      disclaimer: "वैधानिक अस्वीकरण (Legal Disclaimer): वैदिक विस्डम द्वारा प्रदान की जाने वाली सभी सेवाएं, ज्योतिषीय परामर्श, जन्मपत्रिका विश्लेषण और वास्तु मार्गदर्शन प्राचीन पारंपरिक मान्यताओं, शास्त्रों और धार्मिक आस्था पर आधारित हैं। यह किसी भी प्रकार के आधुनिक विज्ञान, चिकित्सा (Medical), कानूनी (Legal) या वित्तीय (Financial) परामर्श का विकल्प नहीं है। दर्शक एवं उपभोक्ता इसे पारंपरिक सांस्कृतिक ज्ञान एवं आध्यात्मिक आस्था के आधार पर ही ग्रहण करें।"
+      disclaimer: "अस्वीकरण: परामर्श एवं वास्तु रिपोर्ट प्राचीन भारतीय प्रेक्षणात्मक शास्त्रों पर आधारित पारंपरिक मार्गदर्शक पद्धतियां हैं। ये केवल व्यक्तिगत, दिशात्मक और गृह-सज्जा योजना हेतु अभिप्रेत हैं। ये किसी भी प्रकार से प्रमाणित चिकित्सा, मनोवैज्ञानिक, कानूनी, वित्तीय अथवा लाइसेंस प्राप्त सिविल इंजीनियरिंग सलाह का विकल्प नहीं हैं। प्रत्येक व्यक्ति का अनुभव व दृष्टिकोण भिन्न हो सकता है।"
     }
   }
 };

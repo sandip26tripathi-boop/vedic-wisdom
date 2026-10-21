@@ -2,8 +2,8 @@ import React from 'react';
 import './globals.css';
 
 export const metadata = {
-  title: 'Vedic Wisdom | Authentic Spatial Vastu & Classical Predictive Astrology',
-  description: 'Harmonizing Spaces, Decoding Destinies — Traditional Vedic Wisdom & Non-Demolition Vastu Shastra.',
+  title: 'Vedic Wisdom | Property-Specific Spatial Vastu & Classical Vedic Advisory',
+  description: 'Property-Specific Spatial Vastu & Classical Vedic Advisory (Practical, Logical & Non-Structural). Ethical, non-demolition directional consultations and classical Vedic astrological guidance for homes, apartments, and commercial workplaces.',
   viewport: {
     width: 'device-width',
     initialScale: 1,

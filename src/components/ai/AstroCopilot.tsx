@@ -49,7 +49,7 @@ const PRESET_QUERIES = [
   },
   {
     label: '⚡ SE transformer & fire element clash remedies',
-    query: 'Our factory main power transformer and water chiller conduits are in adjacent bays in the South-East. How to cure this fire-water clash without civil tear-down?'
+    query: 'Our factory main power transformer and water chiller conduits are in adjacent bays in the South-East. How to resolve this fire-water elemental conflict without civil tear-down?'
   },
   {
     label: '🏢 Boardroom alignment for executive decision making',

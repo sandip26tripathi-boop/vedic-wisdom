@@ -346,7 +346,7 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
           ))}
         </div>
 
-        {/* Academy Research Guarantee Strip */}
+        {/* Academy Research Commitment Strip */}
         <div className="mt-12 p-6 rounded-2xl bg-white dark:bg-[#111827] border border-[#D4AF37]/30 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center space-x-4">
             <div className="p-3 rounded-xl bg-[#D4AF37]/15">

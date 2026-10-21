@@ -547,18 +547,18 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
               <div className="space-y-2 pt-2 text-[11px] text-slate-500 dark:text-slate-400">
                 <div className="flex items-center space-x-2">
                   <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
-                  <span>100% Non-Demolition Metallic Remedies & Classical CIL Guidance</span>
+                  <span>Complete Non-Demolition Metallic Remedies & Classical CIL Guidance</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" />
                   <span>Direct Advisory by Ravindra Pathak & Sandeep Tripathi</span>
                 </div>
-                {/* Legal Disclaimer Box */}
-                <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-[10px] text-amber-900 dark:text-amber-200/90 leading-relaxed">
-                  <strong>{currentLang === 'en' ? 'Legal Notice: ' : 'वैधानिक अस्वीकरण: '}</strong>
+                {/* Mandatory Statutory Legal Disclaimer Box */}
+                <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-[10px] text-amber-950 dark:text-amber-200/90 leading-relaxed">
+                  <strong>{currentLang === 'en' ? 'Statutory Disclaimer: ' : 'सांविधिक अस्वीकरण: '}</strong>
                   {currentLang === 'en'
-                    ? 'All consultations and reports are rooted in ancient Vedic traditions and personal faith. They are intended for spiritual guidance and do not replace professional medical, legal, or financial advice.'
-                    : 'सभी परामर्श व रिपोर्ट्स पारंपरिक वैदिक मान्यताओं एवं धार्मिक आस्था पर आधारित हैं। यह किसी प्रकार के चिकित्सकीय, कानूनी या वित्तीय परामर्श का विकल्प नहीं है।'}
+                    ? 'Disclaimer: Consultations and spatial reports are traditional advisory practices rooted in classical Indian observational sciences. They are intended solely for personal, directional, and architectural planning. They do not substitute for certified medical, psychological, legal, financial, or licensed structural engineering advice. Individual perspectives and experiences may vary.'
+                    : 'अस्वीकरण: परामर्श एवं वास्तु रिपोर्ट प्राचीन भारतीय प्रेक्षणात्मक शास्त्रों पर आधारित पारंपरिक मार्गदर्शक पद्धतियां हैं। ये केवल व्यक्तिगत, दिशात्मक और गृह-सज्जा योजना हेतु अभिप्रेत हैं। ये किसी भी प्रकार से प्रमाणित चिकित्सा, मनोवैज्ञानिक, कानूनी, वित्तीय अथवा लाइसेंस प्राप्त सिविल इंजीनियरिंग सलाह का विकल्प नहीं हैं। प्रत्येक व्यक्ति का अनुभव व दृष्टिकोण भिन्न हो सकता है।'}
                 </div>
               </div>
 

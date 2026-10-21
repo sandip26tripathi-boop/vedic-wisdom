@@ -42,6 +42,7 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({ currentLang,
             onClick={onOpenCopilot}
             className="mb-2.5 flex items-center space-x-2 px-3.5 py-2 rounded-full bg-slate-900 text-white border border-[#D4AF37]/50 shadow-xl hover:bg-slate-800 hover:scale-105 transition-all cursor-pointer group"
             title="Open AI AstroCopilot Assistant"
+            aria-label="Open AI AstroCopilot Assistant"
           >
             <div className="w-5 h-5 rounded-full bg-[#D4AF37]/20 flex items-center justify-center text-[#D4AF37]">
               <Bot className="w-3.5 h-3.5" />
@@ -123,7 +124,7 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({ currentLang,
 
             {/* Quick Prompt Options */}
             <div className="space-y-1.5 pt-1">
-              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-1">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 px-1">
                 {currentLang === 'en' ? 'Select Instant Enterprise Topic:' : 'विषय चुनें:'}
               </div>
               {wa.options.map((opt, idx) => (

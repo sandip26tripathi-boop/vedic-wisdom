@@ -149,7 +149,7 @@ export const ConsultationsGrid: React.FC<ConsultationsGridProps> = ({
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-10">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/30 text-xs font-bold text-[#B45309] dark:text-[#F3E5AB]">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/30 text-xs font-bold text-amber-950 dark:text-[#F3E5AB]">
             <ShieldCheck className="w-3.5 h-3.5 text-[#D4AF37]" />
             <span>{c.sectionBadge}</span>
           </div>
@@ -206,7 +206,7 @@ export const ConsultationsGrid: React.FC<ConsultationsGridProps> = ({
                   <div className="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
                     {service.icon}
                   </div>
-                  <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-[#D4AF37]/15 text-[#B45309] dark:text-[#F3E5AB] border border-[#D4AF37]/30">
+                  <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-[#D4AF37]/15 text-amber-950 dark:text-[#F3E5AB] border border-[#D4AF37]/30">
                     {service.badge}
                   </span>
                 </div>

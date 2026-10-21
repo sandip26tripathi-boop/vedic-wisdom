@@ -113,7 +113,7 @@ export const DigitalReportsSection: React.FC<DigitalReportsSectionProps> = ({
                   <div className="p-3 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs">
                     {getReportIcon(report.icon)}
                   </div>
-                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[#D4AF37]/15 text-[#B45309] dark:text-[#F3E5AB] border border-[#D4AF37]/30">
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[#D4AF37]/15 text-amber-950 dark:text-[#F3E5AB] border border-[#D4AF37]/30">
                     {currentLang === 'en' ? report.badgeEn : report.badgeHi}
                   </span>
                 </div>
@@ -124,23 +124,23 @@ export const DigitalReportsSection: React.FC<DigitalReportsSectionProps> = ({
                 </h3>
 
                 {/* Description */}
-                <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-3 mb-4 leading-relaxed">
+                <p className="text-xs text-slate-600 dark:text-slate-300 line-clamp-3 mb-4 leading-relaxed">
                   {currentLang === 'en' ? report.descriptionEn : report.descriptionHi}
                 </p>
 
                 {/* Pricing & Length Badge */}
                 <div className="p-3 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 mb-4 flex items-center justify-between text-xs">
                   <div>
-                    <div className="font-mono text-lg font-extrabold text-[#B45309] dark:text-[#F3E5AB]">
+                    <div className="font-mono text-lg font-extrabold text-amber-950 dark:text-[#F3E5AB]">
                       {report.priceInr}
                     </div>
-                    <div className="text-[10px] text-slate-500">
+                    <div className="text-[10px] text-slate-600 dark:text-slate-400 font-medium">
                       {report.priceUsd} USD
                     </div>
                   </div>
                   <div className="text-right text-[11px] text-slate-600 dark:text-slate-300 font-medium">
                     <div>{currentLang === 'en' ? report.pagesEn : report.pagesHi}</div>
-                    <div className="text-emerald-600 dark:text-emerald-400 font-semibold text-[10px]">
+                    <div className="text-emerald-800 dark:text-emerald-300 font-bold text-[10px]">
                       Instant PDF
                     </div>
                   </div>

@@ -6,7 +6,7 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Language, Theme } from './types/index.ts';
 import { AuthProvider, useAuth } from './context/AuthContext.tsx';
-import { CartProvider } from './context/CartContext.tsx';
+import { CartProvider, useCart } from './context/CartContext.tsx';
 import { useRequireAuth } from './hooks/useRequireAuth.ts';
 import { useAutoLogout } from './hooks/useAutoLogout.ts';
 import { Header } from './components/Header.tsx';
@@ -44,7 +44,8 @@ function MainApp() {
   // Light-First Luxury Default
   const [currentTheme, setCurrentTheme] = useState<Theme>('light');
   const { requireAuth } = useRequireAuth();
-  const { sessionExpiredNotification, clearSessionExpiredNotification, openAuthModal } = useAuth();
+  const { isAuthModalOpen, sessionExpiredNotification, clearSessionExpiredNotification, openAuthModal } = useAuth();
+  const { isCartOpen } = useCart();
 
   // Task 3: 15-Minute Inactivity Auto-Logout Tracker
   useAutoLogout({
@@ -410,23 +411,27 @@ function MainApp() {
           />
         )}
 
-        {/* Global Slide-Over Cart Drawer */}
-        <CartDrawer
-          currentLang={currentLang}
-          onProceedToCheckout={handleProceedToCheckout}
-          onExploreServices={() => handleScrollTo('consultations')}
-        />
+        {/* Global Slide-Over Cart Drawer (Lazy Loaded Only When Triggered) */}
+        {isCartOpen && (
+          <CartDrawer
+            currentLang={currentLang}
+            onProceedToCheckout={handleProceedToCheckout}
+            onExploreServices={() => handleScrollTo('consultations')}
+          />
+        )}
 
-        {/* Auth Modal with Google 1-Click & WhatsApp Instant Verification */}
-        <AuthModal
-          currentLang={currentLang}
-          onSuccessRedirect={() => {
-            if (activeView === 'generate-report' || activeView === 'checkout') {
-              return;
-            }
-            setActiveView('dashboard');
-          }}
-        />
+        {/* Auth Modal with Google 1-Click Verification (Lazy Loaded Only When Open) */}
+        {isAuthModalOpen && (
+          <AuthModal
+            currentLang={currentLang}
+            onSuccessRedirect={() => {
+              if (activeView === 'generate-report' || activeView === 'checkout') {
+                return;
+              }
+              setActiveView('dashboard');
+            }}
+          />
+        )}
 
         {/* Interactive Modals */}
         {isBookingOpen && (

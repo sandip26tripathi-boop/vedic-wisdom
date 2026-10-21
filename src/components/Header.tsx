@@ -129,6 +129,7 @@ export const Header: React.FC<HeaderProps> = ({
               href="https://wa.me/919009448601" 
               target="_blank" 
               rel="noopener noreferrer" 
+              aria-label="Direct WhatsApp contact (+91 90094 48601)"
               className="text-[#F3E5AB] hover:text-white transition-colors flex items-center space-x-1 font-mono text-[11px]"
             >
               <span>WhatsApp:</span>
@@ -359,7 +360,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Theme Toggle (Day/Night) - Desktop only (in mobile drawer for mobile) */}
             <button
               onClick={onThemeToggle}
-              className="hidden sm:flex min-h-[40px] min-w-[40px] items-center justify-center p-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
+              className="hidden sm:flex min-h-[44px] min-w-[44px] items-center justify-center p-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
               aria-label="Toggle dark and light color theme"
               title="Toggle color theme"
             >
@@ -373,7 +374,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Shopping Cart Trigger Button with Dynamic Red Badge */}
             <button
               onClick={openCart}
-              className="relative min-h-[40px] min-w-[40px] flex items-center justify-center p-2 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
+              className="relative min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
               aria-label="View shopping cart drawer"
               title={currentLang === 'en' ? 'Open Vedic Cart' : 'कार्ट देखें'}
             >
@@ -412,7 +413,7 @@ export const Header: React.FC<HeaderProps> = ({
             ) : (
               <button
                 onClick={() => openAuthModal()}
-                className="min-h-[40px] inline-flex items-center space-x-1.5 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-extrabold text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:brightness-105 border border-[#D4AF37] shadow-sm transition-all duration-200 cursor-pointer shrink-0"
+                className="min-h-[44px] inline-flex items-center space-x-1.5 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-extrabold text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:brightness-105 border border-[#D4AF37] shadow-sm transition-all duration-200 cursor-pointer shrink-0"
                 title="Client Login via Google"
                 aria-label="Client Login via Google"
               >
@@ -436,7 +437,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Mobile Menu Toggle Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden min-h-[40px] min-w-[40px] flex items-center justify-center p-2 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+              className="lg:hidden min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
               aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

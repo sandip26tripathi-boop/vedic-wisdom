@@ -107,7 +107,7 @@ export const OfflineWorkflowSection: React.FC<OfflineWorkflowSectionProps> = ({
                   <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/25">
                     {item.icon}
                   </div>
-                  <span className="text-[10px] font-bold font-mono px-2.5 py-1 rounded-full bg-[#D4AF37]/15 text-[#B45309] dark:text-[#F3E5AB]">
+                  <span className="text-[10px] font-bold font-mono px-2.5 py-1 rounded-full bg-[#D4AF37]/15 text-amber-950 dark:text-[#F3E5AB]">
                     {currentLang === 'en' ? item.badgeEn : item.badgeHi}
                   </span>
                 </div>
@@ -116,17 +116,17 @@ export const OfflineWorkflowSection: React.FC<OfflineWorkflowSectionProps> = ({
                   {currentLang === 'en' ? item.titleEn : item.titleHi}
                 </h3>
 
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
                   {currentLang === 'en' ? item.descEn : item.descHi}
                 </p>
               </div>
 
               <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
-                <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                <span className="text-xs font-semibold text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5 font-bold">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   <span>{currentLang === 'en' ? item.actionEn : item.actionHi}</span>
                 </span>
-                <span className="text-xs font-bold text-slate-400">Step {item.step}</span>
+                <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Step {item.step}</span>
               </div>
             </div>
           ))}
@@ -165,6 +165,7 @@ export const OfflineWorkflowSection: React.FC<OfflineWorkflowSectionProps> = ({
               href="https://wa.me/919009448601?text=Hello%20Vedic%20Wisdom,%20I%20would%20like%20to%20schedule%20an%20offline%20consultation/factory%20audit."
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={currentLang === 'en' ? "Schedule offline consultation or factory audit on WhatsApp" : "ऑफलाइन परामर्श या फैक्ट्री ऑडिट हेतु व्हाट्सएप पर संपर्क करें"}
               className="w-full sm:w-auto px-5 py-3.5 rounded-xl font-bold text-xs sm:text-sm text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 hover:bg-emerald-500/25 flex items-center justify-center gap-2 transition-all cursor-pointer"
             >
               <PhoneCall className="w-4 h-4 text-emerald-400" />

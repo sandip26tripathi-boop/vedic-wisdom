@@ -3,4 +3,5 @@ Allow: /
 Disallow: /api/
 Disallow: /checkout/
 
+Sitemap: https://thevedicwisdom.vercel.app/sitemap.xml
 Sitemap: https://vedic-wisdom-ant.vercel.app/sitemap.xml

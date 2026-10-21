@@ -48,7 +48,7 @@ export const Hero: React.FC<HeroProps> = ({
           <div className="lg:col-span-7 space-y-6 text-left">
             
             {/* Top Pill / Badge */}
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/30 text-xs sm:text-sm font-semibold text-[#B45309] dark:text-[#F3E5AB]">
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/30 text-xs sm:text-sm font-bold text-amber-950 dark:text-[#F3E5AB]">
               <span className="flex h-2 w-2 rounded-full bg-[#D4AF37] animate-ping" />
               <span>{t.hero.badge}</span>
             </div>
@@ -135,7 +135,7 @@ export const Hero: React.FC<HeroProps> = ({
                     {currentLang === 'en' ? 'Vedic Resonance Architecture' : 'स्थानिक व ग्रहीय ऊर्जा तंत्र'}
                   </span>
                 </div>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-[#D4AF37]/15 text-[#B45309] dark:text-[#F3E5AB] font-mono font-bold">
+                <span className="text-[10px] px-2 py-0.5 rounded bg-[#D4AF37]/15 text-amber-950 dark:text-[#F3E5AB] font-mono font-bold">
                   KP • CIL • 16-ZONES
                 </span>
               </div>
@@ -144,16 +144,16 @@ export const Hero: React.FC<HeroProps> = ({
               <div className="relative my-6 flex items-center justify-center">
                 
                 {/* Floating Cardinal Badges */}
-                <div className="absolute top-0 text-[10px] font-bold text-sky-600 dark:text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded-full border border-sky-500/30">
+                <div className="absolute top-0 text-[10px] font-bold text-sky-800 dark:text-sky-300 bg-sky-500/15 px-2 py-0.5 rounded-full border border-sky-500/30">
                   N • Kuber (0°)
                 </div>
-                <div className="absolute bottom-0 text-[10px] font-bold text-red-600 dark:text-red-400 bg-red-500/10 px-2 py-0.5 rounded-full border border-red-500/30">
+                <div className="absolute bottom-0 text-[10px] font-bold text-rose-800 dark:text-rose-300 bg-rose-500/15 px-2 py-0.5 rounded-full border border-rose-500/30">
                   S • Yama (180°)
                 </div>
-                <div className="absolute right-0 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/30">
+                <div className="absolute right-0 text-[10px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-500/15 px-2 py-0.5 rounded-full border border-emerald-500/30">
                   E • Surya (90°)
                 </div>
-                <div className="absolute left-0 text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/30">
+                <div className="absolute left-0 text-[10px] font-bold text-amber-900 dark:text-amber-200 bg-amber-500/15 px-2 py-0.5 rounded-full border border-amber-500/30">
                   W • Varuna (270°)
                 </div>
 
@@ -169,7 +169,7 @@ export const Hero: React.FC<HeroProps> = ({
                   <TrendingUp className="w-4 h-4 text-[#D4AF37]" />
                   <div>
                     <div className="font-bold text-slate-800 dark:text-slate-100">KP Sub-Sub Lord</div>
-                    <div className="text-[10px] text-slate-500 dark:text-slate-400">Micro-Second Timing</div>
+                    <div className="text-[10px] text-slate-600 dark:text-slate-300 font-medium">Micro-Second Timing</div>
                   </div>
                 </div>
 
@@ -177,15 +177,15 @@ export const Hero: React.FC<HeroProps> = ({
                   <Zap className="w-4 h-4 text-amber-500" />
                   <div>
                     <div className="font-bold text-slate-800 dark:text-slate-100">0% Demolition</div>
-                    <div className="text-[10px] text-slate-500 dark:text-slate-400">Elemental Metallic Transmutation</div>
+                    <div className="text-[10px] text-slate-600 dark:text-slate-300 font-medium">Elemental Metallic Transmutation</div>
                   </div>
                 </div>
               </div>
 
               {/* Founding Leadership Endorsement Strip */}
-              <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
+              <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-600 dark:text-slate-300">
                 <span>By Ravindra Pathak & Sandeep Tripathi</span>
-                <span className="font-semibold text-[#B45309] dark:text-[#D4AF37]">Bhopal, MP, India</span>
+                <span className="font-bold text-amber-950 dark:text-[#F3E5AB]">Bhopal, MP, India</span>
               </div>
 
             </div>

@@ -192,9 +192,9 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
         {/* Bottom Direct Inquiry Card */}
         <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-amber-500/10 via-[#D4AF37]/15 to-amber-500/10 border border-[#D4AF37]/40 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-5 text-center sm:text-left">
           <div className="space-y-1">
-            <h4 className="font-cinzel text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+            <h3 className="font-cinzel text-base sm:text-lg font-bold text-slate-900 dark:text-white">
               {currentLang === 'en' ? 'Have a Specific Factory or Kundli Question?' : 'क्या आपकी फैक्ट्री या कुंडली से जुड़ा कोई विशेष प्रश्न है?'}
-            </h4>
+            </h3>
             <p className="text-xs text-slate-600 dark:text-slate-400">
               {currentLang === 'en'
                 ? 'Speak directly with Master Sandeep K. Tripathi & Ravindra Pathak’s research desk.'
@@ -207,6 +207,7 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
               href="https://wa.me/919009448601?text=Namaste%20Vedic%20Wisdom,%20I%20have%20a%20specific%20question%20regarding%20an%20offline%20audit/consultation."
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={currentLang === 'en' ? "Contact Vedic Wisdom research desk on WhatsApp for FAQ inquiries" : "प्रश्नोत्तरी हेतु रिसर्च डेस्क से व्हाट्सएप पर संपर्क करें"}
               className="px-4 py-2.5 rounded-xl font-bold text-xs text-white bg-emerald-600 hover:bg-emerald-500 flex items-center gap-1.5 transition-all shadow-sm"
             >
               <MessageCircle className="w-4 h-4" />

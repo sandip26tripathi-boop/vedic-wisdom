@@ -63,9 +63,9 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Column 2: Astrology Solutions (Col span 3) */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="font-cinzel text-sm font-bold text-white tracking-wide uppercase">
+            <h3 className="font-cinzel text-sm font-bold text-white tracking-wide uppercase">
               {f.astrologyLinksTitle}
-            </h4>
+            </h3>
             <ul className="space-y-2 text-xs">
               <li>
                 <button
@@ -120,9 +120,9 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Column 3: Astro-Vastu Verticals (Col span 2) */}
           <div className="lg:col-span-2 space-y-3">
-            <h4 className="font-cinzel text-sm font-bold text-white tracking-wide uppercase">
+            <h3 className="font-cinzel text-sm font-bold text-white tracking-wide uppercase">
               {f.vastuLinksTitle}
-            </h4>
+            </h3>
             <ul className="space-y-2 text-xs">
               <li>
                 <button
@@ -169,15 +169,16 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Column 4: Contact & Social (Col span 3) */}
           <div className="lg:col-span-3 space-y-4">
-            <h4 className="font-cinzel text-sm font-bold text-white tracking-wide uppercase">
+            <h3 className="font-cinzel text-sm font-bold text-white tracking-wide uppercase">
               {f.contactTitle}
-            </h4>
+            </h3>
 
             <div className="space-y-2.5 text-xs">
               <a
                 href="https://wa.me/919009448601"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Connect with Vedic Wisdom on WhatsApp at +91 90094 48601"
                 className="flex items-center space-x-2 text-slate-300 hover:text-emerald-400 transition-colors"
               >
                 <Phone className="w-4 h-4 text-[#D4AF37]" />
@@ -186,6 +187,7 @@ export const Footer: React.FC<FooterProps> = ({
 
               <a
                 href="mailto:ask.vedicwisdom@gmail.com"
+                aria-label="Send email to Vedic Wisdom Research Desk"
                 className="flex items-center space-x-2 text-slate-300 hover:text-[#D4AF37] transition-colors"
               >
                 <Mail className="w-4 h-4 text-[#D4AF37]" />

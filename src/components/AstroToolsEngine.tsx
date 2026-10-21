@@ -349,9 +349,14 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
 
             <form onSubmit={handleUnlockLead} className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl mx-auto">
               <div>
+                <label htmlFor="lead-user-name" className="sr-only">
+                  {tools.form.name}
+                </label>
                 <input
+                  id="lead-user-name"
                   type="text"
                   required
+                  aria-label={tools.form.name}
                   placeholder={tools.form.name}
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
@@ -359,9 +364,14 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                 />
               </div>
               <div>
+                <label htmlFor="lead-user-phone" className="sr-only">
+                  {tools.form.phone}
+                </label>
                 <input
+                  id="lead-user-phone"
                   type="tel"
                   required
+                  aria-label={tools.form.phone}
                   placeholder={tools.form.phone}
                   value={userPhone}
                   onChange={(e) => setUserPhone(e.target.value)}
@@ -369,8 +379,13 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                 />
               </div>
               <div className="relative">
+                <label htmlFor="lead-user-city" className="sr-only">
+                  {tools.form.city}
+                </label>
                 <input
+                  id="lead-user-city"
                   type="text"
+                  aria-label={tools.form.city}
                   placeholder={tools.form.city}
                   value={userCity}
                   onChange={(e) => {
@@ -430,12 +445,14 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
 
               <form onSubmit={handleComputeKundli} className="space-y-3.5">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  <label htmlFor="kundli-user-name" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     {tools.kundliEngine.nameLabel}
                   </label>
                   <input
+                    id="kundli-user-name"
                     type="text"
                     required
+                    aria-label={tools.kundliEngine.nameLabel}
                     value={kundliName}
                     onChange={(e) => setKundliName(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white"
@@ -444,12 +461,14 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    <label htmlFor="kundli-dob" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                       {tools.kundliEngine.dobLabel}
                     </label>
                     <input
+                      id="kundli-dob"
                       type="date"
                       required
+                      aria-label={tools.kundliEngine.dobLabel}
                       value={dob}
                       onChange={(e) => setDob(e.target.value)}
                       className="w-full px-3 py-2 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white"
@@ -457,12 +476,14 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    <label htmlFor="kundli-tob" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                       {tools.kundliEngine.tobLabel}
                     </label>
                     <input
+                      id="kundli-tob"
                       type="time"
                       required
+                      aria-label={tools.kundliEngine.tobLabel}
                       value={tob}
                       onChange={(e) => setTob(e.target.value)}
                       className="w-full px-3 py-2 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white"
@@ -472,7 +493,7 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
 
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                    <label htmlFor="global-place-search-input" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
                       {tools.kundliEngine.pobLabel} *
                     </label>
                     <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
@@ -662,7 +683,7 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                     <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
                     <span>{currentLang === 'en' ? 'Astronomical Graha Coordinates (Chitrapaksha / Lahiri)' : 'ग्रह स्पष्ट स्थिति (लाहिड़ी अयनांश)'}</span>
                   </span>
-                  <span className="text-[10px] font-mono text-[#B45309] dark:text-[#F3E5AB] font-bold">
+                  <span className="text-[10px] font-mono text-amber-950 dark:text-[#F3E5AB] font-bold">
                     Ayanamsa: {kundliResult.ayanamsa}°
                   </span>
                 </div>
@@ -671,14 +692,14 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                   {kundliResult.planets.map((p, idx) => (
                     <div key={idx} className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 text-center">
                       <div className="font-bold text-[#D4AF37]">{p.symbol} - {currentLang === 'en' ? p.nameEn.split(' ')[0] : p.nameHi}</div>
-                      <div className="text-slate-700 dark:text-slate-200 font-semibold truncate">{p.rashiNameEn.split(' ')[0]}</div>
-                      <div className="text-slate-400 font-mono text-[9px]">{p.degInRashi.toFixed(1)}° • H{p.house}</div>
+                      <div className="text-slate-800 dark:text-slate-100 font-semibold truncate">{p.rashiNameEn.split(' ')[0]}</div>
+                      <div className="text-slate-600 dark:text-slate-300 font-mono text-[9px] font-semibold">{p.degInRashi.toFixed(1)}° • H{p.house}</div>
                     </div>
                   ))}
                   <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-center col-span-2 sm:col-span-1">
-                    <div className="font-bold text-[#B45309] dark:text-[#F3E5AB]">Vimshottari Dasha</div>
+                    <div className="font-bold text-amber-950 dark:text-[#F3E5AB]">Vimshottari Dasha</div>
                     <div className="text-[10px] font-semibold text-slate-800 dark:text-slate-200">{kundliResult.vimshottariLordEn}</div>
-                    <div className="text-[9px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">{kundliResult.balanceYears} Yrs Bal</div>
+                    <div className="text-[9px] font-mono text-emerald-800 dark:text-emerald-300 font-bold">{kundliResult.balanceYears} Yrs Bal</div>
                   </div>
                 </div>
               </div>
@@ -689,6 +710,7 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                   href={`https://wa.me/919009448601?text=${encodeURIComponent(`*Janam Kundli Offline Analysis Request - Vedic Wisdom*\nName: ${kundliName}\nDOB: ${dob} ${tob}\nPlace: ${pob}\nComputed Lagna: ${calculatedLagna}\nMoon Sign: ${calculatedMoon}\nNakshatra: ${calculatedNakshatra}\n\nPlease verify Cuspal Sub-Sub Lords and schedule an offline 1-on-1 consultation session with Master Sandeep K. Tripathi.`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={currentLang === 'en' ? 'Send Kundli to WhatsApp for 1-on-1 Offline Analysis' : 'ऑफ़लाइन विश्लेषण हेतु कुंडली व्हाट्सएप पर भेजें'}
                   className="w-full py-2.5 px-4 rounded-xl text-xs font-bold text-emerald-950 bg-emerald-400 hover:bg-emerald-300 flex items-center justify-center gap-2 shadow-sm transition-all"
                 >
                   <MessageCircle className="w-4 h-4 text-emerald-950" />
@@ -726,11 +748,11 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                   <h3 className="font-cinzel text-xl font-bold text-slate-900 dark:text-white">
                     {tools.panchangEngine.heading}
                   </h3>
-                  <div className="text-xs text-[#B45309] dark:text-[#D4AF37] font-semibold mt-0.5">
+                  <div className="text-xs text-amber-950 dark:text-[#F3E5AB] font-bold mt-0.5">
                     {today.toLocaleDateString(currentLang === 'hi' ? 'hi-IN' : 'en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                   </div>
                 </div>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#D4AF37]/15 text-[#B45309] dark:text-[#F3E5AB] font-bold">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#D4AF37]/15 text-amber-950 dark:text-[#F3E5AB] font-bold">
                   SURYA SIDDHANTA
                 </span>
               </div>
@@ -738,19 +760,19 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
               {/* 4 Pillars of Panchang */}
               <div className="grid grid-cols-2 gap-3 text-xs">
                 <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                  <span className="text-[10px] text-slate-400 font-semibold">{tools.panchangEngine.tithiLabel}</span>
+                  <span className="text-[10px] text-slate-600 dark:text-slate-300 font-semibold">{tools.panchangEngine.tithiLabel}</span>
                   <div className="font-bold text-slate-900 dark:text-white mt-0.5">Shukla Paksha Dashami</div>
                 </div>
                 <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                  <span className="text-[10px] text-slate-400 font-semibold">{tools.panchangEngine.nakshatraLabel}</span>
+                  <span className="text-[10px] text-slate-600 dark:text-slate-300 font-semibold">{tools.panchangEngine.nakshatraLabel}</span>
                   <div className="font-bold text-slate-900 dark:text-white mt-0.5">Pushya (Lord Saturn)</div>
                 </div>
                 <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                  <span className="text-[10px] text-slate-400 font-semibold">{tools.panchangEngine.yogaLabel}</span>
-                  <div className="font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">Siddha Yoga (Highly Auspicious)</div>
+                  <span className="text-[10px] text-slate-600 dark:text-slate-300 font-semibold">{tools.panchangEngine.yogaLabel}</span>
+                  <div className="font-bold text-emerald-800 dark:text-emerald-300 mt-0.5">Siddha Yoga (Highly Auspicious)</div>
                 </div>
                 <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                  <span className="text-[10px] text-slate-400 font-semibold">{tools.panchangEngine.karanaLabel}</span>
+                  <span className="text-[10px] text-slate-600 dark:text-slate-300 font-semibold">{tools.panchangEngine.karanaLabel}</span>
                   <div className="font-bold text-slate-900 dark:text-white mt-0.5">Gara Karana</div>
                 </div>
               </div>
@@ -889,21 +911,26 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                 )}
 
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-500 text-[11px]">{currentLang === 'en' ? 'Rotary Heading:' : 'घूर्णन दिशा:'}</span>
-                  <span className="font-mono font-bold text-xs text-[#B45309] dark:text-[#F3E5AB]">
+                  <span className="text-slate-600 dark:text-slate-300 text-[11px] font-medium">{currentLang === 'en' ? 'Rotary Heading:' : 'घूर्णन दिशा:'}</span>
+                  <span className="font-mono font-bold text-xs text-amber-950 dark:text-[#F3E5AB]">
                     {currentHeading}° • {selectedZone.nameEn} ({selectedZone.id})
                   </span>
                 </div>
 
+                <label htmlFor="compass-rotary-heading" className="sr-only">
+                  {currentLang === 'en' ? 'Rotary Compass Heading in degrees' : 'कम्पास दिशा अंशों में'}
+                </label>
                 <input
+                  id="compass-rotary-heading"
                   type="range"
                   min="0"
                   max="359"
                   value={currentHeading}
+                  aria-label={currentLang === 'en' ? 'Rotary Compass Heading in degrees' : 'कम्पास दिशा अंशों में'}
                   onChange={(e) => handleHeadingChange(parseInt(e.target.value))}
                   className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#D4AF37]"
                 />
-                <div className="flex justify-between text-[9px] text-slate-400 font-mono">
+                <div className="flex justify-between text-[9px] text-slate-600 dark:text-slate-300 font-mono font-medium">
                   <span>0° N</span>
                   <span>90° E</span>
                   <span>180° S</span>
@@ -976,15 +1003,15 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                     <h3 className="font-cinzel text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
                       {currentLang === 'en' ? selectedZone.nameEn : selectedZone.nameHi}
                     </h3>
-                    <div className="text-xs text-slate-500 font-mono">
+                    <div className="text-xs text-slate-600 dark:text-slate-300 font-mono font-medium">
                       Axis: {selectedZone.degrees} • Element: {currentLang === 'en' ? selectedZone.elementEn : selectedZone.elementHi}
                     </div>
                   </div>
                 </div>
 
                 <div className="text-right">
-                  <div className="text-[10px] text-slate-400 uppercase font-semibold">{tools.vastuEngine.zoneHealthScore}</div>
-                  <div className="text-xl sm:text-2xl font-extrabold font-mono text-emerald-600 dark:text-emerald-400">
+                  <div className="text-[10px] text-slate-600 dark:text-slate-300 uppercase font-semibold">{tools.vastuEngine.zoneHealthScore}</div>
+                  <div className="text-xl sm:text-2xl font-extrabold font-mono text-emerald-800 dark:text-emerald-300">
                     {selectedZone.healthScore}%
                   </div>
                 </div>
@@ -998,8 +1025,8 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                 <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
                   {currentLang === 'en' ? selectedZone.significanceEn : selectedZone.significanceHi}
                 </p>
-                <div className="mt-2 text-xs text-slate-500">
-                  <span className="font-semibold text-[#B45309] dark:text-[#D4AF37]">
+                <div className="mt-2 text-xs text-slate-600 dark:text-slate-300">
+                  <span className="font-semibold text-amber-950 dark:text-[#F3E5AB]">
                     {currentLang === 'en' ? 'Ideal Alignment: ' : 'आदर्श अलाइनमेंट: '}
                   </span>
                   <span>{currentLang === 'en' ? selectedZone.idealForEn : selectedZone.idealForHi}</span>
@@ -1009,8 +1036,8 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
               {/* Defect vs 0% Demolition Remedy */}
               <div className="space-y-4">
                 <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/25">
-                  <div className="flex items-center space-x-2 text-amber-800 dark:text-amber-300 text-xs font-bold mb-1">
-                    <AlertTriangle className="w-4 h-4 text-amber-600" />
+                  <div className="flex items-center space-x-2 text-amber-900 dark:text-amber-200 text-xs font-bold mb-1">
+                    <AlertTriangle className="w-4 h-4 text-amber-700 dark:text-amber-400" />
                     <span>{tools.vastuEngine.flawIdentified}</span>
                   </div>
                   <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300">
@@ -1019,8 +1046,8 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                 </div>
 
                 <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/25">
-                  <div className="flex items-center space-x-2 text-emerald-800 dark:text-emerald-300 text-xs font-bold mb-1">
-                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                  <div className="flex items-center space-x-2 text-emerald-900 dark:text-emerald-200 text-xs font-bold mb-1">
+                    <ShieldCheck className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />
                     <span>{tools.vastuEngine.remedyRecommended}</span>
                   </div>
                   <p className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 font-medium">
@@ -1031,7 +1058,7 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
 
               {/* CTA Strip */}
               <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <span className="text-xs text-slate-500">
+                <span className="text-xs text-slate-600 dark:text-slate-300 font-medium">
                   {currentLang === 'en' ? 'Need an on-site Lecher Antenna factory audit?' : 'क्या आपकी फैक्ट्री में ऑन-साइट लेचर एंटीना जांच चाहिए?'}
                 </span>
                 <div className="flex items-center gap-2">
@@ -1039,6 +1066,7 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                     href={`https://wa.me/919009448601?text=${encodeURIComponent(`*Offline Factory / Site Vastu Audit Inquiry - Vedic Wisdom*\nInspected Zone: ${selectedZone.nameEn} (${selectedZone.degrees} - ${selectedZone.id})\nIdentified Concern: ${selectedZone.commonDefectEn}\nClient: ${userName || 'Property Owner'}\nCity: ${userCity || 'India'}\n\nPlease schedule an on-site visit with Lecher Antenna for physical 0% non-demolition energy rectification.`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={currentLang === 'en' ? 'Contact WhatsApp Desk for Factory Vastu Audit Inquiry' : 'फैक्ट्री वास्तु जांच हेतु व्हाट्सएप डेस्क से संपर्क करें'}
                     className="px-3.5 py-2 rounded-xl text-xs font-bold text-emerald-950 bg-emerald-400 hover:bg-emerald-300 flex items-center gap-1.5 transition-all shadow-xs"
                   >
                     <MessageCircle className="w-3.5 h-3.5 text-emerald-950" />

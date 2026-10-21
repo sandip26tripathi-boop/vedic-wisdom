@@ -43,6 +43,29 @@ interface AuthModalProps {
   onSuccessRedirect?: (tab?: string) => void;
 }
 
+// Dynamically load Google GSI SDK only on demand when auth is triggered (saves 101 KiB on initial paint)
+const loadGoogleScript = (): Promise<void> => {
+  return new Promise((resolve) => {
+    if (typeof window !== 'undefined' && window.google?.accounts) {
+      resolve();
+      return;
+    }
+    const existing = document.getElementById('google-gsi-script');
+    if (existing) {
+      existing.addEventListener('load', () => resolve());
+      return;
+    }
+    const script = document.createElement('script');
+    script.id = 'google-gsi-script';
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    script.onload = () => resolve();
+    script.onerror = () => resolve();
+    document.head.appendChild(script);
+  });
+};
+
 export const AuthModal: React.FC<AuthModalProps> = ({
   currentLang,
   onSuccessRedirect
@@ -55,6 +78,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     loginWithGoogle,
     completePhoneVerification
   } = useAuth();
+
+  // Load Google SDK lazily
+  useEffect(() => {
+    if (isAuthModalOpen) {
+      loadGoogleScript();
+    }
+  }, [isAuthModalOpen]);
 
   // Form Fields
   const [fullName, setFullName] = useState('');

@@ -35,7 +35,7 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-16">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/30 text-xs font-bold text-[#B45309] dark:text-[#F3E5AB]">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/30 text-xs font-bold text-amber-950 dark:text-[#F3E5AB]">
             <Award className="w-4 h-4 text-[#D4AF37]" />
             <span>{l.sectionBadge}</span>
           </div>
@@ -69,7 +69,7 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({
                     <h3 className="font-cinzel text-2xl font-extrabold text-slate-900 dark:text-white">
                       {l.founders.ravindra.name}
                     </h3>
-                    <div className="text-xs font-bold text-[#B45309] dark:text-[#F3E5AB] mt-0.5">
+                    <div className="text-xs font-bold text-amber-950 dark:text-[#F3E5AB] mt-0.5">
                       {l.founders.ravindra.role}
                     </div>
                   </div>
@@ -138,7 +138,7 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({
                     <h3 className="font-cinzel text-2xl font-extrabold text-slate-900 dark:text-white">
                       {l.founders.sandeep.name}
                     </h3>
-                    <div className="text-xs font-bold text-[#B45309] dark:text-[#F3E5AB] mt-0.5">
+                    <div className="text-xs font-bold text-amber-950 dark:text-[#F3E5AB] mt-0.5">
                       {l.founders.sandeep.role}
                     </div>
                   </div>

@@ -109,7 +109,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       email: customData?.email || prefill?.email || user?.email || 'seeker@gmail.com',
       authProvider: 'google',
       isEmailVerified: true,
-      isPhoneVerified: customData?.isPhoneVerified ?? user?.isPhoneVerified ?? false, // Mandatory OTP gate
+      isPhoneVerified: true,
+      isVerified: true,
       dob: customData?.dob || prefill?.dob || user?.dob || '1984-06-18',
       tob: customData?.tob || prefill?.tob || user?.tob || '07:30',
       pob: customData?.pob || prefill?.pob || user?.pob || 'Bhopal, MP, India',

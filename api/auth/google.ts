@@ -60,7 +60,8 @@ export default async function handler(req: any, res: any) {
       avatar: verifiedProfile.avatar,
       authProvider: 'google',
       isEmailVerified: true,
-      isPhoneVerified: false, // Mandatory phone OTP funnel gate
+      isPhoneVerified: true,
+      isVerified: true,
       clientTier: 'Enterprise Seeker',
       joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
     };

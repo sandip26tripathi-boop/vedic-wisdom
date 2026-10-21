@@ -167,7 +167,7 @@ function MainApp() {
   };
 
   return (
-    <div className={`w-full max-w-full overflow-x-hidden min-h-screen flex flex-col font-sans transition-colors duration-300 ${currentLang === 'hi' ? 'font-hindi' : ''} bg-[#FAF9F6] dark:bg-[#0B0F19] text-slate-800 dark:text-slate-100`}>
+    <div className={`w-full max-w-full overflow-x-clip min-h-screen flex flex-col font-sans transition-colors duration-300 ${currentLang === 'hi' ? 'font-hindi' : ''} bg-[#FAF9F6] dark:bg-[#0B0F19] text-slate-800 dark:text-slate-100`}>
       
       {/* Task 3: Inactivity Session Expired Floating Notification Toast */}
       {sessionExpiredNotification && (
@@ -201,7 +201,7 @@ function MainApp() {
 
       {/* VIEW 0: OFFICIAL ENCRYPTED CHECKOUT ROUTE */}
       {activeView === 'checkout' ? (
-        <div className="w-full max-w-full overflow-x-hidden min-h-screen flex flex-col">
+        <div className="w-full max-w-full overflow-x-clip min-h-screen flex flex-col">
           <Header
             currentLang={currentLang}
             onLanguageChange={setCurrentLang}
@@ -213,7 +213,7 @@ function MainApp() {
             onOpenGenerateReport={handleOpenGenerateReport}
           />
 
-          <main className="w-full max-w-full overflow-x-hidden flex-1">
+          <main className="w-full max-w-full overflow-x-clip flex-1">
             <Suspense fallback={<div className="min-h-[60vh] flex items-center justify-center"><div className="w-8 h-8 rounded-full border-2 border-[#D4AF37] border-t-transparent animate-spin" /></div>}>
               <CheckoutView
                 currentLang={currentLang}
@@ -244,7 +244,7 @@ function MainApp() {
         </Suspense>
       ) : activeView === 'generate-report' ? (
         /* VIEW 2: MODULE 1 - AI DIGITAL REPORT GENERATION AGENT */
-        <div className="w-full max-w-full overflow-x-hidden min-h-screen flex flex-col">
+        <div className="w-full max-w-full overflow-x-clip min-h-screen flex flex-col">
           <Header
             currentLang={currentLang}
             onLanguageChange={setCurrentLang}
@@ -256,7 +256,7 @@ function MainApp() {
             onOpenGenerateReport={handleOpenGenerateReport}
           />
 
-          <main className="w-full max-w-full overflow-x-hidden flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <main className="w-full max-w-full overflow-x-clip flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-10">
             {/* Back to Website Button */}
             <div className="max-w-4xl mx-auto mb-6 flex items-center justify-between">
               <button
@@ -319,7 +319,7 @@ function MainApp() {
           />
 
           {/* Main Content Sections */}
-          <main className="w-full max-w-full overflow-x-hidden flex-1">
+          <main className="w-full max-w-full overflow-x-clip flex-1">
             {/* 1. Hero Section (Balanced Dual-Pillar Focus) */}
             <Hero
               currentLang={currentLang}

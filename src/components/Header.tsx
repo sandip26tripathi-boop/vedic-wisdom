@@ -16,7 +16,8 @@ import {
   HelpCircle,
   Award,
   Calculator,
-  Compass
+  Compass,
+  LogOut
 } from 'lucide-react';
 import { translations } from '../data/translations.ts';
 import { Language, Theme } from '../types/index.ts';
@@ -44,7 +45,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenCopilot,
   onOpenGenerateReport,
 }) => {
-  const { user, isAuthenticated, openAuthModal } = useAuth();
+  const { user, isAuthenticated, openAuthModal, logout } = useAuth();
   const { totalItems, openCart } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [astroDropdownOpen, setAstroDropdownOpen] = useState(false);
@@ -384,20 +385,31 @@ export const Header: React.FC<HeaderProps> = ({
               )}
             </button>
 
-            {/* PROMINENT TOP-RIGHT LOGIN / CLIENT PORTAL BUTTON */}
+            {/* PROMINENT TOP-RIGHT LOGIN / CLIENT PORTAL & SIGN OUT BUTTONS */}
             {isAuthenticated ? (
-              <button
-                onClick={onOpenDashboard}
-                className="min-h-[44px] inline-flex items-center space-x-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-900 dark:text-white bg-amber-500/20 hover:bg-amber-500/30 border-2 border-[#D4AF37] shadow-sm shadow-[#D4AF37]/30 cursor-pointer transition-all shrink-0"
-                title="Open Client Dashboard"
-                aria-label="Open Vedic Client Portal Dashboard"
-              >
-                <div className="w-5 h-5 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-white flex items-center justify-center text-[10px] font-extrabold">
-                  {user?.name ? user.name.charAt(0).toUpperCase() : 'V'}
-                </div>
-                <span className="font-extrabold text-xs">Client Portal</span>
-                <Sparkles className="w-3 h-3 text-[#D4AF37]" />
-              </button>
+              <div className="flex items-center gap-1.5 shrink-0">
+                <button
+                  onClick={onOpenDashboard}
+                  className="min-h-[44px] inline-flex items-center space-x-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-900 dark:text-white bg-amber-500/20 hover:bg-amber-500/30 border-2 border-[#D4AF37] shadow-sm shadow-[#D4AF37]/30 cursor-pointer transition-all shrink-0"
+                  title="Open Client Dashboard"
+                  aria-label="Open Vedic Client Portal Dashboard"
+                >
+                  <div className="w-5 h-5 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-white flex items-center justify-center text-[10px] font-extrabold">
+                    {user?.name ? user.name.charAt(0).toUpperCase() : 'V'}
+                  </div>
+                  <span className="font-extrabold text-xs">Client Portal</span>
+                  <Sparkles className="w-3 h-3 text-[#D4AF37]" />
+                </button>
+                <button
+                  onClick={logout}
+                  className="min-h-[44px] inline-flex items-center space-x-1 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-xs font-bold text-red-600 dark:text-red-400 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 shadow-xs cursor-pointer transition-all shrink-0"
+                  title={currentLang === 'en' ? 'Sign Out / Logout' : 'साइन आउट / लॉगआउट'}
+                  aria-label={currentLang === 'en' ? 'Sign Out of Vedic Wisdom' : 'वैदिक विस्डम से साइन आउट करें'}
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline font-bold">{currentLang === 'en' ? 'Sign Out' : 'लॉगआउट'}</span>
+                </button>
+              </div>
             ) : (
               <button
                 onClick={() => openAuthModal()}
@@ -437,16 +449,27 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Mobile Auth Button */}
           <div className="p-3 rounded-2xl bg-gradient-to-r from-amber-500/15 via-[#D4AF37]/15 to-emerald-500/15 border-2 border-[#D4AF37]/40 shadow-sm">
             {isAuthenticated ? (
-              <button
-                onClick={() => { setMobileMenuOpen(false); onOpenDashboard && onOpenDashboard(); }}
-                className="w-full text-left font-bold text-xs text-[#B45309] dark:text-[#F3E5AB] flex items-center justify-between cursor-pointer"
-              >
-                <span className="flex items-center gap-2">
-                  <User className="w-4 h-4 text-[#D4AF37]" />
-                  {user?.name} (Open Client Portal)
-                </span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+              <div className="flex items-center justify-between gap-2">
+                <button
+                  onClick={() => { setMobileMenuOpen(false); onOpenDashboard && onOpenDashboard(); }}
+                  className="flex-1 text-left font-bold text-xs text-[#B45309] dark:text-[#F3E5AB] flex items-center justify-between cursor-pointer py-1"
+                >
+                  <span className="flex items-center gap-2">
+                    <User className="w-4 h-4 text-[#D4AF37]" />
+                    <span className="truncate">{user?.name} (Portal)</span>
+                  </span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={() => { setMobileMenuOpen(false); logout(); }}
+                  className="px-2.5 py-1.5 rounded-lg bg-red-500/15 border border-red-500/30 text-red-600 dark:text-red-400 text-xs font-bold flex items-center gap-1 cursor-pointer shrink-0"
+                  title="Sign Out"
+                  aria-label="Sign Out"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span>{currentLang === 'en' ? 'Sign Out' : 'लॉगआउट'}</span>
+                </button>
+              </div>
             ) : (
               <button
                 onClick={() => { setMobileMenuOpen(false); openAuthModal(); }}

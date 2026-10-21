@@ -331,23 +331,25 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="flex items-center bg-slate-200/80 dark:bg-slate-800/80 rounded-lg p-0.5 border border-slate-300 dark:border-slate-700">
               <button
                 onClick={() => onLanguageChange('en')}
-                className={`px-1.5 sm:px-2 py-1 text-[11px] font-bold rounded transition-all cursor-pointer ${
+                className={`min-h-[40px] px-2 py-1 text-[11px] font-bold rounded transition-all cursor-pointer ${
                   currentLang === 'en'
                     ? 'bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-white shadow-xs'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
                 title="Switch to English"
+                aria-label="Switch website language to English"
               >
                 EN
               </button>
               <button
                 onClick={() => onLanguageChange('hi')}
-                className={`px-1.5 sm:px-2 py-1 text-[11px] font-bold rounded transition-all cursor-pointer ${
+                className={`min-h-[40px] px-2 py-1 text-[11px] font-bold rounded transition-all cursor-pointer ${
                   currentLang === 'hi'
                     ? 'bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-white shadow-xs'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
                 title="हिंदी में देखें"
+                aria-label="वेबसाइट की भाषा हिंदी में बदलें"
               >
                 हिंदी
               </button>
@@ -356,8 +358,9 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Theme Toggle (Day/Night) */}
             <button
               onClick={onThemeToggle}
-              className="p-1.5 sm:p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
-              aria-label="Toggle theme"
+              className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
+              aria-label="Toggle dark and light color theme"
+              title="Toggle color theme"
             >
               {currentTheme === 'dark' ? (
                 <Sun className="w-4 h-4 text-[#D4AF37]" />
@@ -369,8 +372,8 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Shopping Cart Trigger Button with Dynamic Red Badge */}
             <button
               onClick={openCart}
-              className="relative p-1.5 sm:p-2 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
-              aria-label="Open Cart"
+              className="relative min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
+              aria-label="View shopping cart drawer"
               title={currentLang === 'en' ? 'Open Vedic Cart' : 'कार्ट देखें'}
             >
               <ShoppingBag className="w-4 h-4 text-[#D4AF37]" />
@@ -385,8 +388,9 @@ export const Header: React.FC<HeaderProps> = ({
             {isAuthenticated ? (
               <button
                 onClick={onOpenDashboard}
-                className="inline-flex items-center space-x-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-900 dark:text-white bg-amber-500/20 hover:bg-amber-500/30 border-2 border-[#D4AF37] shadow-sm shadow-[#D4AF37]/30 cursor-pointer transition-all shrink-0"
+                className="min-h-[44px] inline-flex items-center space-x-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-900 dark:text-white bg-amber-500/20 hover:bg-amber-500/30 border-2 border-[#D4AF37] shadow-sm shadow-[#D4AF37]/30 cursor-pointer transition-all shrink-0"
                 title="Open Client Dashboard"
+                aria-label="Open Vedic Client Portal Dashboard"
               >
                 <div className="w-5 h-5 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-white flex items-center justify-center text-[10px] font-extrabold">
                   {user?.name ? user.name.charAt(0).toUpperCase() : 'V'}
@@ -397,19 +401,20 @@ export const Header: React.FC<HeaderProps> = ({
             ) : (
               <button
                 onClick={() => openAuthModal()}
-                className="inline-flex items-center space-x-2 px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-extrabold text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:brightness-105 border-2 border-[#D4AF37] shadow-md shadow-[#D4AF37]/40 transition-all duration-200 cursor-pointer shrink-0"
+                className="min-h-[44px] inline-flex items-center space-x-2 px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-extrabold text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:brightness-105 border-2 border-[#D4AF37] shadow-md shadow-[#D4AF37]/40 transition-all duration-200 cursor-pointer shrink-0"
                 title="Client Login (Google / Mobile / WhatsApp)"
+                aria-label="Client Login via Google or WhatsApp"
               >
                 <div className="flex items-center -space-x-1 shrink-0">
                   <span className="w-4 h-4 rounded-full bg-white flex items-center justify-center p-0.5 shadow-xs">
-                    <svg className="w-3 h-3" viewBox="0 0 24 24">
+                    <svg className="w-3 h-3" viewBox="0 0 24 24" aria-hidden="true">
                       <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.27-2.09 3.66-5.17 3.66-9.12z" />
                       <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.26 21.36 7.33 24 12 24z" />
                       <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.58H1.25C.45 8.17 0 9.99 0 12s.45 3.83 1.25 5.42l4.03-3.13z" />
                       <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.13c.95-2.83 3.6-4.96 6.72-4.96z" />
                     </svg>
                   </span>
-                  <span className="w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[8px] font-black border border-white">
+                  <span className="w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[8px] font-black border border-white" aria-hidden="true">
                     W
                   </span>
                 </div>
@@ -422,8 +427,8 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Mobile Menu Toggle Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-1.5 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
-              aria-label="Open menu"
+              className="lg:hidden min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+              aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>

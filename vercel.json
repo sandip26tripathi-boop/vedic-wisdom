@@ -4,7 +4,7 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
-      "source": "/((?!api/).*)",
+      "source": "/((?!api/|robots\\.txt|sitemap\\.xml|favicon\\.ico|assets/).*)",
       "destination": "/index.html"
     }
   ]

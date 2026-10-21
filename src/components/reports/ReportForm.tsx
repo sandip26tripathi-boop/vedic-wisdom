@@ -239,12 +239,13 @@ export const ReportForm: React.FC<ReportFormProps> = ({
             {/* Row 1: Full Name & Gender */}
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
               <div className="sm:col-span-8">
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                <label htmlFor="rf-full-name" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Full Name / Enterprise Executive *
                 </label>
                 <div className="relative">
                   <User className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
                   <input
+                    id="rf-full-name"
                     type="text"
                     required
                     placeholder="e.g. Vikramaditya Singhania"
@@ -256,10 +257,11 @@ export const ReportForm: React.FC<ReportFormProps> = ({
               </div>
 
               <div className="sm:col-span-4">
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                <label htmlFor="rf-gender" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Profile Gender
                 </label>
                 <select
+                  id="rf-gender"
                   value={gender}
                   onChange={(e) => setGender(e.target.value as any)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
@@ -274,12 +276,13 @@ export const ReportForm: React.FC<ReportFormProps> = ({
             {/* Row 2: Date of Birth & Exact Time of Birth */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                <label htmlFor="rf-dob" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Date of Birth (Gregorian) *
                 </label>
                 <div className="relative">
                   <Calendar className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
                   <input
+                    id="rf-dob"
                     type="date"
                     required
                     value={dob}
@@ -290,12 +293,13 @@ export const ReportForm: React.FC<ReportFormProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                <label htmlFor="rf-tob" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Exact Time of Birth (HH:MM) *
                 </label>
                 <div className="relative">
                   <Clock className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
                   <input
+                    id="rf-tob"
                     type="time"
                     required
                     value={tob}
@@ -303,7 +307,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({
                     className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
                   />
                 </div>
-                <span className="text-[10px] text-slate-400 mt-1 block">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 block">
                   *Accurate time ensures exact Sub-Sub Lord house boundary calculation.
                 </span>
               </div>
@@ -365,7 +369,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({
               <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center gap-2.5 text-xs text-amber-800 dark:text-amber-200">
                 <Lock className="w-4 h-4 text-[#D4AF37] shrink-0" />
                 <span>
-                  <strong>Strict Verification Gate:</strong> Clicking below triggers a rapid 2-step verification (Google/Email + 6-digit Mobile OTP) to authenticate and immediately unlock your report.
+                  <strong>Identity Verification Gate:</strong> Clicking below triggers rapid 1-click verification (Google / Email or WhatsApp) to authenticate and immediately unlock your report.
                 </span>
               </div>
             )}

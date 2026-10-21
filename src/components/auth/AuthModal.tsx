@@ -265,8 +265,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         {/* Close Button */}
         <button
           onClick={closeAuthModal}
-          className="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors cursor-pointer z-10"
-          aria-label="Close"
+          className="min-h-[44px] min-w-[44px] flex items-center justify-center absolute top-4 right-4 p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-white transition-colors cursor-pointer z-10"
+          aria-label="Close identity verification modal"
         >
           <X className="w-5 h-5" />
         </button>
@@ -356,12 +356,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <form onSubmit={handleWhatsAppVerify} className="space-y-4 animate-in fade-in duration-150">
                 {/* Full Name */}
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  <label htmlFor="wa-full-name" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     {currentLang === 'en' ? 'Full Name' : 'पूरा नाम'} <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
                     <UserCheck className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                     <input
+                      id="wa-full-name"
                       type="text"
                       required
                       placeholder={currentLang === 'en' ? 'e.g. Vikramaditya Singhania' : 'उदा. विक्रमादित्य सिंघानिया'}
@@ -374,7 +375,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
                 {/* WhatsApp Mobile Number */}
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  <label htmlFor="wa-phone-number" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     {currentLang === 'en' ? 'WhatsApp Mobile Number' : 'व्हाट्सऐप मोबाइल नंबर'} <span className="text-red-500">*</span>
                   </label>
                   <div className="flex rounded-xl overflow-hidden border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus-within:ring-2 focus-within:ring-emerald-500">
@@ -383,6 +384,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       <span>+91</span>
                     </div>
                     <input
+                      id="wa-phone-number"
                       type="tel"
                       required
                       maxLength={10}
@@ -392,7 +394,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       className="w-full px-3 py-2.5 bg-transparent text-sm font-bold tracking-wider text-slate-900 dark:text-white focus:outline-none"
                     />
                   </div>
-                  <span className="text-[10px] text-slate-400 mt-1 block">
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 block">
                     {currentLang === 'en' 
                       ? 'Instant 100% Free verification via official Vedic Wisdom hotline (+91 90094 48601).'
                       : 'वैदिक विस्डम हेल्पलाइन (+91 90094 48601) के ज़रिए 100% निःशुल्क त्वरित सत्यापन।'}
@@ -403,7 +405,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full mt-2 py-3.5 px-4 rounded-xl font-black text-sm text-white bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-600 hover:brightness-105 shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 transition-all cursor-pointer group"
+                  className="min-h-[44px] w-full mt-2 py-3.5 px-4 rounded-xl font-black text-sm text-white bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-600 hover:brightness-105 shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 transition-all cursor-pointer group"
                 >
                   <span className="w-5 h-5 rounded-full bg-white text-emerald-600 flex items-center justify-center text-[10px] font-black">W</span>
                   <span>{currentLang === 'en' ? 'Verify on WhatsApp & Unlock' : 'WhatsApp से सत्यापित करें व अनलॉक करें'}</span>
@@ -422,7 +424,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   type="button"
                   onClick={handleGoogleSignIn}
                   disabled={isLoading}
-                  className="w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-700 hover:border-[#4285F4] text-slate-800 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800/80 shadow-xs flex items-center justify-center gap-2.5 transition-all cursor-pointer group"
+                  className="min-h-[44px] w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-700 hover:border-[#4285F4] text-slate-800 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800/80 shadow-xs flex items-center justify-center gap-2.5 transition-all cursor-pointer group"
                 >
                   <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.27-2.09 3.66-5.17 3.66-9.12z" />
@@ -435,22 +437,23 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
                 {/* Divider */}
                 <div className="relative flex items-center justify-center my-3">
-                  <div className="border-t border-slate-200 dark:border-slate-800 w-full" />
-                  <span className="bg-[#FAF9F6] dark:bg-[#111827] px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  <div className="border-t border-slate-300 dark:border-slate-800 w-full" />
+                  <span className="bg-[#FAF9F6] dark:bg-[#111827] px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                     {currentLang === 'en' ? 'or sign in with email' : 'अथवा ईमेल से साइन इन करें'}
                   </span>
-                  <div className="border-t border-slate-200 dark:border-slate-800 w-full" />
+                  <div className="border-t border-slate-300 dark:border-slate-800 w-full" />
                 </div>
 
                 {/* 2. Email Sign-In Form */}
                 <form onSubmit={handleEmailSignIn} className="space-y-3.5">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    <label htmlFor="email-full-name" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                       {currentLang === 'en' ? 'Full Name' : 'पूरा नाम'}
                     </label>
                     <div className="relative">
                       <UserCheck className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                       <input
+                        id="email-full-name"
                         type="text"
                         placeholder={currentLang === 'en' ? 'e.g. Dr. Anandvardhan Verma' : 'उदा. डॉ. आनंदवर्धन वर्मा'}
                         value={fullName}
@@ -461,12 +464,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    <label htmlFor="email-input-field" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                       {currentLang === 'en' ? 'Email Address' : 'ईमेल आईडी'} <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                       <input
+                        id="email-input-field"
                         type="email"
                         required
                         placeholder="client@enterprise.com"
@@ -481,7 +485,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full mt-2 py-3 px-4 rounded-xl font-black text-sm text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:brightness-105 shadow-md shadow-[#D4AF37]/30 flex items-center justify-center gap-2 transition-all cursor-pointer group"
+                    className="min-h-[44px] w-full mt-2 py-3 px-4 rounded-xl font-black text-sm text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:brightness-105 shadow-md shadow-[#D4AF37]/30 flex items-center justify-center gap-2 transition-all cursor-pointer group"
                   >
                     <Check className="w-4 h-4 text-slate-950" />
                     <span>{currentLang === 'en' ? 'Sign In with Email & Unlock' : 'ईमेल से साइन इन करें व अनलॉक करें'}</span>

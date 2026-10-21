@@ -21,9 +21,9 @@ export const TrustBar: React.FC<TrustBarProps> = ({ currentLang }) => {
     <div className="bg-slate-100/60 dark:bg-slate-900/60 border-y border-[#D4AF37]/20 py-6">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-4xl mx-auto mb-4">
-          <p className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
             {t.trust.title}
-          </p>
+          </h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

@@ -203,17 +203,19 @@ export const Footer: React.FC<FooterProps> = ({
               <div className="flex items-center bg-slate-800 rounded-lg p-0.5 border border-slate-700">
                 <button
                   onClick={() => onLanguageChange('en')}
-                  className={`px-2 py-1 text-xs font-semibold rounded cursor-pointer ${
-                    currentLang === 'en' ? 'bg-[#D4AF37] text-slate-950' : 'text-slate-400 hover:text-white'
+                  className={`min-h-[40px] px-2.5 py-1.5 text-xs font-semibold rounded cursor-pointer ${
+                    currentLang === 'en' ? 'bg-[#D4AF37] text-slate-950 font-bold' : 'text-slate-300 hover:text-white'
                   }`}
+                  aria-label="Switch language to English"
                 >
                   English
                 </button>
                 <button
                   onClick={() => onLanguageChange('hi')}
-                  className={`px-2 py-1 text-xs font-semibold rounded cursor-pointer ${
-                    currentLang === 'hi' ? 'bg-[#D4AF37] text-slate-950' : 'text-slate-400 hover:text-white'
+                  className={`min-h-[40px] px-2.5 py-1.5 text-xs font-semibold rounded cursor-pointer ${
+                    currentLang === 'hi' ? 'bg-[#D4AF37] text-slate-950 font-bold' : 'text-slate-300 hover:text-white'
                   }`}
+                  aria-label="हिंदी भाषा चुनें"
                 >
                   हिंदी
                 </button>
@@ -221,18 +223,20 @@ export const Footer: React.FC<FooterProps> = ({
 
               <button
                 onClick={onThemeToggle}
-                className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors cursor-pointer"
+                className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors cursor-pointer"
                 title="Toggle Theme"
+                aria-label="Toggle dark and light color theme"
               >
-                {currentTheme === 'dark' ? <Sun className="w-3.5 h-3.5 text-[#D4AF37]" /> : <Moon className="w-3.5 h-3.5" />}
+                {currentTheme === 'dark' ? <Sun className="w-4 h-4 text-[#D4AF37]" /> : <Moon className="w-4 h-4 text-slate-300" />}
               </button>
 
               <button
                 onClick={scrollToTop}
-                className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors ml-auto cursor-pointer"
+                className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors ml-auto cursor-pointer"
                 title="Back to Top"
+                aria-label="Scroll back to top of page"
               >
-                <ArrowUp className="w-3.5 h-3.5" />
+                <ArrowUp className="w-4 h-4" />
               </button>
             </div>
           </div>

@@ -64,8 +64,8 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({ currentLang,
 
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="relative p-4 rounded-full bg-gradient-to-tr from-[#059669] to-[#10B981] hover:brightness-110 text-white shadow-2xl hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] transform hover:scale-105 transition-all duration-300 cursor-pointer flex items-center justify-center border-2 border-white/30"
-          aria-label="WhatsApp Advisory Chat"
+          className="relative min-h-[56px] min-w-[56px] p-4 rounded-full bg-gradient-to-tr from-[#059669] to-[#10B981] hover:brightness-110 text-white shadow-2xl hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] transform hover:scale-105 transition-all duration-300 cursor-pointer flex items-center justify-center border-2 border-white/30"
+          aria-label={isOpen ? "Close WhatsApp Advisory Chat" : "Open WhatsApp Advisory Chat"}
         >
           {isOpen ? (
             <X className="w-7 h-7" />
@@ -102,7 +102,8 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({ currentLang,
 
             <button
               onClick={() => setIsOpen(false)}
-              className="p-1 rounded-lg hover:bg-white/10 text-white/80 hover:text-white"
+              className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-lg hover:bg-white/10 text-white/80 hover:text-white cursor-pointer"
+              aria-label="Close WhatsApp chat popup"
             >
               <X className="w-5 h-5" />
             </button>
@@ -169,14 +170,16 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({ currentLang,
             <input
               type="text"
               placeholder={currentLang === 'en' ? "Type your project query..." : "अपना प्रश्न यहां लिखें..."}
+              aria-label={currentLang === 'en' ? "Type your project query" : "अपना प्रश्न यहां लिखें"}
               value={customMsg}
               onChange={(e) => setCustomMsg(e.target.value)}
               className="flex-1 px-3 py-2 text-xs rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500"
             />
             <button
               type="submit"
-              className="p-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white shrink-0 cursor-pointer shadow-xs transition-colors"
+              className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white shrink-0 cursor-pointer shadow-xs transition-colors"
               title="Send to WhatsApp"
+              aria-label="Send query to WhatsApp"
             >
               <Send className="w-4 h-4" />
             </button>

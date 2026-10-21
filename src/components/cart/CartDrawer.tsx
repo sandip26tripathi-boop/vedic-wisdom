@@ -78,8 +78,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
             <button
               onClick={closeCart}
-              className="p-2 rounded-xl text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-              aria-label="Close Cart"
+              className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              aria-label="Close shopping cart drawer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -137,8 +137,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
                       <button
                         onClick={() => removeFromCart(item.id)}
-                        className="p-1.5 text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors cursor-pointer"
+                        className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors cursor-pointer"
                         title="Remove item"
+                        aria-label={`Remove ${item.title} from cart`}
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -150,10 +151,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         <button
                           type="button"
                           onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="p-0.5 text-slate-500 hover:text-slate-900 dark:hover:text-white cursor-pointer"
-                          aria-label="Decrease quantity"
+                          className="min-h-[36px] min-w-[36px] flex items-center justify-center text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white cursor-pointer"
+                          aria-label={`Decrease quantity of ${item.title}`}
                         >
-                          <Minus className="w-3 h-3" />
+                          <Minus className="w-3.5 h-3.5" />
                         </button>
                         <span className="font-mono text-xs font-bold text-slate-800 dark:text-slate-200 w-4 text-center">
                           {item.quantity}
@@ -161,10 +162,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         <button
                           type="button"
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="p-0.5 text-slate-500 hover:text-slate-900 dark:hover:text-white cursor-pointer"
-                          aria-label="Increase quantity"
+                          className="min-h-[36px] min-w-[36px] flex items-center justify-center text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white cursor-pointer"
+                          aria-label={`Increase quantity of ${item.title}`}
                         >
-                          <Plus className="w-3 h-3" />
+                          <Plus className="w-3.5 h-3.5" />
                         </button>
                       </div>
 

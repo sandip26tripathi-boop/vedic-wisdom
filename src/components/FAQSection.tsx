@@ -132,10 +132,12 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
             <div className="relative">
               <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
               <input
+                id="faq-search-input"
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={currentLang === 'en' ? 'Search questions (e.g. factory, demolition, timing)...' : 'प्रश्न खोजें (जैसे फैक्ट्री, तोड़-फोड़, केपी)...'}
+                aria-label={currentLang === 'en' ? 'Search frequently asked questions' : 'प्रश्न खोजें'}
                 className="w-full pl-10 pr-4 py-2.5 rounded-xl text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
               />
             </div>
@@ -158,7 +160,9 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
                 >
                   <button
                     onClick={() => setOpenId(isOpen ? null : faq.id)}
-                    className="w-full px-5 py-4 text-left flex items-center justify-between gap-4 cursor-pointer"
+                    aria-expanded={isOpen}
+                    aria-controls={`faq-answer-${faq.id}`}
+                    className="min-h-[48px] w-full px-5 py-4 text-left flex items-center justify-between gap-4 cursor-pointer"
                   >
                     <span className="font-cinzel text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-snug">
                       {currentLang === 'en' ? faq.qEn : faq.qHi}
@@ -171,7 +175,7 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
                   </button>
 
                   {isOpen && (
-                    <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800 animate-in fade-in duration-200">
+                    <div id={`faq-answer-${faq.id}`} className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800 animate-in fade-in duration-200">
                       <p>{currentLang === 'en' ? faq.aEn : faq.aHi}</p>
                     </div>
                   )}

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Language, Theme } from './types/index.ts';
 import { AuthProvider, useAuth } from './context/AuthContext.tsx';
 import { CartProvider } from './context/CartContext.tsx';
@@ -21,21 +21,23 @@ import { LeadershipSection } from './components/LeadershipSection.tsx';
 import { CaseStudiesSection } from './components/CaseStudiesSection.tsx';
 import { FAQSection } from './components/FAQSection.tsx';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp.tsx';
-import { BookingModal } from './components/BookingModal.tsx';
-import { ConsultationScopeModal } from './components/ConsultationScopeModal.tsx';
-import { CourseEnrollModal } from './components/CourseEnrollModal.tsx';
-import { ReportOrderModal } from './components/ReportOrderModal.tsx';
-import { AuthModal } from './components/AuthModal.tsx';
-import { ClientDashboard } from './components/ClientDashboard.tsx';
-import { AstroCopilot } from './components/ai/AstroCopilot.tsx';
-import { ReportForm } from './components/reports/ReportForm.tsx';
-import { ReportViewer } from './components/reports/ReportViewer.tsx';
-import { CartDrawer } from './components/cart/CartDrawer.tsx';
-import { CheckoutView } from './components/cart/CheckoutView.tsx';
 import { Footer } from './components/Footer.tsx';
 import { DigitalReportItem, digitalReportsData } from './data/digitalReports.ts';
 import { Sparkles, ArrowLeft, ShieldCheck, AlertTriangle, X } from 'lucide-react';
 import { SriYantraMotif } from './components/SriYantraMotif.tsx';
+
+// Code-split heavy interactive modals & secondary views for 95+ Mobile Performance
+const BookingModal = lazy(() => import('./components/BookingModal.tsx').then(m => ({ default: m.BookingModal })));
+const ConsultationScopeModal = lazy(() => import('./components/ConsultationScopeModal.tsx').then(m => ({ default: m.ConsultationScopeModal })));
+const CourseEnrollModal = lazy(() => import('./components/CourseEnrollModal.tsx').then(m => ({ default: m.CourseEnrollModal })));
+const ReportOrderModal = lazy(() => import('./components/ReportOrderModal.tsx').then(m => ({ default: m.ReportOrderModal })));
+const AuthModal = lazy(() => import('./components/AuthModal.tsx').then(m => ({ default: m.AuthModal })));
+const ClientDashboard = lazy(() => import('./components/ClientDashboard.tsx').then(m => ({ default: m.ClientDashboard })));
+const AstroCopilot = lazy(() => import('./components/ai/AstroCopilot.tsx').then(m => ({ default: m.AstroCopilot })));
+const ReportForm = lazy(() => import('./components/reports/ReportForm.tsx').then(m => ({ default: m.ReportForm })));
+const ReportViewer = lazy(() => import('./components/reports/ReportViewer.tsx').then(m => ({ default: m.ReportViewer })));
+const CartDrawer = lazy(() => import('./components/cart/CartDrawer.tsx').then(m => ({ default: m.CartDrawer })));
+const CheckoutView = lazy(() => import('./components/cart/CheckoutView.tsx').then(m => ({ default: m.CheckoutView })));
 
 function MainApp() {
   const [currentLang, setCurrentLang] = useState<Language>('en');
@@ -212,11 +214,13 @@ function MainApp() {
           />
 
           <main className="w-full max-w-full overflow-x-hidden flex-1">
-            <CheckoutView
-              currentLang={currentLang}
-              onReturnToWebsite={() => setActiveView('website')}
-              onOpenBooking={handleOpenBooking}
-            />
+            <Suspense fallback={<div className="min-h-[60vh] flex items-center justify-center"><div className="w-8 h-8 rounded-full border-2 border-[#D4AF37] border-t-transparent animate-spin" /></div>}>
+              <CheckoutView
+                currentLang={currentLang}
+                onReturnToWebsite={() => setActiveView('website')}
+                onOpenBooking={handleOpenBooking}
+              />
+            </Suspense>
           </main>
 
           <Footer
@@ -230,12 +234,14 @@ function MainApp() {
         </div>
       ) : activeView === 'dashboard' ? (
         /* VIEW 1: PROTECTED ENTERPRISE CLIENT DASHBOARD */
-        <ClientDashboard
-          currentLang={currentLang}
-          onReturnToWebsite={() => setActiveView('website')}
-          onOpenBooking={handleOpenBooking}
-          onOpenGenerateReport={handleOpenGenerateReport}
-        />
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-8 h-8 rounded-full border-2 border-[#D4AF37] border-t-transparent animate-spin" /></div>}>
+          <ClientDashboard
+            currentLang={currentLang}
+            onReturnToWebsite={() => setActiveView('website')}
+            onOpenBooking={handleOpenBooking}
+            onOpenGenerateReport={handleOpenGenerateReport}
+          />
+        </Suspense>
       ) : activeView === 'generate-report' ? (
         /* VIEW 2: MODULE 1 - AI DIGITAL REPORT GENERATION AGENT */
         <div className="w-full max-w-full overflow-x-hidden min-h-screen flex flex-col">
@@ -268,22 +274,24 @@ function MainApp() {
             </div>
 
             {/* Render Report Form or Generated Report Dossier */}
-            {generatedReportData ? (
-              <ReportViewer
-                reportData={generatedReportData}
-                currentLang={currentLang}
-                onBack={() => setGeneratedReportData(null)}
-                onOpenBooking={() => handleOpenBooking('astrology')}
-              />
-            ) : (
-              <ReportForm
-                currentLang={currentLang}
-                onReportGenerated={(data) => {
-                  setGeneratedReportData(data);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-              />
-            )}
+            <Suspense fallback={<div className="py-20 flex items-center justify-center"><div className="w-8 h-8 rounded-full border-2 border-[#D4AF37] border-t-transparent animate-spin" /></div>}>
+              {generatedReportData ? (
+                <ReportViewer
+                  reportData={generatedReportData}
+                  currentLang={currentLang}
+                  onBack={() => setGeneratedReportData(null)}
+                  onOpenBooking={() => handleOpenBooking('astrology')}
+                />
+              ) : (
+                <ReportForm
+                  currentLang={currentLang}
+                  onReportGenerated={(data) => {
+                    setGeneratedReportData(data);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                />
+              )}
+            </Suspense>
           </main>
 
           <Footer
@@ -391,60 +399,73 @@ function MainApp() {
         onOpenCopilot={() => setIsCopilotOpen(true)}
       />
 
-      {/* Streaming AI AstroCopilot Assistant Modal */}
-      <AstroCopilot
-        isOpen={isCopilotOpen}
-        onClose={() => setIsCopilotOpen(false)}
-        currentLang={currentLang}
-      />
+      {/* Modals & Slide-Overs wrapped in Suspense for Zero Initial Load Impact */}
+      <Suspense fallback={null}>
+        {/* Streaming AI AstroCopilot Assistant Modal */}
+        {isCopilotOpen && (
+          <AstroCopilot
+            isOpen={isCopilotOpen}
+            onClose={() => setIsCopilotOpen(false)}
+            currentLang={currentLang}
+          />
+        )}
 
-      {/* Global Slide-Over Cart Drawer */}
-      <CartDrawer
-        currentLang={currentLang}
-        onProceedToCheckout={handleProceedToCheckout}
-        onExploreServices={() => handleScrollTo('consultations')}
-      />
+        {/* Global Slide-Over Cart Drawer */}
+        <CartDrawer
+          currentLang={currentLang}
+          onProceedToCheckout={handleProceedToCheckout}
+          onExploreServices={() => handleScrollTo('consultations')}
+        />
 
-      {/* Auth Modal with OTP Verification, Google 1-Click & Mobile Login */}
-      <AuthModal
-        currentLang={currentLang}
-        onSuccessRedirect={() => {
-          if (activeView === 'generate-report' || activeView === 'checkout') {
-            return;
-          }
-          setActiveView('dashboard');
-        }}
-      />
+        {/* Auth Modal with Google 1-Click & WhatsApp Instant Verification */}
+        <AuthModal
+          currentLang={currentLang}
+          onSuccessRedirect={() => {
+            if (activeView === 'generate-report' || activeView === 'checkout') {
+              return;
+            }
+            setActiveView('dashboard');
+          }}
+        />
 
-      {/* Interactive Modals */}
-      <BookingModal
-        isOpen={isBookingOpen}
-        onClose={() => setIsBookingOpen(false)}
-        currentLang={currentLang}
-        initialServiceId={bookingServiceId}
-      />
+        {/* Interactive Modals */}
+        {isBookingOpen && (
+          <BookingModal
+            isOpen={isBookingOpen}
+            onClose={() => setIsBookingOpen(false)}
+            currentLang={currentLang}
+            initialServiceId={bookingServiceId}
+          />
+        )}
 
-      <ConsultationScopeModal
-        isOpen={isScopeOpen}
-        onClose={() => setIsScopeOpen(false)}
-        serviceId={scopeServiceId}
-        currentLang={currentLang}
-        onOpenBooking={handleOpenBooking}
-      />
+        {isScopeOpen && (
+          <ConsultationScopeModal
+            isOpen={isScopeOpen}
+            onClose={() => setIsScopeOpen(false)}
+            serviceId={scopeServiceId}
+            currentLang={currentLang}
+            onOpenBooking={handleOpenBooking}
+          />
+        )}
 
-      <CourseEnrollModal
-        isOpen={isEnrollOpen}
-        onClose={() => setIsEnrollOpen(false)}
-        courseId={enrollCourseId}
-        currentLang={currentLang}
-      />
+        {isEnrollOpen && (
+          <CourseEnrollModal
+            isOpen={isEnrollOpen}
+            onClose={() => setIsEnrollOpen(false)}
+            courseId={enrollCourseId}
+            currentLang={currentLang}
+          />
+        )}
 
-      <ReportOrderModal
-        isOpen={isReportModalOpen}
-        onClose={() => setIsReportModalOpen(false)}
-        report={selectedReport}
-        currentLang={currentLang}
-      />
+        {isReportModalOpen && (
+          <ReportOrderModal
+            isOpen={isReportModalOpen}
+            onClose={() => setIsReportModalOpen(false)}
+            report={selectedReport}
+            currentLang={currentLang}
+          />
+        )}
+      </Suspense>
 
     </div>
   );

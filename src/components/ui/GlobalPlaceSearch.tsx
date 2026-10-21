@@ -219,11 +219,13 @@ export const GlobalPlaceSearch: React.FC<GlobalPlaceSearchProps> = ({
         </div>
 
         <input
+          id="global-place-search-input"
           type="text"
           required={required}
           disabled={disabled}
           value={query}
           onChange={(e) => handleInputChange(e.target.value)}
+          aria-label={currentLang === 'en' ? "Search global city or birth location" : "जन्म नगर या स्थान खोजें"}
           onFocus={() => {
             if (suggestions.length > 0) setIsOpen(true);
             else if (query.trim().length >= 1) handleInputChange(query);
@@ -245,7 +247,8 @@ export const GlobalPlaceSearch: React.FC<GlobalPlaceSearchProps> = ({
             <button
               type="button"
               onClick={clearInput}
-              className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+              aria-label="Clear location search input"
+              className="min-h-[36px] min-w-[36px] flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
             </button>

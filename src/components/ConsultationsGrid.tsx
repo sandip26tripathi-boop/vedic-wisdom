@@ -250,7 +250,8 @@ export const ConsultationsGrid: React.FC<ConsultationsGridProps> = ({
               <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center gap-2">
                 <button
                   onClick={() => onOpenScopeModal(service.id)}
-                  className="flex-1 flex items-center justify-center space-x-1 px-2.5 py-2.5 rounded-xl font-semibold text-xs text-slate-700 dark:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
+                  className="min-h-[44px] flex-1 flex items-center justify-center space-x-1 px-2.5 py-2.5 rounded-xl font-semibold text-xs text-slate-700 dark:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
+                  aria-label={`View scope and methodology for ${service.title}`}
                 >
                   <FileText className="w-3.5 h-3.5 text-[#D4AF37]" />
                   <span>{c.viewScope}</span>
@@ -269,9 +270,9 @@ export const ConsultationsGrid: React.FC<ConsultationsGridProps> = ({
                     });
                     openCart();
                   }}
-                  className="p-2.5 rounded-xl border border-[#D4AF37]/50 bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 text-[#B45309] dark:text-[#F3E5AB] transition-colors cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2.5 rounded-xl border border-[#D4AF37]/50 bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 text-[#B45309] dark:text-[#F3E5AB] transition-colors cursor-pointer"
                   title={currentLang === 'en' ? 'Add to Cart' : 'कार्ट में जोड़ें'}
-                  aria-label="Add to Cart"
+                  aria-label={`Add ${service.title} to Cart`}
                 >
                   <ShoppingBag className="w-4 h-4 text-[#D4AF37]" />
                 </button>
@@ -288,7 +289,8 @@ export const ConsultationsGrid: React.FC<ConsultationsGridProps> = ({
                     });
                     openCart();
                   }}
-                  className="flex-1 flex items-center justify-center space-x-1 px-3 py-2.5 rounded-xl font-bold text-xs text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 shadow-sm transition-all cursor-pointer"
+                  className="min-h-[44px] flex-1 flex items-center justify-center space-x-1 px-3 py-2.5 rounded-xl font-bold text-xs text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 shadow-sm transition-all cursor-pointer"
+                  aria-label={`Book and pay now for ${service.title}`}
                 >
                   <span>{currentLang === 'en' ? 'Book & Pay Now' : 'बुक करें व भुगतान करें'}</span>
                   <ArrowRight className="w-3.5 h-3.5" />

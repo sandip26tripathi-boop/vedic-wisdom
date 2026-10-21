@@ -739,6 +739,14 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     app.use(express.static(path.join(__dirname, 'dist')));
+    app.get('/robots.txt', (_req: Request, res: Response) => {
+      res.type('text/plain');
+      res.sendFile(path.join(__dirname, 'public', 'robots.txt'));
+    });
+    app.get('/sitemap.xml', (_req: Request, res: Response) => {
+      res.type('application/xml');
+      res.sendFile(path.join(__dirname, 'public', 'sitemap.xml'));
+    });
     app.get('*', (_req: Request, res: Response) => {
       res.sendFile(path.join(__dirname, 'dist', 'index.html'));
     });

@@ -138,7 +138,7 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* Main Navigation Bar */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+      <div className="max-w-[1400px] mx-auto px-3 sm:px-4 lg:px-6">
         <div className="flex items-center justify-between h-16 sm:h-20 gap-2 sm:gap-4">
           
           {/* Left: Brand Logo */}
@@ -154,7 +154,7 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="font-cinzel text-lg sm:text-xl font-black tracking-wider text-slate-900 dark:text-white flex items-center gap-1">
                 VEDIC <span className="gold-gradient-text">WISDOM</span>
               </span>
-              <span className="text-[9px] sm:text-[10px] font-medium tracking-tight text-slate-600 dark:text-slate-400 truncate max-w-[150px] sm:max-w-none">
+              <span className="hidden xl:block text-[10px] font-medium tracking-tight text-slate-600 dark:text-slate-400 truncate max-w-[280px]">
                 {t.nav.tagline}
               </span>
             </div>
@@ -385,7 +385,7 @@ export const Header: React.FC<HeaderProps> = ({
             {isAuthenticated ? (
               <button
                 onClick={onOpenDashboard}
-                className="inline-flex items-center space-x-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold text-slate-900 dark:text-white bg-amber-500/20 hover:bg-amber-500/30 border-2 border-[#D4AF37] shadow-sm shadow-[#D4AF37]/30 cursor-pointer transition-all shrink-0"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-900 dark:text-white bg-amber-500/20 hover:bg-amber-500/30 border-2 border-[#D4AF37] shadow-sm shadow-[#D4AF37]/30 cursor-pointer transition-all shrink-0"
                 title="Open Client Dashboard"
               >
                 <div className="w-5 h-5 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-white flex items-center justify-center text-[10px] font-extrabold">
@@ -397,11 +397,11 @@ export const Header: React.FC<HeaderProps> = ({
             ) : (
               <button
                 onClick={() => openAuthModal()}
-                className="inline-flex items-center space-x-1.5 sm:space-x-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-extrabold text-slate-950 dark:text-white bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 border border-[#D4AF37] shadow-md shadow-[#D4AF37]/30 transition-all duration-200 cursor-pointer shrink-0"
-                title="Login with Google or WhatsApp"
+                className="inline-flex items-center space-x-2 px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-extrabold text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:brightness-105 border-2 border-[#D4AF37] shadow-md shadow-[#D4AF37]/40 transition-all duration-200 cursor-pointer shrink-0"
+                title="Client Login (Google / Mobile / WhatsApp)"
               >
                 <div className="flex items-center -space-x-1 shrink-0">
-                  <span className="w-4 h-4 rounded-full bg-white flex items-center justify-center p-0.5 shadow-2xs">
+                  <span className="w-4 h-4 rounded-full bg-white flex items-center justify-center p-0.5 shadow-xs">
                     <svg className="w-3 h-3" viewBox="0 0 24 24">
                       <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.27-2.09 3.66-5.17 3.66-9.12z" />
                       <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.26 21.36 7.33 24 12 24z" />
@@ -409,7 +409,7 @@ export const Header: React.FC<HeaderProps> = ({
                       <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.13c.95-2.83 3.6-4.96 6.72-4.96z" />
                     </svg>
                   </span>
-                  <span className="w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[7px] font-black border border-white">
+                  <span className="w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[8px] font-black border border-white">
                     W
                   </span>
                 </div>

@@ -103,7 +103,7 @@ export const Hero: React.FC<HeroProps> = ({
               </button>
             </div>
 
-            {/* Quick Link to Digital Reports Store & Instant Login */}
+            {/* Quick Link to Digital Reports Store */}
             <div className="pt-2 flex flex-wrap items-center gap-4 text-xs font-medium">
               <button
                 onClick={() => onScrollTo('digital-reports')}
@@ -111,18 +111,6 @@ export const Hero: React.FC<HeroProps> = ({
               >
                 <FileText className="w-4 h-4 text-[#D4AF37]" />
                 <span>{t.hero.ctaReports}</span>
-                <span>→</span>
-              </button>
-
-              <button
-                onClick={() => openAuthModal()}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white dark:bg-slate-800/90 border border-[#D4AF37]/60 text-slate-800 dark:text-white font-bold hover:bg-[#D4AF37]/15 transition-all shadow-xs cursor-pointer"
-              >
-                <div className="flex items-center -space-x-1">
-                  <span className="w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center text-[8px] font-black shadow-2xs">G</span>
-                  <span className="w-4 h-4 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[8px] font-black shadow-2xs">W</span>
-                </div>
-                <span>{currentLang === 'en' ? 'Sign In with Gmail / WhatsApp' : 'Gmail या WhatsApp से लॉगिन'}</span>
                 <span>→</span>
               </button>
             </div>
@@ -136,8 +124,8 @@ export const Hero: React.FC<HeroProps> = ({
             <div className="relative w-full max-w-md p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-white/95 via-white/90 to-[#FAF9F6]/95 dark:from-[#111827]/95 dark:via-[#0F172A]/95 dark:to-[#0B0F19]/95 border border-[#D4AF37]/40 shadow-2xl gold-border-glow backdrop-blur-md overflow-hidden">
               
               {/* Corner Accents */}
-              <div className="absolute top-0 right-0 sm:-top-3 sm:-right-3 w-7 h-7 border-t-2 border-r-2 border-[#D4AF37]"></div>
-              <div className="absolute bottom-0 left-0 sm:-bottom-3 sm:-left-3 w-7 h-7 border-b-2 border-l-2 border-[#D4AF37]"></div>
+              <div className="absolute top-2 right-2 w-6 h-6 border-t-2 border-r-2 border-[#D4AF37]"></div>
+              <div className="absolute bottom-2 left-2 w-6 h-6 border-b-2 border-l-2 border-[#D4AF37]"></div>
 
               {/* Header inside graphic card */}
               <div className="flex items-center justify-between pb-4 border-b border-[#D4AF37]/20">

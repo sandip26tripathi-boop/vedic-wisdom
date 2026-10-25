@@ -399,8 +399,16 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                   </div>
 
                   <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 flex items-start space-x-3">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 text-white flex items-center justify-center font-bold text-lg shrink-0 shadow-sm border border-[#D4AF37]/30">
-                      RP
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#D4AF37] to-[#B45309] text-white flex items-center justify-center font-bold text-lg shrink-0 shadow-sm border border-[#D4AF37]/40 overflow-hidden relative">
+                      <img
+                        src="/assets/ravindra-pathak.jpg"
+                        alt="Ravindra Pathak"
+                        onError={(e) => {
+                          (e.target as HTMLElement).style.display = 'none';
+                        }}
+                        className="w-full h-full object-cover object-top"
+                      />
+                      <span className="text-xs font-bold text-slate-300 absolute">RP</span>
                     </div>
                     <div className="space-y-1">
                       <h4 className="font-bold text-sm text-slate-900 dark:text-white">

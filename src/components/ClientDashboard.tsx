@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext.tsx';
 import { Language, ClientPortalTab } from '../types/index.ts';
 import { SriYantraMotif } from './SriYantraMotif.tsx';
+import ravindraPhoto from '../assets/ravindra-pathak.jpg';
+import sandeepPhoto from '../assets/sandeep-tripathi.jpg';
 import { 
   sampleFloorplans, 
   mockActiveConsultations, 
@@ -382,8 +384,12 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 flex items-start space-x-3">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#D4AF37] to-[#B45309] text-white flex items-center justify-center font-bold text-lg shrink-0 shadow-sm">
-                      ST
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#D4AF37] to-[#B45309] text-white flex items-center justify-center font-bold text-lg shrink-0 shadow-sm border border-[#D4AF37]/40 overflow-hidden">
+                      <img
+                        src={sandeepPhoto}
+                        alt="Sandeep K. Tripathi"
+                        className="w-full h-full object-cover object-top"
+                      />
                     </div>
                     <div className="space-y-1">
                       <h4 className="font-bold text-sm text-slate-900 dark:text-white">
@@ -399,16 +405,12 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                   </div>
 
                   <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 flex items-start space-x-3">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#D4AF37] to-[#B45309] text-white flex items-center justify-center font-bold text-lg shrink-0 shadow-sm border border-[#D4AF37]/40 overflow-hidden relative">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#D4AF37] to-[#B45309] text-white flex items-center justify-center font-bold text-lg shrink-0 shadow-sm border border-[#D4AF37]/40 overflow-hidden">
                       <img
-                        src="/assets/ravindra-pathak.jpg"
+                        src={ravindraPhoto}
                         alt="Ravindra Pathak"
-                        onError={(e) => {
-                          (e.target as HTMLElement).style.display = 'none';
-                        }}
                         className="w-full h-full object-cover object-top"
                       />
-                      <span className="text-xs font-bold text-slate-300 absolute">RP</span>
                     </div>
                     <div className="space-y-1">
                       <h4 className="font-bold text-sm text-slate-900 dark:text-white">

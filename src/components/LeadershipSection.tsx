@@ -2,6 +2,8 @@ import React from 'react';
 import { translations } from '../data/translations.ts';
 import { Language } from '../types/index.ts';
 import { SriYantraMotif } from './SriYantraMotif.tsx';
+import ravindraPhoto from '../assets/ravindra-pathak.jpg';
+import sandeepPhoto from '../assets/sandeep-tripathi.jpg';
 import { 
   Award, 
   BookOpen, 
@@ -62,18 +64,10 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({
                 <div className="flex items-center space-x-4">
                   <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-gradient-to-br from-[#D4AF37] via-amber-400 to-[#B45309] p-1 shadow-lg shrink-0 flex items-center justify-center text-slate-950 font-bold overflow-hidden relative">
                     <img
-                      src={(l.founders.ravindra as any).image || '/assets/ravindra-pathak.jpg'}
+                      src={ravindraPhoto}
                       alt={l.founders.ravindra.name}
-                      onError={(e) => {
-                        (e.target as HTMLElement).style.display = 'none';
-                        const fallback = (e.target as HTMLElement).nextElementSibling;
-                        if (fallback) (fallback as HTMLElement).style.display = 'flex';
-                      }}
                       className="w-full h-full object-cover object-top rounded-xl"
                     />
-                    <div className="w-full h-full rounded-xl bg-slate-950 hidden items-center justify-center text-[#F3E5AB] font-cinzel text-2xl font-black">
-                      RP
-                    </div>
                   </div>
                   <div>
                     <h3 className="font-cinzel text-2xl font-extrabold text-slate-900 dark:text-white">
@@ -141,18 +135,10 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({
                 <div className="flex items-center space-x-4">
                   <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-gradient-to-br from-[#D4AF37] via-amber-400 to-[#B45309] p-1 shadow-lg shrink-0 flex items-center justify-center text-slate-950 font-bold overflow-hidden relative">
                     <img
-                      src={(l.founders.sandeep as any).image || '/assets/sandeep-tripathi.jpg'}
+                      src={sandeepPhoto}
                       alt={l.founders.sandeep.name}
-                      onError={(e) => {
-                        (e.target as HTMLElement).style.display = 'none';
-                        const fallback = (e.target as HTMLElement).nextElementSibling;
-                        if (fallback) (fallback as HTMLElement).style.display = 'flex';
-                      }}
                       className="w-full h-full object-cover object-top rounded-xl"
                     />
-                    <div className="w-full h-full rounded-xl bg-slate-950 hidden items-center justify-center text-[#F3E5AB] font-cinzel text-2xl font-black">
-                      ST
-                    </div>
                   </div>
                   <div>
                     <h3 className="font-cinzel text-2xl font-extrabold text-slate-900 dark:text-white">

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Award, ShieldCheck, Compass, Sparkles, BookOpen, CheckCircle, ArrowRight, UserCheck } from 'lucide-react';
 import { Language } from '../../types/index.ts';
+import sandeepPhoto from '../../assets/sandeep-tripathi.jpg';
 
 interface ExpertProfileProps {
   currentLang?: Language;
@@ -32,22 +33,8 @@ export const ExpertProfile: React.FC<ExpertProfileProps> = ({
                 <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-full p-1.5 bg-gradient-to-tr from-amber-600 via-amber-400 to-amber-700 shadow-xl shadow-amber-900/20">
                   <div className="w-full h-full rounded-full bg-slate-950 border-4 border-slate-900 overflow-hidden flex items-center justify-center relative">
                     <img 
-                      src="/assets/sandeep-tripathi-consultant.png"
+                      src={sandeepPhoto}
                       alt="Sandeep K. Tripathi - Principal Consultant in Spatial Vastu and Classical Vedic Advisory"
-                      onError={(e) => {
-                        // Elegant fallback placeholder with initials & Vedic motif
-                        (e.target as HTMLElement).style.display = 'none';
-                        const parent = (e.target as HTMLElement).parentElement;
-                        if (parent) {
-                          const fallback = document.createElement('div');
-                          fallback.className = 'w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 to-amber-950 text-amber-200';
-                          fallback.innerHTML = `
-                            <span class="text-3xl sm:text-4xl font-serif font-black tracking-wider text-amber-300">SKT</span>
-                            <span class="text-[10px] uppercase font-bold tracking-widest text-amber-400/80 mt-1">Vedic Wisdom</span>
-                          `;
-                          parent.appendChild(fallback);
-                        }
-                      }}
                       className="w-full h-full object-cover object-top"
                     />
                   </div>

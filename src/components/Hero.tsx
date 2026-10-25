@@ -3,6 +3,8 @@ import { translations } from '../data/translations.ts';
 import { Language } from '../types/index.ts';
 import { SriYantraMotif } from './SriYantraMotif.tsx';
 import { useAuth } from '../context/AuthContext.tsx';
+import ravindraPhoto from '../assets/ravindra-pathak.jpg';
+import sandeepPhoto from '../assets/sandeep-tripathi.jpg';
 import { 
   ShieldCheck, 
   Sparkles, 
@@ -210,7 +212,23 @@ export const Hero: React.FC<HeroProps> = ({
 
               {/* Founding Leadership Endorsement Strip */}
               <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-600 dark:text-slate-300">
-                <span>By Ravindra Pathak & Sandeep Tripathi</span>
+                <div className="flex items-center space-x-2">
+                  <div className="flex -space-x-2 overflow-hidden shrink-0">
+                    <img 
+                      src={ravindraPhoto} 
+                      alt="Ravindra Pathak" 
+                      className="inline-block w-6 h-6 rounded-full ring-2 ring-[#D4AF37] object-cover object-top" 
+                    />
+                    <img 
+                      src={sandeepPhoto} 
+                      alt="Sandeep K. Tripathi" 
+                      className="inline-block w-6 h-6 rounded-full ring-2 ring-[#D4AF37] object-cover object-top" 
+                    />
+                  </div>
+                  <span className="font-semibold text-slate-800 dark:text-slate-200">
+                    Ravindra Pathak & Sandeep Tripathi
+                  </span>
+                </div>
                 <span className="font-bold text-amber-950 dark:text-[#F3E5AB]">Bhopal, MP, India</span>
               </div>
 

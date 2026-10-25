@@ -15,7 +15,7 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const key_secret = process.env.RAZORPAY_KEY_SECRET;
+    const key_secret = process.env.RAZORPAY_KEY_SECRET || '2GD8iVdtLQBXjK0QyCYSQg6Q';
 
     if (!key_secret) {
       return res.status(401).json({

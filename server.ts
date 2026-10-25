@@ -6,10 +6,12 @@ import { fileURLToPath } from 'url';
 import crypto from 'crypto';
 import Razorpay from 'razorpay';
 
-dotenv.config();
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Load environment variables from project directory .env
+dotenv.config({ path: path.resolve(__dirname, '.env') });
+dotenv.config(); // fallback to current working directory
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -730,8 +732,8 @@ app.get('/api/geo/search', async (req: Request, res: Response) => {
 // ============================================================================
 app.post('/api/create-order', async (req: Request, res: Response) => {
   try {
-    const key_id = process.env.RAZORPAY_KEY_ID;
-    const key_secret = process.env.RAZORPAY_KEY_SECRET;
+    const key_id = process.env.RAZORPAY_KEY_ID || process.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_Trxx5o2MCYdm01';
+    const key_secret = process.env.RAZORPAY_KEY_SECRET || '2GD8iVdtLQBXjK0QyCYSQg6Q';
 
     if (!key_id || !key_secret) {
       return res.status(401).json({
@@ -782,7 +784,7 @@ app.post('/api/create-order', async (req: Request, res: Response) => {
 
 app.post('/api/verify-payment', async (req: Request, res: Response) => {
   try {
-    const key_secret = process.env.RAZORPAY_KEY_SECRET;
+    const key_secret = process.env.RAZORPAY_KEY_SECRET || '2GD8iVdtLQBXjK0QyCYSQg6Q';
 
     if (!key_secret) {
       return res.status(401).json({

@@ -1,8 +1,0 @@
-feat(auth): automatic session signout and welcome back re-login for new sessions
-
-- Confine active authenticated session strictly to sessionStorage so closing tab/browser automatically signs out
-- Reduce inactivity session auto-logout timeout to 15 minutes with session expiry notification
-- Remember user profile snapshot in localStorage to power 'Welcome Back / Login Again' on new sessions
-- Dual-mode GoogleOneTap / WelcomeBackPrompt component providing 1-click re-login for returning users
-- Header dynamic welcome back button with client initial badge and instant re-login
-- AuthModal top pill for 1-click returning user re-login

@@ -404,6 +404,7 @@ export const translations = {
         ravindra: {
           name: "Ravindra Pathak",
           role: "Founder & Visionary Leader",
+          image: "/assets/ravindra-pathak.jpg",
           credentials: [
             "Institutional Partnerships & Enterprise Spatial Strategist",
             "Pioneer in Preserving Authentic Vedic Traditions for Modern Scale",
@@ -416,6 +417,7 @@ export const translations = {
         sandeep: {
           name: "Sandeep K. Tripathi",
           role: "Principal Researcher & Chief Educator",
+          image: "/assets/sandeep-tripathi.jpg",
           credentials: [
             "12+ Years Intensive Traditional Astrology & Non-Demolition Vastu Research",
             "Master of Krishnamurti Padhdhati (KP), Cuspal Interlinks (CIL) & Bhrigu Nandi Nadi",
@@ -941,6 +943,7 @@ export const translations = {
         ravindra: {
           name: "रवींद्र पाठक",
           role: "संस्थापक एवं विजनरी लीडर",
+          image: "/assets/ravindra-pathak.jpg",
           credentials: [
             "संस्थागत साझेदारी एवं बड़े उद्योगों के स्थानिक रणनीतिकार",
             "गूढ़ वैदिक ज्ञान को आधुनिक उद्योगों हेतु व्यावहारिक बनाने के अग्रणी",
@@ -953,6 +956,7 @@ export const translations = {
         sandeep: {
           name: "संदीप के. त्रिपाठी",
           role: "प्रमुख शोधकर्ता एवं मुख्य शिक्षक",
+          image: "/assets/sandeep-tripathi.jpg",
           credentials: [
             "12+ वर्षों का पारंपरिक वैदिक ज्योतिष एवं बिना तोड़-फोड़ वास्तु पर गहन अध्ययन",
             "कृष्णमूर्ति पद्धति (KP), कस्पल इंटरलिंक्स (CIL) एवं भृगु नंदी नाड़ी के मर्मज्ञ",

@@ -60,8 +60,18 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({
               {/* Profile Header */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
                 <div className="flex items-center space-x-4">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#D4AF37] to-[#B45309] p-0.5 shadow-md shrink-0 flex items-center justify-center text-slate-950 font-bold text-xl">
-                    <div className="w-full h-full rounded-2xl bg-slate-950 flex items-center justify-center text-[#F3E5AB] font-cinzel text-2xl font-black">
+                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#D4AF37] to-[#B45309] p-0.5 shadow-md shrink-0 flex items-center justify-center text-slate-950 font-bold overflow-hidden relative">
+                    <img
+                      src={(l.founders.ravindra as any).image || '/assets/ravindra-pathak.jpg'}
+                      alt={l.founders.ravindra.name}
+                      onError={(e) => {
+                        (e.target as HTMLElement).style.display = 'none';
+                        const fallback = (e.target as HTMLElement).nextElementSibling;
+                        if (fallback) (fallback as HTMLElement).style.display = 'flex';
+                      }}
+                      className="w-full h-full object-cover rounded-2xl"
+                    />
+                    <div className="w-full h-full rounded-2xl bg-slate-950 hidden items-center justify-center text-[#F3E5AB] font-cinzel text-2xl font-black">
                       RP
                     </div>
                   </div>
@@ -129,8 +139,18 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({
               {/* Profile Header */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
                 <div className="flex items-center space-x-4">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#D4AF37] to-[#B45309] p-0.5 shadow-md shrink-0 flex items-center justify-center text-slate-950 font-bold text-xl">
-                    <div className="w-full h-full rounded-2xl bg-slate-950 flex items-center justify-center text-[#F3E5AB] font-cinzel text-2xl font-black">
+                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#D4AF37] to-[#B45309] p-0.5 shadow-md shrink-0 flex items-center justify-center text-slate-950 font-bold overflow-hidden relative">
+                    <img
+                      src={(l.founders.sandeep as any).image || '/assets/sandeep-tripathi.jpg'}
+                      alt={l.founders.sandeep.name}
+                      onError={(e) => {
+                        (e.target as HTMLElement).style.display = 'none';
+                        const fallback = (e.target as HTMLElement).nextElementSibling;
+                        if (fallback) (fallback as HTMLElement).style.display = 'flex';
+                      }}
+                      className="w-full h-full object-cover rounded-2xl"
+                    />
+                    <div className="w-full h-full rounded-2xl bg-slate-950 hidden items-center justify-center text-[#F3E5AB] font-cinzel text-2xl font-black">
                       ST
                     </div>
                   </div>

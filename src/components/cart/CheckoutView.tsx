@@ -52,7 +52,8 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
   const [orderSuccess, setOrderSuccess] = useState<any | null>(null);
   const [paymentError, setPaymentError] = useState<string | null>(null);
 
-  const officialUpiId = 'ask.vedicwisdom@gmail.com';
+  // Official UPI VPA for direct QR payments (cannot be an email address like @gmail.com)
+  const officialUpiId = (import.meta as any).env?.VITE_OFFICIAL_UPI_ID || '9009448601@upi';
 
   const handleCopyUpi = () => {
     navigator.clipboard.writeText(officialUpiId);
@@ -553,6 +554,33 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
                     </div>
                   </div>
 
+                  {/* Razorpay Test Mode Guidance Box */}
+                  <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/25 text-[11px] text-amber-950 dark:text-amber-200/90 space-y-1.5">
+                    <div className="font-bold flex items-center gap-1.5 text-xs text-[#B45309] dark:text-[#F3E5AB]">
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>{currentLang === 'en' ? 'Razorpay Test Sandbox Mode Instructions' : 'रेज़रपे टेस्ट मोड निर्देश'}</span>
+                    </div>
+                    <p className="leading-relaxed">
+                      {currentLang === 'en' ? (
+                        <>
+                          • <strong>Real phone UPI apps (GPay / PhonePe) cannot scan Test Mode QRs</strong> because NPCI banking servers reject simulated test payments.
+                          <br />
+                          • <strong>To test successfully:</strong> Click the button below $\rightarrow$ in the popup select <strong>UPI</strong> $\rightarrow$ enter test VPA <code className="bg-amber-500/20 px-1 py-0.5 rounded font-mono font-bold">success@razorpay</code>, or select <strong>Card</strong> and enter test card <code className="bg-amber-500/20 px-1 py-0.5 rounded font-mono font-bold">4111 1111 1111 1111</code>.
+                          <br />
+                          • <strong>For real customer QR scanning:</strong> Switch to Razorpay Live API keys (<code className="font-mono">rzp_live_...</code>) in production.
+                        </>
+                      ) : (
+                        <>
+                          • <strong>असली PhonePe / GPay मोबाइल ऐप टेस्ट मोड QR कोड को स्कैन नहीं कर सकते</strong>, क्योंकि बैंक सर्वर टेस्ट मोड में असली पैसों का लेन-देन ब्लॉक करते हैं।
+                          <br />
+                          • <strong>सफलतापूर्वक टेस्ट करने के लिए:</strong> नीचे दिए गए बटन पर क्लिक करें $\rightarrow$ पॉपअप में <strong>UPI</strong> चुनें और टेस्ट UPI आईडी <code className="bg-amber-500/20 px-1 py-0.5 rounded font-mono font-bold">success@razorpay</code> दर्ज करें, अथवा <strong>Card</strong> चुनकर <code className="bg-amber-500/20 px-1 py-0.5 rounded font-mono font-bold">4111 1111 1111 1111</code> डालें।
+                          <br />
+                          • <strong>ग्राहकों द्वारा असली QR स्कैन कराने हेतु:</strong> रेज़रपे डैशबोर्ड से लाइव कीज़ (<code className="font-mono">rzp_live_...</code>) सक्रिय करें।
+                        </>
+                      )}
+                    </p>
+                  </div>
+
                   <div className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5 pt-1">
                     <Lock className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" />
                     <span>RBI & PCI-DSS Level 1 Compliant • Instant signature verification • Auto GST receipt</span>
@@ -564,27 +592,40 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
               {paymentMethod === 'upi' && (
                 <div className="p-5 rounded-2xl bg-amber-500/5 border border-amber-500/20 space-y-4 text-xs">
                   <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div className="space-y-1.5">
-                      <span className="font-bold text-slate-800 dark:text-slate-200 text-sm">
-                        Scan with GPay, PhonePe, Paytm, or BHIM
+                    <div className="space-y-2">
+                      <span className="font-bold text-slate-800 dark:text-slate-200 text-sm block">
+                        {currentLang === 'en' ? 'Scan with GPay, PhonePe, Paytm, or BHIM' : 'GPay, PhonePe, Paytm अथवा BHIM से स्कैन करें'}
                       </span>
                       <p className="text-slate-500 dark:text-slate-400">
-                        Official Registered UPI: <strong className="text-slate-800 dark:text-slate-200 font-mono">{officialUpiId}</strong>
+                        {currentLang === 'en' ? 'Official Registered UPI VPA:' : 'पंजीकृत आधिकारिक UPI आईडी:'}{' '}
+                        <strong className="text-slate-800 dark:text-slate-200 font-mono text-sm">{officialUpiId}</strong>
                       </p>
-                      <button
-                        type="button"
-                        onClick={handleCopyUpi}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-semibold text-[#B45309] dark:text-[#F3E5AB] cursor-pointer hover:bg-slate-100"
-                      >
-                        {copiedUpi ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-                        <span>{copiedUpi ? 'Copied UPI ID!' : 'Copy UPI ID'}</span>
-                      </button>
+                      
+                      <div className="flex flex-wrap items-center gap-2 pt-1">
+                        <button
+                          type="button"
+                          onClick={handleCopyUpi}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-semibold text-[#B45309] dark:text-[#F3E5AB] cursor-pointer hover:bg-slate-100"
+                        >
+                          {copiedUpi ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                          <span>{copiedUpi ? 'Copied UPI ID!' : 'Copy UPI ID'}</span>
+                        </button>
+
+                        {/* Mobile One-Tap Pay Link */}
+                        <a
+                          href={`upi://pay?pa=${encodeURIComponent(officialUpiId)}&pn=${encodeURIComponent('Vedic Wisdom')}&am=${total}&cu=INR&tn=${encodeURIComponent('Vedic Consultation')}`}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-500 shadow-sm"
+                        >
+                          <QrCode className="w-3.5 h-3.5" />
+                          <span>{currentLang === 'en' ? 'Pay directly on Mobile UPI App' : 'मोबाइल पर सीधे UPI ऐप से खोलें'}</span>
+                        </a>
+                      </div>
                     </div>
 
                     {/* Dynamic QR Box Display */}
                     <div className="p-3 bg-white rounded-2xl shadow-sm border border-slate-200 text-center shrink-0">
                       <img 
-                        src={`https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(`upi://pay?pa=${officialUpiId}&pn=Vedic%20Wisdom&am=${total}&cu=INR`)}`}
+                        src={`https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(`upi://pay?pa=${officialUpiId}&pn=Vedic%20Wisdom&am=${total}&cu=INR&tn=Vedic%20Consultation`)}`}
                         alt="Vedic Wisdom UPI Payment QR"
                         className="w-28 h-28 mx-auto"
                       />

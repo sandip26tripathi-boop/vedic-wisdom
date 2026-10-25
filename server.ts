@@ -155,9 +155,7 @@ app.post('/api/auth/send-otp', async (req: Request, res: Response) => {
       success: true,
       message: `Verification link dispatched for ${channel === 'whatsapp' ? `WhatsApp (${masked})` : masked}.`,
       target: channel === 'whatsapp' ? `WhatsApp: ${masked}` : masked,
-      channel: channel || 'whatsapp'
-    });
-      channel: 'mobile',
+      channel: channel || 'whatsapp',
       devOtpPreview: otpCode
     });
   } catch (err: any) {

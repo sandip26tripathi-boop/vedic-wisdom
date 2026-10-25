@@ -78,7 +78,7 @@ export interface UserProfile {
   rashi?: string;
   lagna?: string;
   nakshatra?: string;
-  whatsappOptIn: boolean;
+  whatsappOptIn?: boolean;
   avatar?: string;
   memberId: string;
   clientTier: 'Enterprise VIP' | 'Corporate' | 'Seeker Elite';

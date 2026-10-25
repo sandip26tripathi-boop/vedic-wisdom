@@ -23,7 +23,7 @@ interface FAQSectionProps {
 
 interface FAQItem {
   id: string;
-  category: 'renovation' | 'guarantees' | 'timeline' | 'privacy' | 'refunds';
+  category: 'renovation' | 'guarantees' | 'outcomes' | 'timeline' | 'privacy' | 'refunds';
   qEn: string;
   qHi: string;
   aEn: string;

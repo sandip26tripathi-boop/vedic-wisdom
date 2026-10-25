@@ -308,14 +308,33 @@ export const Footer: React.FC<FooterProps> = ({
                 </button>
               </div>
 
-              <button
-                onClick={onThemeToggle}
-                className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors cursor-pointer"
-                title="Toggle Theme"
-                aria-label="Toggle dark and light color theme"
-              >
-                {currentTheme === 'dark' ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-slate-300" />}
-              </button>
+              {/* Day / Night Mode Segment in Footer */}
+              <div className="flex items-center bg-slate-800 rounded-lg p-0.5 border border-slate-700">
+                <button
+                  type="button"
+                  onClick={() => { if (currentTheme !== 'light') onThemeToggle(); }}
+                  className={`px-2 py-1 text-[11px] font-bold rounded flex items-center space-x-1 cursor-pointer transition-all ${
+                    currentTheme === 'light' ? 'bg-amber-500 text-slate-950 font-black' : 'text-slate-300 hover:text-white'
+                  }`}
+                  title="Day Mode (Light)"
+                  aria-label="Switch to Day Mode"
+                >
+                  <Sun className="w-3 h-3 text-amber-950 dark:text-amber-400" />
+                  <span>{isHi ? 'दिन' : 'Day'}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { if (currentTheme !== 'dark') onThemeToggle(); }}
+                  className={`px-2 py-1 text-[11px] font-bold rounded flex items-center space-x-1 cursor-pointer transition-all ${
+                    currentTheme === 'dark' ? 'bg-slate-950 text-amber-300 font-black border border-amber-500/40' : 'text-slate-300 hover:text-white'
+                  }`}
+                  title="Night Mode (Dark)"
+                  aria-label="Switch to Night Mode"
+                >
+                  <Moon className="w-3 h-3 text-amber-400" />
+                  <span>{isHi ? 'रात' : 'Night'}</span>
+                </button>
+              </div>
 
               <button
                 onClick={scrollToTop}

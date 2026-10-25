@@ -54,8 +54,19 @@ const LegalModal = lazy(() => import('./components/legal/LegalModal.tsx').then(m
 
 function MainApp() {
   const [currentLang, setCurrentLang] = useState<Language>('en');
-  // Light-First Luxury Default
-  const [currentTheme, setCurrentTheme] = useState<Theme>('light');
+  // Light / Dark Theme State with persistence in localStorage and system preferences
+  const [currentTheme, setCurrentTheme] = useState<Theme>(() => {
+    try {
+      const saved = localStorage.getItem('vw_theme') as Theme | null;
+      if (saved === 'dark' || saved === 'light') return saved;
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+    } catch {
+      // fallback
+    }
+    return 'light';
+  });
   const { requireAuth } = useRequireAuth();
   const { isAuthModalOpen, sessionExpiredNotification, clearSessionExpiredNotification, openAuthModal } = useAuth();
   const { isCartOpen } = useCart();
@@ -92,13 +103,20 @@ function MainApp() {
   const [isCompassModalOpen, setIsCompassModalOpen] = useState(false);
   const [activeLegalDoc, setActiveLegalDoc] = useState<LegalDocType | null>(null);
 
-  // Handle theme updates
+  // Handle theme updates & persist to localStorage
   useEffect(() => {
     const root = document.documentElement;
     if (currentTheme === 'dark') {
       root.classList.add('dark');
+      root.classList.remove('light');
     } else {
       root.classList.remove('dark');
+      root.classList.add('light');
+    }
+    try {
+      localStorage.setItem('vw_theme', currentTheme);
+    } catch {
+      // ignore
     }
   }, [currentTheme]);
 

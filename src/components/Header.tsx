@@ -361,17 +361,50 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             </div>
 
-            {/* Theme Toggle (Day/Night) - Desktop only (in mobile drawer for mobile) */}
+            {/* Theme Switcher (Day / Night Mode) - Desktop Dual Pill */}
+            <div className="hidden sm:flex items-center bg-slate-200/90 dark:bg-slate-800/90 rounded-lg p-0.5 border border-slate-300 dark:border-slate-700 shadow-2xs">
+              <button
+                type="button"
+                onClick={() => { if (currentTheme !== 'light') onThemeToggle(); }}
+                className={`min-h-[38px] px-2.5 py-1 text-[11px] font-bold rounded flex items-center space-x-1.5 transition-all cursor-pointer ${
+                  currentTheme === 'light'
+                    ? 'bg-amber-500 text-slate-950 font-black shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+                title={currentLang === 'en' ? 'Day Mode (Light)' : 'दिन मोड (लाइट)'}
+                aria-label={currentLang === 'en' ? 'Switch to Day Mode' : 'दिन मोड सक्रिय करें'}
+              >
+                <Sun className="w-3.5 h-3.5 text-amber-950 dark:text-amber-400" />
+                <span>{currentLang === 'en' ? 'Day' : 'दिन'}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => { if (currentTheme !== 'dark') onThemeToggle(); }}
+                className={`min-h-[38px] px-2.5 py-1 text-[11px] font-bold rounded flex items-center space-x-1.5 transition-all cursor-pointer ${
+                  currentTheme === 'dark'
+                    ? 'bg-slate-950 text-amber-300 border border-amber-500/40 font-black shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+                title={currentLang === 'en' ? 'Night Mode (Dark)' : 'रात मोड (डार्क)'}
+                aria-label={currentLang === 'en' ? 'Switch to Night Mode' : 'रात मोड सक्रिय करें'}
+              >
+                <Moon className="w-3.5 h-3.5 text-amber-400" />
+                <span>{currentLang === 'en' ? 'Night' : 'रात'}</span>
+              </button>
+            </div>
+
+            {/* Theme Toggle (Day / Night Mode) - Mobile Header Icon Button */}
             <button
+              type="button"
               onClick={onThemeToggle}
-              className="hidden sm:flex min-h-[44px] min-w-[44px] items-center justify-center p-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
-              aria-label="Toggle dark and light color theme"
-              title="Toggle color theme"
+              className="sm:hidden min-h-[40px] min-w-[40px] flex items-center justify-center p-2 rounded-xl text-slate-800 dark:text-slate-100 bg-white/90 dark:bg-slate-800/90 border border-slate-300 dark:border-slate-700 shadow-2xs transition-colors cursor-pointer"
+              title={currentTheme === 'dark' ? (currentLang === 'en' ? 'Switch to Day Mode' : 'दिन मोड करें') : (currentLang === 'en' ? 'Switch to Night Mode' : 'रात मोड करें')}
+              aria-label="Toggle Day and Night Mode"
             >
               {currentTheme === 'dark' ? (
-                <Sun className="w-4 h-4 text-[#D4AF37]" />
+                <Sun className="w-4 h-4 text-amber-400" />
               ) : (
-                <Moon className="w-4 h-4 text-slate-700" />
+                <Moon className="w-4 h-4 text-indigo-700 dark:text-indigo-400" />
               )}
             </button>
 
@@ -454,13 +487,15 @@ export const Header: React.FC<HeaderProps> = ({
       {mobileMenuOpen && (
         <div className="lg:hidden bg-[#FAF9F6] dark:bg-[#0B0F19] border-b border-[#D4AF37]/30 px-4 pt-3 pb-6 space-y-3 animate-in slide-in-from-top-4 duration-200">
           
-          {/* Mobile Language & Theme Bar */}
-          <div className="flex items-center justify-between p-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
-            <div className="flex items-center space-x-1">
-              <span className="text-xs font-semibold text-slate-500 mr-2">Language:</span>
+          {/* Mobile Language & Currency Row */}
+          <div className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800">
+            <div className="flex items-center space-x-1.5">
+              <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400">
+                {currentLang === 'en' ? 'Language:' : 'भाषा:'}
+              </span>
               <button
                 onClick={() => onLanguageChange('en')}
-                className={`px-3 py-1 text-xs font-bold rounded-lg cursor-pointer ${
+                className={`min-h-[34px] px-2.5 py-1 text-xs font-bold rounded-lg cursor-pointer transition-all ${
                   currentLang === 'en'
                     ? 'bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-white shadow-xs'
                     : 'text-slate-700 dark:text-slate-300'
@@ -470,7 +505,7 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
               <button
                 onClick={() => onLanguageChange('hi')}
-                className={`px-3 py-1 text-xs font-bold rounded-lg cursor-pointer ${
+                className={`min-h-[34px] px-2.5 py-1 text-xs font-bold rounded-lg cursor-pointer transition-all ${
                   currentLang === 'hi'
                     ? 'bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-white shadow-xs'
                     : 'text-slate-700 dark:text-slate-300'
@@ -479,13 +514,50 @@ export const Header: React.FC<HeaderProps> = ({
                 हिंदी
               </button>
             </div>
-            <button
-              onClick={onThemeToggle}
-              className="p-1.5 rounded-lg text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 cursor-pointer"
-              aria-label="Toggle Theme"
-            >
-              {currentTheme === 'dark' ? <Sun className="w-4 h-4 text-[#D4AF37]" /> : <Moon className="w-4 h-4 text-slate-700" />}
-            </button>
+            <CurrencyToggle />
+          </div>
+
+          {/* Dedicated Day / Night Mode Row in Mobile Drawer */}
+          <div className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 shadow-2xs">
+            <div className="flex items-center space-x-2">
+              {currentTheme === 'dark' ? (
+                <Moon className="w-4 h-4 text-amber-400" />
+              ) : (
+                <Sun className="w-4 h-4 text-amber-600" />
+              )}
+              <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                {currentLang === 'en' ? 'Theme Mode:' : 'स्क्रीन मोड:'}
+              </span>
+            </div>
+
+            <div className="flex items-center bg-slate-200/90 dark:bg-slate-800/90 rounded-xl p-0.5 border border-slate-300 dark:border-slate-700">
+              <button
+                type="button"
+                onClick={() => { if (currentTheme !== 'light') onThemeToggle(); }}
+                className={`min-h-[36px] px-3 py-1 text-xs font-bold rounded-lg flex items-center space-x-1.5 cursor-pointer transition-all ${
+                  currentTheme === 'light'
+                    ? 'bg-amber-500 text-slate-950 font-black shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400'
+                }`}
+                title={currentLang === 'en' ? 'Day Mode' : 'दिन मोड'}
+              >
+                <Sun className="w-3.5 h-3.5 text-amber-950 dark:text-amber-400" />
+                <span>{currentLang === 'en' ? 'Day' : 'दिन'}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => { if (currentTheme !== 'dark') onThemeToggle(); }}
+                className={`min-h-[36px] px-3 py-1 text-xs font-bold rounded-lg flex items-center space-x-1.5 cursor-pointer transition-all ${
+                  currentTheme === 'dark'
+                    ? 'bg-slate-950 text-amber-300 border border-amber-500/40 font-black shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400'
+                }`}
+                title={currentLang === 'en' ? 'Night Mode' : 'रात मोड'}
+              >
+                <Moon className="w-3.5 h-3.5 text-amber-400" />
+                <span>{currentLang === 'en' ? 'Night' : 'रात'}</span>
+              </button>
+            </div>
           </div>
           {/* Mobile Auth Button */}
           <div className="p-3 rounded-2xl bg-gradient-to-r from-amber-500/15 via-[#D4AF37]/15 to-emerald-500/15 border-2 border-[#D4AF37]/40 shadow-sm">

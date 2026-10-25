@@ -45,6 +45,7 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
       instructor: c.kpMastery.instructor,
       format: c.kpMastery.format,
       tokenFee: c.kpMastery.tokenFee,
+      priceNumeric: 14999,
       highlights: c.kpMastery.highlights,
       tierBoxes: null,
       accent: 'border-[#D4AF37]/50 hover:border-[#D4AF37]'
@@ -59,6 +60,7 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
       instructor: c.bnn.instructor,
       format: c.bnn.format,
       tokenFee: c.bnn.tokenFee,
+      priceNumeric: 8999,
       highlights: c.bnn.highlights,
       tierBoxes: null,
       accent: 'border-amber-500/40 hover:border-amber-500'
@@ -73,6 +75,7 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
       instructor: c.jaimini.instructor,
       format: c.jaimini.format,
       tokenFee: c.jaimini.tokenFee,
+      priceNumeric: 7999,
       highlights: c.jaimini.highlights,
       tierBoxes: null,
       accent: 'border-purple-500/40 hover:border-purple-500'
@@ -87,6 +90,7 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
       instructor: c.vastuMastery.instructor,
       format: c.vastuMastery.format,
       tokenFee: c.vastuMastery.tokenFee,
+      priceNumeric: 16999,
       tierBoxes: c.vastuMastery.tierBoxes,
       highlights: c.vastuMastery.highlights,
       accent: 'border-amber-500/60 hover:border-[#D4AF37] ring-1 ring-[#D4AF37]/30'
@@ -101,6 +105,7 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
       instructor: c.astroVastuCert.instructor,
       format: c.astroVastuCert.format,
       tokenFee: c.astroVastuCert.tokenFee,
+      priceNumeric: 18500,
       highlights: c.astroVastuCert.highlights,
       tierBoxes: null,
       accent: 'border-emerald-500/50 hover:border-emerald-400'
@@ -115,6 +120,7 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
       instructor: c.numerology.instructor,
       format: c.numerology.format,
       tokenFee: c.numerology.tokenFee,
+      priceNumeric: 4999,
       highlights: c.numerology.highlights,
       tierBoxes: null,
       accent: 'border-sky-500/40 hover:border-sky-400'
@@ -299,7 +305,7 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
                         id: course.id,
                         title: course.title,
                         category: 'Academy Certification',
-                        price: course.id === 'kpMastery' ? 14999 : course.id === 'astroVastuCert' ? 18500 : 7999,
+                        price: course.priceNumeric,
                         turnaround: course.duration,
                         badge: course.badge
                       });
@@ -318,7 +324,7 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
                         id: course.id,
                         title: course.title,
                         category: 'Academy Certification',
-                        price: course.id === 'kpMastery' ? 14999 : course.id === 'astroVastuCert' ? 18500 : 7999,
+                        price: course.priceNumeric,
                         turnaround: course.duration,
                         badge: course.badge
                       });

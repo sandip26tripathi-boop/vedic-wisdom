@@ -66,14 +66,14 @@ export const CourseEnrollModal: React.FC<CourseEnrollModalProps> = ({
       // ignore
     }
 
-    const text = `*New Academy Seat Reservation - Vedic Wisdom*\n\n` +
+    const text = `*New Academy Course Enrollment - Vedic Wisdom*\n\n` +
       `*Course:* ${course.title}\n` +
       `*Student Name:* ${studentName}\n` +
       `*WhatsApp Phone:* ${studentPhone}\n` +
       `*Email:* ${studentEmail || 'N/A'}\n` +
       `*Experience Level:* ${priorExperience}\n` +
-      `*Reservation Token:* ${course.tokenFee}\n\n` +
-      `Please provide batch schedule and onboarding access.`;
+      `*Course Fee (Final):* ${course.tokenFee}\n\n` +
+      `Please confirm enrollment and share batch schedule & joining link.`;
 
     setTimeout(() => {
       window.open(`https://wa.me/919009448601?text=${encodeURIComponent(text)}`, '_blank');

@@ -462,7 +462,7 @@ export const CourseSyllabusModal: React.FC<CourseSyllabusModalProps> = ({
             }}
             className="flex items-center space-x-2 px-4 py-2.5 rounded-xl font-bold text-xs text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 shadow-md shadow-[#D4AF37]/25 cursor-pointer transition-all"
           >
-            <span>Reserve Seat / Enroll Now</span>
+            <span>Enroll in Course • Final Price</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

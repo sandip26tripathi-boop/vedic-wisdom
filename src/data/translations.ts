@@ -212,10 +212,10 @@ export const translations = {
       level: "Level:",
       instructor: "Master Mentor:",
       curriculum: "Curriculum Modules:",
-      enrollBtn: "Enroll / Reserve Seat",
+      enrollBtn: "Enroll in Course",
       syllabusBtn: "Download Full Syllabus",
       certificationBadge: "Vedic Wisdom Institutional Certification",
-      tokenFeeLabel: "Seat Reservation Token:",
+      tokenFeeLabel: "Course Fee (Final Price):",
 
       courses: {
         kpMastery: {
@@ -225,7 +225,7 @@ export const translations = {
           duration: "16 Weeks (48 Intensive Live Hours + Lifetime Recordings)",
           instructor: "Sandeep K. Tripathi (12+ Yrs KP Researcher)",
           format: "Live Interactive Weekend Batches + Private Mastermind Forum",
-          tokenFee: "₹4,999 / $99 (Reservation)",
+          tokenFee: "₹14,999 / $199 (Final Price)",
           highlights: [
             "Placidus house system & exact calculation of Sub-Lord and Sub-Sub Lords",
             "Cuspal Interlink Theory (CIL) — 1st to 12th cusp multi-dimensional link decoding",
@@ -242,7 +242,7 @@ export const translations = {
           duration: "10 Weeks (30 Live Hours)",
           instructor: "Sandeep K. Tripathi",
           format: "Live Classes + Transit Software Training",
-          tokenFee: "₹3,999 / $79 (Reservation)",
+          tokenFee: "₹8,999 / $119 (Final Price)",
           highlights: [
             "Planetary Karakattwas (Jupiter as Jeeva, Saturn as Karma Karaka, Venus as Wealth)",
             "Directional trine combinations (1-5-9, 2-6-10, 3-7-11, 4-8-12 planetary links)",
@@ -259,7 +259,7 @@ export const translations = {
           duration: "8 Weeks (24 Live Hours)",
           instructor: "Sandeep K. Tripathi",
           format: "Interactive Masterclass + Classical Sutra Decryption",
-          tokenFee: "₹3,499 / $69 (Reservation)",
+          tokenFee: "₹7,999 / $99 (Final Price)",
           highlights: [
             "Chara Karakas (Atmakaraka, Amatyakaraka, Bhratrikaraka, Darakaraka)",
             "Karakamsha Kundli and Navamsha decoding for soul mission and true profession",
@@ -275,7 +275,7 @@ export const translations = {
           duration: "16 Weeks (48 Intensive Live Hours + Field Audits)",
           instructor: "Sandeep K. Tripathi & Ravindra Pathak",
           format: "Live Cohort + 3D CAD Layouts + Lecher Antenna Audits",
-          tokenFee: "₹4,999 / $99 (Reservation)",
+          tokenFee: "₹16,999 / $219 (All 4 Tiers Included)",
           tierBoxes: [
             { level: "Basic", focus: "16 Zones, 5 Elements & Room-by-Room Vastu" },
             { level: "Advance", focus: "45 Devtas, 32 Entrances & Astrological Hit Theory" },
@@ -296,7 +296,7 @@ export const translations = {
           duration: "14 Weeks (42 Intensive Hours + Field Practical Training)",
           instructor: "Sandeep K. Tripathi & Ravindra Pathak",
           format: "On-Site / Virtual Factory Audits + Lecher Antenna Protocols",
-          tokenFee: "₹5,999 / $129 (Reservation)",
+          tokenFee: "₹18,500 / $249 (Final Price)",
           highlights: [
             "16 Vastu Zones spatial division across 360 degrees",
             "45 Energy Fields of the Vastu Purusha Mandala & Devta placement",
@@ -313,7 +313,7 @@ export const translations = {
           duration: "6 Weeks (18 Live Hours)",
           instructor: "Vedic Wisdom Research Faculty",
           format: "Hands-on Number Calculation Workshops",
-          tokenFee: "₹2,499 / $49 (Reservation)",
+          tokenFee: "₹4,999 / $69 (Final Price)",
           highlights: [
             "Chaldean & Pythagorean numerology systems comparison",
             "Mobile number vibration analysis: identifying loss-making and prosperity combinations",
@@ -513,8 +513,8 @@ export const translations = {
     // Course Enroll Modal
     enrollModal: {
       title: "Enroll in Vedic Wisdom Academy",
-      subtitle: "Join Master Sandeep K. Tripathi's live weekend cohort. Master real predictive algorithms.",
-      tokenLabel: "Seat Reservation Token:",
+      subtitle: "Join Master Sandeep K. Tripathi's live weekend cohort. Master authentic Vedic and KP predictive methods.",
+      tokenLabel: "Course Fee (Final Price):",
       benefits: [
         "Live Interactive Weekend Batches with Q&A",
         "Lifetime Access to High-Definition Class Recordings",
@@ -522,7 +522,7 @@ export const translations = {
         "Official Vedic Wisdom Certificate of Mastery",
         "Practical Case Studies of Real Client Charts & Floor Plans"
       ],
-      proceedWhatsapp: "Reserve Seat via WhatsApp Now"
+      proceedWhatsapp: "Enroll in Course via WhatsApp Now"
     },
 
     // Footer
@@ -751,10 +751,10 @@ export const translations = {
       level: "स्तर:",
       instructor: "मुख्य मार्गदर्शक:",
       curriculum: "पाठ्यक्रम के मुख्य भाग:",
-      enrollBtn: "सीट आरक्षित करें",
+      enrollBtn: "कोर्स में प्रवेश लें",
       syllabusBtn: "विस्तृत सिलेबस डाउनलोड करें",
       certificationBadge: "वैदिक विजडम संस्थागत प्रमाण पत्र",
-      tokenFeeLabel: "सीट आरक्षण टोकन:",
+      tokenFeeLabel: "कोर्स शुल्क (अंतिम मूल्य):",
 
       courses: {
         kpMastery: {
@@ -764,7 +764,7 @@ export const translations = {
           duration: "16 सप्ताह (48 घंटे लाइव कक्षाएं + आजीवन रिकॉर्डिंग्स)",
           instructor: "संदीप के. त्रिपाठी (12+ वर्ष केपी शोधकर्ता)",
           format: "लाइव सप्ताहांत कक्षाएं + विशेष मास्टरमाइंड फोरम",
-          tokenFee: "₹4,999 / $99 (आरक्षण)",
+          tokenFee: "₹14,999 / $199 (अंतिम मूल्य)",
           highlights: [
             "प्लेसिडस हाउस सिस्टम, सब-लॉर्ड व सब-सब लॉर्ड की सूक्ष्म गणना",
             "कस्पल इंटरलिंक थ्योरी (CIL) — 1 से 12 भावों के बहु-आयामी संबंधों का रहस्य",
@@ -781,7 +781,7 @@ export const translations = {
           duration: "10 सप्ताह (30 घंटे लाइव)",
           instructor: "संदीप के. त्रिपाठी",
           format: "लाइव कक्षाएं + गोचर सॉफ्टवेयर प्रशिक्षण",
-          tokenFee: "₹3,999 / $79 (आरक्षण)",
+          tokenFee: "₹8,999 / $119 (अंतिम मूल्य)",
           highlights: [
             "ग्रहों के कारकत्व (गुरु = जीव, शनि = कर्म कारक, शुक्र = धन व लक्ष्मी)",
             "दिशात्मक त्रिकोण संबंध (1-5-9, 2-6-10, 3-7-11, 4-8-12 का प्रभाव)",
@@ -798,7 +798,7 @@ export const translations = {
           duration: "8 सप्ताह (24 लाइव घंटे)",
           instructor: "संदीप के. त्रिपाठी",
           format: "लाइव मास्टरक्लास + महर्षि जैमिनी सूत्रों का डिकोडिंग",
-          tokenFee: "₹3,499 / $69 (आरक्षण)",
+          tokenFee: "₹7,999 / $99 (अंतिम मूल्य)",
           highlights: [
             "चर कारक (आत्मकारक, अमात्यकारक, भ्रातृकारक, दाराकारक आदि)",
             "कारकांश कुंडली और नवमांश द्वारा आत्मा के वास्तविक उद्देश्य की पहचान",
@@ -814,7 +814,7 @@ export const translations = {
           duration: "16 सप्ताह (48 घंटे लाइव + फील्ड प्रैक्टिकल)",
           instructor: "संदीप के. त्रिपाठी एवं रवींद्र पाठक",
           format: "लाइव कक्षाएं + 3डी लेआउट्स + लेचर एंटीना प्रशिक्षण",
-          tokenFee: "₹4,999 / $99 (आरक्षण)",
+          tokenFee: "₹16,999 / $219 (सभी 4 स्तर शामिल)",
           tierBoxes: [
             { level: "बेसिक (Basic)", focus: "16 दिशाएं, पंचमहाभूत तत्व चक्र एवं कमरों का वास्तु" },
             { level: "एडवांस (Advance)", focus: "45 देवता, 32 मुख्य द्वार एवं एस्ट्रो-हिट थ्योरी" },
@@ -835,7 +835,7 @@ export const translations = {
           duration: "14 सप्ताह (42 घंटे + फील्ड प्रैक्टिकल ट्रेनिंग)",
           instructor: "संदीप के. त्रिपाठी एवं रवींद्र पाठक",
           format: "लाइव/वर्चुअल फैक्ट्री ऑडिट्स + लेचर एंटीना कार्यप्रणाली",
-          tokenFee: "₹5,999 / $129 (आरक्षण)",
+          tokenFee: "₹18,500 / $249 (अंतिम मूल्य)",
           highlights: [
             "16 वास्तु जोन्स का 0° से 360° तक का शास्त्रसम्मत पारंपरिक विभाजन",
             "वास्तु पुरुष मंडल के 45 ऊर्जा क्षेत्रों एवं देवताओं का अध्ययन",
@@ -852,7 +852,7 @@ export const translations = {
           duration: "6 सप्ताह (18 लाइव घंटे)",
           instructor: "वैदिक विजडम रिसर्च फैकल्टी",
           format: "व्यावहारिक वर्कशॉप्स एवं नंबर एनालिसिस",
-          tokenFee: "₹2,499 / $49 (आरक्षण)",
+          tokenFee: "₹4,999 / $69 (अंतिम मूल्य)",
           highlights: [
             "कैल्डियन (Chaldean) एवं पाइथागोरियन अंक प्रणालियों की तुलना",
             "मोबाइल नंबर ऊर्जा विश्लेषण: नुकसान व लाभ देने वाले नंबर कॉम्बिनेशन",
@@ -1053,7 +1053,7 @@ export const translations = {
     enrollModal: {
       title: "वैदिक विजडम एकेडमी में प्रवेश",
       subtitle: "संदीप के. त्रिपाठी जी के लाइव सप्ताहांत बैच से जुड़ें। पारंपरिक वैदिक ज्योतिष एवं शास्त्रसम्मत विश्लेषण में निपुण बनें।",
-      tokenLabel: "सीट आरक्षण टोकन:",
+      tokenLabel: "कोर्स शुल्क (अंतिम मूल्य):",
       benefits: [
         "लाइव इंटरएक्टिव सप्ताहांत कक्षाएं एवं प्रश्नोत्तर",
         "हाई-डेफिनिशन क्लास रिकॉर्डिंग्स का आजीवन एक्सेस",
@@ -1061,7 +1061,7 @@ export const translations = {
         "वैदिक विजडम का आधिकारिक मास्टरी सर्टिफिकेशन",
         "सैकड़ों वास्तविक कुंडलियों व फैक्ट्री ब्लूप्रिंट्स पर प्रैक्टिकल अध्ययन"
       ],
-      proceedWhatsapp: "व्हाट्सएप पर अभी सीट सुरक्षित करें"
+      proceedWhatsapp: "व्हाट्सएप पर अभी कोर्स में प्रवेश लें"
     },
 
     // Footer

@@ -28,6 +28,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     items, 
     totalItems, 
     subtotal, 
+    discount,
+    appliedCoupon,
     total, 
     isCartOpen, 
     closeCart, 
@@ -171,6 +173,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
                       {/* Item Total */}
                       <div className="text-right">
+                        {item.originalPrice && item.originalPrice > item.price && (
+                          <div className="line-through text-slate-400 dark:text-slate-500 text-[11px] font-mono">
+                            ₹{(item.originalPrice * item.quantity).toLocaleString('en-IN')}
+                          </div>
+                        )}
                         <span className="font-cinzel text-base font-bold text-[#B45309] dark:text-[#F3E5AB]">
                           ₹{(item.price * item.quantity).toLocaleString('en-IN')}
                         </span>
@@ -190,6 +197,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   <span>{currentLang === 'en' ? 'Subtotal' : 'कुल योग'}</span>
                   <span className="font-mono font-semibold">₹{subtotal.toLocaleString('en-IN')}</span>
                 </div>
+                {discount > 0 && (
+                  <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400 font-semibold">
+                    <span>{currentLang === 'en' ? `Vedic Discount (${appliedCoupon})` : `वैदिक विशेष छूट (${appliedCoupon})`}</span>
+                    <span className="font-mono">-₹{discount.toLocaleString('en-IN')}</span>
+                  </div>
+                )}
                 <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
                   <span>{currentLang === 'en' ? 'Vedic Advisory Taxes & GST' : 'कर एवं परामर्श शुल्क'}</span>
                   <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{currentLang === 'en' ? 'Included (₹0 extra)' : 'शामिल'}</span>

@@ -26,6 +26,8 @@ export interface AcademyCourse {
   certificationKey: string;
   formatKey: string;
   tokenFee: string;
+  originalFee?: string;
+  discountBadge?: string;
 }
 
 export interface LeaderProfile {

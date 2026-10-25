@@ -17,7 +17,8 @@ import {
   Clock, 
   Sparkles,
   Download,
-  AlertCircle
+  AlertCircle,
+  Tag
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { initiateRazorpayCheckout } from '../../services/razorpay.ts';
@@ -32,7 +33,7 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
   currentLang,
   onReturnToWebsite,
 }) => {
-  const { items, total, subtotal, clearCart } = useCart();
+  const { items, total, subtotal, discount, appliedCoupon, applyCoupon, removeCoupon, clearCart } = useCart();
   const { user } = useAuth();
 
   // Billing form state (prefilled from verified user)
@@ -44,6 +45,10 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
   const [gstin, setGstin] = useState('');
   const [specialInstructions, setSpecialInstructions] = useState('');
 
+  // Coupon state
+  const [couponInput, setCouponInput] = useState('');
+  const [couponFeedback, setCouponFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+
   // Payment method selection: 'razorpay' | 'upi' | 'whatsapp'
   const [paymentMethod, setPaymentMethod] = useState<'razorpay' | 'upi' | 'whatsapp'>('razorpay');
   const [upiUtr, setUpiUtr] = useState('');
@@ -51,6 +56,33 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState<any | null>(null);
   const [paymentError, setPaymentError] = useState<string | null>(null);
+
+  const handleApplyPromo = () => {
+    if (!couponInput.trim()) {
+      setCouponFeedback({
+        type: 'error',
+        message: currentLang === 'en' ? 'Please enter a promo code.' : 'कृपया प्रोमो कोड दर्ज करें।'
+      });
+      return;
+    }
+    const res = applyCoupon(couponInput);
+    if (res.success) {
+      setCouponFeedback({ type: 'success', message: res.message });
+      setCouponInput('');
+    } else {
+      setCouponFeedback({ type: 'error', message: res.message });
+    }
+  };
+
+  const handleQuickCoupon = (code: string) => {
+    const res = applyCoupon(code);
+    if (res.success) {
+      setCouponFeedback({ type: 'success', message: res.message });
+      setCouponInput('');
+    } else {
+      setCouponFeedback({ type: 'error', message: res.message });
+    }
+  };
 
   // Official UPI VPA for direct QR payments (cannot be an email address like @gmail.com)
   const officialUpiId = (import.meta as any).env?.VITE_OFFICIAL_UPI_ID || '9009448601@upi';
@@ -104,6 +136,8 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
             companyName,
             items: [...items],
             totalAmount: total,
+            discountAmount: discount,
+            appliedCoupon: appliedCoupon,
             paymentMethod: 'Razorpay Standard Web Checkout (256-Bit SSL)',
             status: 'Verified & Paid',
             upiUtr: 'Verified via Razorpay',
@@ -160,6 +194,8 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
           companyName,
           items: [...items],
           totalAmount: total,
+          discountAmount: discount,
+          appliedCoupon: appliedCoupon,
           paymentMethod: 'Manual UPI QR',
           upiUtr,
           status: 'Submitted (Verification Pending)',
@@ -196,7 +232,8 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
   // WhatsApp Pre-Filled Confirmation Link
   const buildWhatsAppOrderLink = () => {
     const itemsList = items.map((i) => `• ${i.title} (₹${(i.price * i.quantity).toLocaleString('en-IN')})`).join('\n');
-    const msg = `*Vedic Wisdom Official Order Confirmation*\n\nClient: ${fullName || 'Client'}\nPhone: ${phone || user?.phone || ''}\nCity: ${city || 'India'}\n\n*Selected Services:*\n${itemsList}\n\n*Total Payable:* ₹${total.toLocaleString('en-IN')}\n\nPlease confirm availability and dispatch payment invoice.`;
+    const discountLine = discount > 0 ? `\n*Special Vedic Discount (${appliedCoupon}):* -₹${discount.toLocaleString('en-IN')}` : '';
+    const msg = `*Vedic Wisdom Official Order Confirmation*\n\nClient: ${fullName || 'Client'}\nPhone: ${phone || user?.phone || ''}\nCity: ${city || 'India'}\n\n*Selected Services:*\n${itemsList}${discountLine}\n\n*Total Payable:* ₹${total.toLocaleString('en-IN')}\n\nPlease confirm availability and dispatch payment invoice.`;
     return `https://wa.me/919009448601?text=${encodeURIComponent(msg)}`;
   };
 
@@ -269,6 +306,12 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
                   </span>
                 </div>
               ))}
+              {orderSuccess.discountAmount > 0 && (
+                <div className="flex justify-between py-1 text-emerald-600 dark:text-emerald-400 font-semibold border-b border-slate-200/50 dark:border-slate-700/50">
+                  <span>{currentLang === 'en' ? `Discount Applied (${orderSuccess.appliedCoupon})` : `विशेष छूट (${orderSuccess.appliedCoupon})`}</span>
+                  <span className="font-mono">-₹{orderSuccess.discountAmount.toLocaleString('en-IN')}</span>
+                </div>
+              )}
             </div>
 
             <div className="pt-2 flex justify-between items-center text-sm font-bold">
@@ -696,11 +739,109 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
                         Qty: {item.quantity} • {item.category}
                       </span>
                     </div>
-                    <span className="font-mono font-bold text-slate-800 dark:text-slate-200">
-                      ₹{(item.price * item.quantity).toLocaleString('en-IN')}
-                    </span>
+                    <div className="text-right">
+                      {item.originalPrice && item.originalPrice > item.price && (
+                        <div className="line-through text-slate-400 dark:text-slate-500 text-[10px] font-mono">
+                          ₹{(item.originalPrice * item.quantity).toLocaleString('en-IN')}
+                        </div>
+                      )}
+                      <span className="font-mono font-bold text-slate-800 dark:text-slate-200">
+                        ₹{(item.price * item.quantity).toLocaleString('en-IN')}
+                      </span>
+                    </div>
                   </div>
                 ))}
+              </div>
+
+              {/* Promo / Discount Coupon Section */}
+              <div className="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                    <Tag className="w-3.5 h-3.5 text-[#D4AF37]" />
+                    <span>{currentLang === 'en' ? 'Have a Discount / Promo Code?' : 'डिस्काउंट / प्रोमो कोड लागू करें'}</span>
+                  </span>
+                  {appliedCoupon && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        removeCoupon();
+                        setCouponFeedback(null);
+                        setCouponInput('');
+                      }}
+                      className="text-[11px] text-red-500 hover:text-red-700 font-medium underline cursor-pointer"
+                    >
+                      {currentLang === 'en' ? 'Remove' : 'हटाएं'}
+                    </button>
+                  )}
+                </div>
+
+                {appliedCoupon ? (
+                  <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-300">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                      <span className="font-mono font-bold">{appliedCoupon}</span>
+                      <span className="text-[11px] text-emerald-600 dark:text-emerald-400">
+                        (-₹{discount.toLocaleString('en-IN')} off)
+                      </span>
+                    </div>
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
+                      {currentLang === 'en' ? 'APPLIED' : 'लागू'}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={couponInput}
+                        onChange={(e) => {
+                          setCouponInput(e.target.value.toUpperCase());
+                          if (couponFeedback) setCouponFeedback(null);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleApplyPromo();
+                          }
+                        }}
+                        placeholder={currentLang === 'en' ? 'e.g. VEDIC10, SHREE' : 'उदा. VEDIC10, SHREE'}
+                        className="flex-1 px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 uppercase font-mono tracking-wider text-slate-900 dark:text-white focus:outline-none focus:border-[#D4AF37]"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleApplyPromo}
+                        className="px-4 py-2 text-xs font-bold rounded-xl text-slate-950 bg-gradient-to-r from-[#F3E5AB] to-[#D4AF37] hover:brightness-105 transition-all cursor-pointer shrink-0"
+                      >
+                        {currentLang === 'en' ? 'Apply' : 'लागू करें'}
+                      </button>
+                    </div>
+
+                    {/* Quick suggestion coupon chips */}
+                    <div className="flex flex-wrap items-center gap-1.5 text-[11px]">
+                      <span className="text-slate-500">{currentLang === 'en' ? 'Available:' : 'उपलब्ध:'}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleQuickCoupon('VEDIC10')}
+                        className="px-2 py-0.5 rounded-md bg-amber-500/10 hover:bg-amber-500/20 text-[#B45309] dark:text-[#F3E5AB] font-mono text-[10px] border border-amber-500/30 transition-colors cursor-pointer"
+                      >
+                        VEDIC10 (10% OFF)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleQuickCoupon('SHREE')}
+                        className="px-2 py-0.5 rounded-md bg-amber-500/10 hover:bg-amber-500/20 text-[#B45309] dark:text-[#F3E5AB] font-mono text-[10px] border border-amber-500/30 transition-colors cursor-pointer"
+                      >
+                        SHREE (₹500 OFF)
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {couponFeedback && (
+                  <p className={`text-[11px] font-medium ${couponFeedback.type === 'success' ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500'}`}>
+                    {couponFeedback.message}
+                  </p>
+                )}
               </div>
 
               {/* Pricing Totals */}
@@ -709,6 +850,12 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
                   <span>{currentLang === 'en' ? 'Subtotal' : 'कुल योग'}</span>
                   <span className="font-mono">₹{subtotal.toLocaleString('en-IN')}</span>
                 </div>
+                {discount > 0 && (
+                  <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-semibold">
+                    <span>{currentLang === 'en' ? `Discount Applied (${appliedCoupon})` : `लागू विशेष छूट (${appliedCoupon})`}</span>
+                    <span className="font-mono">-₹{discount.toLocaleString('en-IN')}</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-slate-600 dark:text-slate-400">
                   <span>{currentLang === 'en' ? 'Vedic Advisory Taxes & GST' : 'कर एवं परामर्श शुल्क'}</span>
                   <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{currentLang === 'en' ? 'Included (₹0)' : 'शामिल'}</span>

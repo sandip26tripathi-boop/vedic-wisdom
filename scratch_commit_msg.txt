@@ -1,0 +1,8 @@
+feat(pricing): add strikethrough original prices, discount badges, and checkout promo coupon system
+
+- Display higher original price (MRP) with strikethrough next to final course price
+- Add discount percentage badges (40% OFF, 39% OFF, 38% OFF, 37% OFF)
+- Support promo / discount coupon codes (VEDIC10 for 10% off, SHREE for flat ₹500 off, SCHOLARSHIP for 15% off)
+- Update Academy Directory cards and Course Enroll Modal with original fee and discount badge
+- Update Cart Drawer and Checkout View with coupon input, available coupon chips, and instant discount breakdown
+- Update English and Hindi translations with originalFee and discountBadge

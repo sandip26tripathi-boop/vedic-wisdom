@@ -44,8 +44,11 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
       duration: c.kpMastery.duration,
       instructor: c.kpMastery.instructor,
       format: c.kpMastery.format,
+      originalFee: (c.kpMastery as any).originalFee || '₹24,999 / $299',
+      discountBadge: (c.kpMastery as any).discountBadge || '40% OFF',
       tokenFee: c.kpMastery.tokenFee,
       priceNumeric: 14999,
+      originalPriceNumeric: 24999,
       highlights: c.kpMastery.highlights,
       tierBoxes: null,
       accent: 'border-[#D4AF37]/50 hover:border-[#D4AF37]'
@@ -59,8 +62,11 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
       duration: c.bnn.duration,
       instructor: c.bnn.instructor,
       format: c.bnn.format,
+      originalFee: (c.bnn as any).originalFee || '₹14,999 / $199',
+      discountBadge: (c.bnn as any).discountBadge || '40% OFF',
       tokenFee: c.bnn.tokenFee,
       priceNumeric: 8999,
+      originalPriceNumeric: 14999,
       highlights: c.bnn.highlights,
       tierBoxes: null,
       accent: 'border-amber-500/40 hover:border-amber-500'
@@ -74,8 +80,11 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
       duration: c.jaimini.duration,
       instructor: c.jaimini.instructor,
       format: c.jaimini.format,
+      originalFee: (c.jaimini as any).originalFee || '₹12,999 / $169',
+      discountBadge: (c.jaimini as any).discountBadge || '38% OFF',
       tokenFee: c.jaimini.tokenFee,
       priceNumeric: 7999,
+      originalPriceNumeric: 12999,
       highlights: c.jaimini.highlights,
       tierBoxes: null,
       accent: 'border-purple-500/40 hover:border-purple-500'
@@ -89,8 +98,11 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
       duration: c.vastuMastery.duration,
       instructor: c.vastuMastery.instructor,
       format: c.vastuMastery.format,
+      originalFee: (c.vastuMastery as any).originalFee || '₹28,000 / $349',
+      discountBadge: (c.vastuMastery as any).discountBadge || '39% OFF',
       tokenFee: c.vastuMastery.tokenFee,
       priceNumeric: 16999,
+      originalPriceNumeric: 28000,
       tierBoxes: c.vastuMastery.tierBoxes,
       highlights: c.vastuMastery.highlights,
       accent: 'border-amber-500/60 hover:border-[#D4AF37] ring-1 ring-[#D4AF37]/30'
@@ -104,8 +116,11 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
       duration: c.astroVastuCert.duration,
       instructor: c.astroVastuCert.instructor,
       format: c.astroVastuCert.format,
+      originalFee: (c.astroVastuCert as any).originalFee || '₹30,000 / $399',
+      discountBadge: (c.astroVastuCert as any).discountBadge || '38% OFF',
       tokenFee: c.astroVastuCert.tokenFee,
       priceNumeric: 18500,
+      originalPriceNumeric: 30000,
       highlights: c.astroVastuCert.highlights,
       tierBoxes: null,
       accent: 'border-emerald-500/50 hover:border-emerald-400'
@@ -119,8 +134,11 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
       duration: c.numerology.duration,
       instructor: c.numerology.instructor,
       format: c.numerology.format,
+      originalFee: (c.numerology as any).originalFee || '₹7,999 / $109',
+      discountBadge: (c.numerology as any).discountBadge || '37% OFF',
       tokenFee: c.numerology.tokenFee,
       priceNumeric: 4999,
+      originalPriceNumeric: 7999,
       highlights: c.numerology.highlights,
       tierBoxes: null,
       accent: 'border-sky-500/40 hover:border-sky-400'
@@ -279,13 +297,21 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
 
               </div>
 
-              {/* Bottom Actions and Token Reservation */}
+              {/* Bottom Actions and Course Fee */}
               <div className="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-3">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-slate-600 dark:text-slate-300 font-medium">{t.academy.tokenFeeLabel}</span>
-                  <span className="font-mono font-bold text-base text-amber-950 dark:text-[#F3E5AB]">
-                    {course.tokenFee}
-                  </span>
+                  <div className="flex items-center gap-2 flex-wrap justify-end">
+                    <span className="line-through text-slate-400 dark:text-slate-500 text-xs font-mono">
+                      {course.originalFee}
+                    </span>
+                    <span className="font-mono font-bold text-base text-amber-950 dark:text-[#F3E5AB]">
+                      {course.tokenFee}
+                    </span>
+                    <span className="px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
+                      {course.discountBadge}
+                    </span>
+                  </div>
                 </div>
 
                 {/* Quick 60-Second Syllabus Overview Button (Module 2) */}
@@ -306,6 +332,7 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
                         title: course.title,
                         category: 'Academy Certification',
                         price: course.priceNumeric,
+                        originalPrice: course.originalPriceNumeric,
                         turnaround: course.duration,
                         badge: course.badge
                       });
@@ -325,6 +352,7 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
                         title: course.title,
                         category: 'Academy Certification',
                         price: course.priceNumeric,
+                        originalPrice: course.originalPriceNumeric,
                         turnaround: course.duration,
                         badge: course.badge
                       });

@@ -119,7 +119,21 @@ export const CourseEnrollModal: React.FC<CourseEnrollModalProps> = ({
           </div>
           <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-200 dark:border-slate-700">
             <span className="text-slate-500 font-semibold">{em.tokenLabel}</span>
-            <span className="font-mono text-base font-extrabold text-[#B45309] dark:text-[#F3E5AB]">{course.tokenFee}</span>
+            <div className="flex items-center gap-2 flex-wrap justify-end">
+              {course.originalFee && (
+                <span className="line-through text-slate-400 dark:text-slate-500 text-xs font-mono">
+                  {course.originalFee}
+                </span>
+              )}
+              <span className="font-mono text-base font-extrabold text-[#B45309] dark:text-[#F3E5AB]">
+                {course.tokenFee}
+              </span>
+              {course.discountBadge && (
+                <span className="px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
+                  {course.discountBadge}
+                </span>
+              )}
+            </div>
           </div>
         </div>
 

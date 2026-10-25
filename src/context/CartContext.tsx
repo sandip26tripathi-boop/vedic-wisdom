@@ -18,6 +18,9 @@ export interface CartContextType {
   subtotal: number;
   discount: number;
   total: number;
+  appliedCoupon: string | null;
+  applyCoupon: (code: string) => { success: boolean; message: string };
+  removeCoupon: () => void;
   isCartOpen: boolean;
   openCart: () => void;
   closeCart: () => void;
@@ -31,6 +34,7 @@ export interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 const CART_STORAGE_KEY = 'vedic_wisdom_cart_session';
+const COUPON_STORAGE_KEY = 'vedic_wisdom_coupon_session';
 
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>(() => {
@@ -44,19 +48,93 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return [];
   });
 
+  const [appliedCoupon, setAppliedCoupon] = useState<string | null>(() => {
+    try {
+      return sessionStorage.getItem(COUPON_STORAGE_KEY) || null;
+    } catch {
+      return null;
+    }
+  });
+
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  // Sync to sessionStorage
+  // Sync items to sessionStorage
   useEffect(() => {
     try {
       sessionStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
     } catch {}
   }, [items]);
 
+  // Sync coupon to sessionStorage
+  useEffect(() => {
+    try {
+      if (appliedCoupon) {
+        sessionStorage.setItem(COUPON_STORAGE_KEY, appliedCoupon);
+      } else {
+        sessionStorage.removeItem(COUPON_STORAGE_KEY);
+      }
+    } catch {}
+  }, [appliedCoupon]);
+
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const discount = 0; // Transparent zero hidden fees
-  const total = subtotal - discount;
+
+  // Calculate discount from coupon
+  let discount = 0;
+  if (appliedCoupon && subtotal > 0) {
+    const code = appliedCoupon.toUpperCase().trim();
+    if (code === 'VEDIC10' || code === 'ACADEMY10') {
+      discount = Math.round(subtotal * 0.10);
+    } else if (code === 'SHREE' || code === 'VASTU500') {
+      discount = subtotal > 500 ? 500 : 0;
+    } else if (code === 'SCHOLARSHIP' || code === 'GURUKUL') {
+      discount = Math.round(subtotal * 0.15);
+    } else if (code === 'SPECIAL' || code === 'DIWALI') {
+      discount = subtotal > 1000 ? 1000 : 0;
+    }
+  }
+
+  // Ensure total is at least ₹1 if cart is not empty (for Razorpay compliance)
+  const total = items.length === 0 ? 0 : Math.max(1, subtotal - discount);
+
+  const applyCoupon = (rawCode: string): { success: boolean; message: string } => {
+    const code = rawCode.toUpperCase().trim();
+    if (!code) {
+      return { success: false, message: 'Please enter a coupon code.' };
+    }
+    if (items.length === 0) {
+      return { success: false, message: 'Add items or courses to your cart first.' };
+    }
+
+    if (code === 'VEDIC10' || code === 'ACADEMY10') {
+      setAppliedCoupon(code);
+      return { success: true, message: '10% Vedic discount successfully applied!' };
+    }
+    if (code === 'SHREE' || code === 'VASTU500') {
+      if (subtotal < 1000) {
+        return { success: false, message: 'Code SHREE requires minimum order of ₹1,000.' };
+      }
+      setAppliedCoupon(code);
+      return { success: true, message: 'Flat ₹500 Vedic discount successfully applied!' };
+    }
+    if (code === 'SCHOLARSHIP' || code === 'GURUKUL') {
+      setAppliedCoupon(code);
+      return { success: true, message: 'Academic 15% scholarship discount successfully applied!' };
+    }
+    if (code === 'SPECIAL' || code === 'DIWALI') {
+      if (subtotal < 2000) {
+        return { success: false, message: 'Special promo requires minimum order of ₹2,000.' };
+      }
+      setAppliedCoupon(code);
+      return { success: true, message: 'Flat ₹1,000 festive discount successfully applied!' };
+    }
+
+    return { success: false, message: 'Invalid promo code. Try "VEDIC10" or "SHREE".' };
+  };
+
+  const removeCoupon = () => {
+    setAppliedCoupon(null);
+  };
 
   const openCart = () => setIsCartOpen(true);
   const closeCart = () => setIsCartOpen(false);
@@ -92,8 +170,10 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const clearCart = () => {
     setItems([]);
+    setAppliedCoupon(null);
     try {
       sessionStorage.removeItem(CART_STORAGE_KEY);
+      sessionStorage.removeItem(COUPON_STORAGE_KEY);
     } catch {}
   };
 
@@ -105,6 +185,9 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         subtotal,
         discount,
         total,
+        appliedCoupon,
+        applyCoupon,
+        removeCoupon,
         isCartOpen,
         openCart,
         closeCart,

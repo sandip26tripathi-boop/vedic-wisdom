@@ -19,6 +19,9 @@ export interface AuthContextType {
   activeModalOptions: AuthModalOptions | null;
   simulatedOtpCode: string;
   sessionExpiredNotification: string | null;
+  rememberedUser: UserProfile | null;
+  reloginRememberedUser: () => UserProfile | null;
+  forgetRememberedUser: () => void;
   openAuthModal: (options?: AuthModalOptions) => void;
   closeAuthModal: () => void;
   setActiveModalTab: (tab: 'phone' | 'google' | 'magicLink' | 'emailPassword') => void;
@@ -28,7 +31,7 @@ export interface AuthContextType {
   loginWithMagicLink: (email: string) => boolean;
   completePhoneVerification: (phone: string, additionalData?: Partial<UserProfile>) => UserProfile;
   signIn: (provider?: string, options?: AuthModalOptions) => Promise<void>;
-  logout: () => void;
+  logout: (options?: { forgetRemembered?: boolean } | any) => void;
   updateProfile: (updates: Partial<UserProfile>) => void;
   generateNewOtp: (phone: string) => string;
   triggerSessionExpiry: () => void;
@@ -37,17 +40,38 @@ export interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Persistent User Storage Key
-const AUTH_STORAGE_KEY = 'vedic_wisdom_auth_user';
+// Active session storage key (sessionStorage only, purged automatically when tab/browser closes)
 const SESSION_STORAGE_KEY = 'vedic_wisdom_session_user';
+// Persistent remembered user key (localStorage, used to offer "Welcome Back / Login Again" on new sessions)
+const REMEMBERED_USER_KEY = 'vedic_wisdom_remembered_user';
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  // Load active user EXCLUSIVELY from sessionStorage so that closing the tab/browser automatically signs out!
   const [user, setUser] = useState<UserProfile | null>(() => {
     try {
-      const stored = localStorage.getItem(AUTH_STORAGE_KEY) || sessionStorage.getItem(SESSION_STORAGE_KEY);
+      // Clear legacy permanent auth key if present to respect session signout
+      localStorage.removeItem('vedic_wisdom_auth_user');
+
+      const storedSession = sessionStorage.getItem(SESSION_STORAGE_KEY);
+      if (storedSession) {
+        const parsed = JSON.parse(storedSession);
+        if (parsed && typeof parsed === 'object' && parsed.email) {
+          return parsed;
+        }
+      }
+    } catch {
+      // ignore
+    }
+    return null;
+  });
+
+  // Remembered user (persisted in localStorage across sessions to provide "Welcome Back / Login Again")
+  const [rememberedUser, setRememberedUser] = useState<UserProfile | null>(() => {
+    try {
+      const stored = localStorage.getItem(REMEMBERED_USER_KEY) || localStorage.getItem('vedic_recent_gmail_user');
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (parsed && typeof parsed === 'object' && parsed.email) {
+        if (parsed && typeof parsed === 'object' && (parsed.email || parsed.name)) {
           return parsed;
         }
       }
@@ -63,14 +87,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [simulatedOtpCode, setSimulatedOtpCode] = useState('786921');
   const [sessionExpiredNotification, setSessionExpiredNotification] = useState<string | null>(null);
 
-  // Sync user state to persistent localStorage and sessionStorage
+  // Sync user state to sessionStorage and update rememberedUser in localStorage
   useEffect(() => {
     try {
       if (user) {
-        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
         sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(user));
+        localStorage.setItem(REMEMBERED_USER_KEY, JSON.stringify(user));
+        localStorage.setItem('vedic_recent_gmail_user', JSON.stringify({
+          name: user.name,
+          email: user.email
+        }));
+        setRememberedUser(user);
       } else {
-        localStorage.removeItem(AUTH_STORAGE_KEY);
         sessionStorage.removeItem(SESSION_STORAGE_KEY);
       }
     } catch {
@@ -96,7 +124,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return newCode;
   };
 
-  // Google 1-Click login creates a provisional user, requiring phone OTP step next
+  // Google 1-Click login creates a verified user profile
   const loginWithGoogle = (customData?: Partial<UserProfile>): UserProfile => {
     const prefill = activeModalOptions?.prefilledData;
     const googleUser: UserProfile = {
@@ -128,7 +156,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return googleUser;
   };
 
-  // Email/Password login or registration creates provisional user, requiring phone OTP step next
+  // Email/Password login or registration
   const loginWithEmailPassword = (
     email: string,
     _password?: string,
@@ -146,7 +174,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       email: cleanEmail,
       authProvider: 'email',
       isEmailVerified: true,
-      isPhoneVerified: user?.isPhoneVerified || false, // Mandatory OTP gate
+      isPhoneVerified: user?.isPhoneVerified || false,
       dob: prefill?.dob || user?.dob || '1990-01-01',
       tob: prefill?.tob || user?.tob || '08:00',
       pob: prefill?.pob || user?.pob || 'Bhopal, MP, India',
@@ -172,7 +200,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return true;
   };
 
-  // Mandatory Mobile OTP Completion Step
+  // Mobile OTP Completion Step
   const completePhoneVerification = (phone: string, additionalData?: Partial<UserProfile>): UserProfile => {
     const verifiedUser: UserProfile = {
       ...(user || {}),
@@ -204,6 +232,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setUser(verifiedUser);
     try {
       sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(verifiedUser));
+      localStorage.setItem(REMEMBERED_USER_KEY, JSON.stringify(verifiedUser));
     } catch {
       // ignore
     }
@@ -228,6 +257,41 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return false;
   };
 
+  // Instant 1-Click Re-login for returning client in a new session
+  const reloginRememberedUser = (): UserProfile | null => {
+    const target = rememberedUser || (() => {
+      try {
+        const saved = localStorage.getItem(REMEMBERED_USER_KEY);
+        return saved ? JSON.parse(saved) : null;
+      } catch {
+        return null;
+      }
+    })();
+
+    if (!target) return null;
+
+    const refreshedUser: UserProfile = {
+      ...target,
+      isPhoneVerified: true,
+      isVerified: true
+    };
+    setUser(refreshedUser);
+    try {
+      sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(refreshedUser));
+    } catch {}
+    return refreshedUser;
+  };
+
+  // Forget remembered account on this device
+  const forgetRememberedUser = () => {
+    setRememberedUser(null);
+    try {
+      localStorage.removeItem(REMEMBERED_USER_KEY);
+      localStorage.removeItem('vedic_recent_gmail_user');
+      localStorage.removeItem('vedic_wisdom_auth_user');
+    } catch {}
+  };
+
   const signIn = async (provider: string = 'google', options?: AuthModalOptions) => {
     openAuthModal({
       ...options,
@@ -239,19 +303,25 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const logout = () => {
+  // Manual sign out clears active session. Options can forget remembered device.
+  const logout = (options?: { forgetRemembered?: boolean } | any) => {
     setUser(null);
     try {
       sessionStorage.removeItem(SESSION_STORAGE_KEY);
-      localStorage.removeItem(AUTH_STORAGE_KEY);
-      localStorage.removeItem('vedic_recent_gmail_user');
+      if (options && typeof options === 'object' && 'forgetRemembered' in options && options.forgetRemembered) {
+        forgetRememberedUser();
+      }
     } catch {
       // ignore
     }
   };
 
+  // Inactivity timeout triggers automatic signout from active session
   const triggerSessionExpiry = () => {
-    logout();
+    setUser(null);
+    try {
+      sessionStorage.removeItem(SESSION_STORAGE_KEY);
+    } catch {}
     setSessionExpiredNotification(
       'Session expired due to 15 minutes of inactivity. Please log in again.'
     );
@@ -279,6 +349,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         activeModalOptions,
         simulatedOtpCode,
         sessionExpiredNotification,
+        rememberedUser,
+        reloginRememberedUser,
+        forgetRememberedUser,
         openAuthModal,
         closeAuthModal,
         setActiveModalTab,

@@ -208,7 +208,7 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                 </div>
 
                 <button
-                  onClick={logout}
+                  onClick={() => logout()}
                   className="p-2 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-500/10 transition-colors cursor-pointer"
                   title="Sign out of Client Portal"
                 >

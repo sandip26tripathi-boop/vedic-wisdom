@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext.tsx';
 import { Language, UserProfile } from '../../types/index.ts';
-import { X, ArrowRight, ShieldCheck, Mail, Sparkles, CheckCircle2 } from 'lucide-react';
+import { X, ArrowRight, ShieldCheck, Mail, Sparkles, CheckCircle2, User, RotateCcw } from 'lucide-react';
+import confetti from 'canvas-confetti';
 
 interface GoogleOneTapVisitPromptProps {
   currentLang?: Language;
@@ -10,39 +11,40 @@ interface GoogleOneTapVisitPromptProps {
 export const GoogleOneTapVisitPrompt: React.FC<GoogleOneTapVisitPromptProps> = ({
   currentLang = 'en'
 }) => {
-  const { isAuthenticated, user, loginWithGoogle, completePhoneVerification } = useAuth();
+  const { 
+    isAuthenticated, 
+    user, 
+    rememberedUser, 
+    reloginRememberedUser, 
+    forgetRememberedUser, 
+    openAuthModal,
+    loginWithGoogle, 
+    completePhoneVerification 
+  } = useAuth();
+
   const [isVisible, setIsVisible] = useState(false);
   const [gmailInput, setGmailInput] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [recentAccount, setRecentAccount] = useState<{ name: string; email: string } | null>(null);
 
   const isHi = currentLang === 'hi';
 
   useEffect(() => {
-    // Check if user already authenticated
+    // If user is already authenticated in active session, hide prompt
     if (isAuthenticated || user) {
       setIsVisible(false);
       return;
     }
 
-    // Check if dismissed in this session
+    // Check if dismissed in this browser session
     try {
       const dismissed = sessionStorage.getItem('vw_onetap_dismissed');
       if (dismissed === 'true') {
         return;
       }
-      const saved = localStorage.getItem('vedic_recent_gmail_user');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed?.email) {
-          setRecentAccount(parsed);
-          setGmailInput(parsed.email);
-        }
-      }
     } catch {}
 
-    // Show after 1.5s on visit
+    // Show after 1.5s on new visit
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, 1500);
@@ -61,17 +63,48 @@ export const GoogleOneTapVisitPrompt: React.FC<GoogleOneTapVisitPromptProps> = (
     } catch {}
   };
 
+  // 1-Click Re-login for remembered returning user
+  const handleRelogin = () => {
+    setIsLoggingIn(true);
+    try {
+      confetti({
+        particleCount: 50,
+        spread: 60,
+        origin: { y: 0.7 }
+      });
+    } catch {}
+
+    const loggedIn = reloginRememberedUser();
+    if (loggedIn) {
+      setIsSuccess(true);
+      setTimeout(() => {
+        setIsLoggingIn(false);
+        setIsVisible(false);
+      }, 800);
+    } else {
+      setIsLoggingIn(false);
+      openAuthModal();
+    }
+  };
+
+  // Switch Account: open standard login modal
+  const handleSwitchAccount = () => {
+    handleDismiss();
+    openAuthModal();
+  };
+
+  // Direct login via Google or typed email
   const executeDirectLogin = (targetEmail?: string, targetName?: string) => {
     setIsLoggingIn(true);
     let email = (targetEmail || gmailInput).trim().toLowerCase();
     if (!email) {
-      email = recentAccount?.email || 'seeker.client@gmail.com';
+      email = rememberedUser?.email || 'seeker.client@gmail.com';
     }
     if (!email.includes('@')) {
       email = `${email}@gmail.com`;
     }
 
-    const name = targetName || recentAccount?.name || email.split('@')[0].toUpperCase();
+    const name = targetName || rememberedUser?.name || email.split('@')[0].toUpperCase();
     const avatar = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}&backgroundColor=d4af37,b45309`;
 
     const verifiedUser: UserProfile = {
@@ -92,15 +125,6 @@ export const GoogleOneTapVisitPrompt: React.FC<GoogleOneTapVisitPromptProps> = (
     loginWithGoogle(verifiedUser);
     completePhoneVerification(verifiedUser.phone || '+91 90094 48601', verifiedUser);
 
-    try {
-      localStorage.setItem('vedic_wisdom_auth_user', JSON.stringify(verifiedUser));
-      sessionStorage.setItem('vedic_wisdom_session_user', JSON.stringify(verifiedUser));
-      localStorage.setItem('vedic_recent_gmail_user', JSON.stringify({
-        name: verifiedUser.name,
-        email: verifiedUser.email
-      }));
-    } catch {}
-
     setIsSuccess(true);
     setTimeout(() => {
       setIsLoggingIn(false);
@@ -110,8 +134,8 @@ export const GoogleOneTapVisitPrompt: React.FC<GoogleOneTapVisitPromptProps> = (
 
   return (
     <aside 
-      aria-label={isHi ? "Google सीधा लॉगिन" : "Google Sign-In Visit Prompt"}
-      className="fixed bottom-4 right-4 sm:top-20 sm:right-6 sm:bottom-auto z-40 max-w-sm w-[92vw] sm:w-[360px] animate-in slide-in-from-bottom-4 sm:slide-in-from-top-4 duration-300"
+      aria-label={isHi ? "पुनः स्वागत एवं लॉगिन" : "Welcome Back & Login Prompt"}
+      className="fixed bottom-4 right-4 sm:top-20 sm:right-6 sm:bottom-auto z-40 max-w-sm w-[92vw] sm:w-[370px] animate-in slide-in-from-bottom-4 sm:slide-in-from-top-4 duration-300"
     >
       <div className="bg-white/95 dark:bg-[#111827]/95 backdrop-blur-xl rounded-2xl border-2 border-[#D4AF37] shadow-2xl overflow-hidden p-4 sm:p-5 relative">
         
@@ -132,13 +156,96 @@ export const GoogleOneTapVisitPrompt: React.FC<GoogleOneTapVisitPromptProps> = (
               <CheckCircle2 className="w-7 h-7" />
             </div>
             <h4 className="font-bold text-sm text-slate-900 dark:text-white">
-              {isHi ? "Gmail द्वारा सफलतापूर्वक प्रवेश!" : "Signed in with Gmail!"}
+              {isHi ? "सफलतापूर्वक प्रवेश!" : "Signed in Successfully!"}
             </h4>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              {isHi ? "वैदिक विस्डम में आपका स्वागत है।" : "Welcome to Vedic Wisdom."}
+              {isHi ? "वैदिक विस्डम में आपका स्वागत है।" : "Welcome back to Vedic Wisdom."}
             </p>
           </div>
+        ) : rememberedUser ? (
+          /* MODE 1: WELCOME BACK / LOGIN AGAIN (For returning client in a new session) */
+          <div className="space-y-3.5">
+            {/* Header Badge */}
+            <div className="flex items-center space-x-2 pr-6">
+              <div className="p-1.5 rounded-lg bg-amber-500/15 border border-[#D4AF37]/40 text-[#D4AF37]">
+                <Sparkles className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="font-cinzel font-bold text-sm sm:text-base text-slate-900 dark:text-white leading-tight">
+                  {isHi ? "पुनः स्वागत है!" : "Welcome Back!"}
+                </h3>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">
+                  {isHi ? "नया सत्र प्रारंभ हुआ है। पुनः लॉगिन करें।" : "Your session ended. Ready to log in again?"}
+                </p>
+              </div>
+            </div>
+
+            {/* Profile Snapshot Card */}
+            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-3">
+              <div className="flex items-center space-x-2.5 min-w-0">
+                {rememberedUser.avatar ? (
+                  <img
+                    src={rememberedUser.avatar}
+                    alt={rememberedUser.name}
+                    className="w-10 h-10 rounded-full border border-[#D4AF37] object-cover shrink-0"
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
+                    {rememberedUser.name.charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <div className="min-w-0">
+                  <div className="font-bold text-xs text-slate-900 dark:text-white truncate">
+                    {rememberedUser.name}
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                    {rememberedUser.email || rememberedUser.phone}
+                  </div>
+                </div>
+              </div>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-[#B45309] dark:text-[#F3E5AB] border border-[#D4AF37]/30 shrink-0">
+                {rememberedUser.clientTier || 'Client'}
+              </span>
+            </div>
+
+            {/* Primary Action: 1-Click Re-Login */}
+            <button
+              type="button"
+              disabled={isLoggingIn}
+              onClick={handleRelogin}
+              className="w-full min-h-[42px] px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:brightness-105 shadow-md shadow-[#D4AF37]/25 flex items-center justify-center gap-2 transition-all cursor-pointer"
+            >
+              {isLoggingIn ? (
+                <div className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <RotateCcw className="w-3.5 h-3.5 text-slate-950" />
+              )}
+              <span>
+                {isHi ? `${rememberedUser.name.split(' ')[0]} के रूप में पुनः लॉगिन करें` : `Log In Again as ${rememberedUser.name}`}
+              </span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+
+            {/* Secondary Option: Switch / Different Account */}
+            <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-200 dark:border-slate-800">
+              <button
+                type="button"
+                onClick={handleSwitchAccount}
+                className="text-slate-600 dark:text-slate-300 hover:text-amber-600 dark:hover:text-[#F3E5AB] font-semibold transition-colors cursor-pointer"
+              >
+                {isHi ? "अन्य खाते से लॉगिन करें" : "Use another account"}
+              </button>
+              <button
+                type="button"
+                onClick={handleDismiss}
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 underline cursor-pointer"
+              >
+                {isHi ? "अतिथि के रूप में देखें" : "Browse as guest"}
+              </button>
+            </div>
+          </div>
         ) : (
+          /* MODE 2: FIRST-TIME GOOGLE 1-CLICK PROMPT */
           <div className="space-y-3">
             {/* Header with Google Logo */}
             <div className="flex items-center space-x-2.5 pr-6">
@@ -164,7 +271,7 @@ export const GoogleOneTapVisitPrompt: React.FC<GoogleOneTapVisitPromptProps> = (
             <button
               type="button"
               disabled={isLoggingIn}
-              onClick={() => executeDirectLogin(recentAccount?.email, recentAccount?.name)}
+              onClick={() => executeDirectLogin()}
               className="w-full min-h-[42px] px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:brightness-105 shadow-md shadow-[#D4AF37]/25 flex items-center justify-center gap-2 transition-all cursor-pointer"
             >
               {isLoggingIn ? (
@@ -180,9 +287,7 @@ export const GoogleOneTapVisitPrompt: React.FC<GoogleOneTapVisitPromptProps> = (
                 </span>
               )}
               <span>
-                {recentAccount
-                  ? (isHi ? `जारी रखें: ${recentAccount.email}` : `Continue as ${recentAccount.email}`)
-                  : (isHi ? "1-क्लिक में Google से प्रवेश करें" : "1-Click Continue with Google")}
+                {isHi ? "1-क्लिक में Google से प्रवेश करें" : "1-Click Continue with Google"}
               </span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
@@ -222,7 +327,7 @@ export const GoogleOneTapVisitPrompt: React.FC<GoogleOneTapVisitPromptProps> = (
                 onClick={handleDismiss}
                 className="text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 underline cursor-pointer"
               >
-                {isHi ? "मेहमान के रूप में देखें" : "Browse as guest"}
+                {isHi ? "अतिथि के रूप में देखें" : "Browse as guest"}
               </button>
             </div>
           </div>

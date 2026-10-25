@@ -72,6 +72,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 }) => {
   const {
     user,
+    rememberedUser,
+    reloginRememberedUser,
     isAuthModalOpen,
     closeAuthModal,
     activeModalOptions,
@@ -155,12 +157,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const finishVerificationSuccess = (verifiedUser: UserProfile) => {
     completePhoneVerification(verifiedUser.phone || '+91 90094 48601', verifiedUser);
     try {
-      localStorage.setItem('vedic_wisdom_auth_user', JSON.stringify(verifiedUser));
+      // Session storage only for active authenticated session
       sessionStorage.setItem('vedic_wisdom_session_user', JSON.stringify(verifiedUser));
+      // Local storage only for remembering user profile on "Welcome Back"
+      localStorage.setItem('vedic_wisdom_remembered_user', JSON.stringify(verifiedUser));
       localStorage.setItem('vedic_recent_gmail_user', JSON.stringify({
         name: verifiedUser.name,
         email: verifiedUser.email
       }));
+      localStorage.removeItem('vedic_wisdom_auth_user');
     } catch {}
 
     setVerifiedUserInfo({
@@ -377,28 +382,39 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         ) : (
           <div className="px-6 sm:px-8 pb-6 sm:pb-8 space-y-4">
             
-            {/* Quick Saved Account Pill (If available) */}
-            {savedRecentAccount && (
+            {/* Quick Welcome Back Account Pill (If available) */}
+            {(rememberedUser || savedRecentAccount) && (
               <button
                 type="button"
-                onClick={() => executeGoogleLogin(savedRecentAccount.email, savedRecentAccount.name)}
-                className="w-full p-3 rounded-2xl bg-amber-500/10 dark:bg-amber-500/15 border border-[#D4AF37]/50 hover:bg-amber-500/20 text-left flex items-center justify-between transition-all cursor-pointer group"
+                onClick={() => {
+                  if (rememberedUser) {
+                    reloginRememberedUser();
+                    closeAuthModal();
+                  } else if (savedRecentAccount) {
+                    executeGoogleLogin(savedRecentAccount.email, savedRecentAccount.name);
+                  }
+                }}
+                className="w-full p-3 rounded-2xl bg-gradient-to-r from-amber-500/15 via-[#D4AF37]/15 to-emerald-500/10 border-2 border-[#D4AF37]/60 hover:border-[#D4AF37] hover:bg-amber-500/20 text-left flex items-center justify-between transition-all cursor-pointer group shadow-xs"
               >
                 <div className="flex items-center space-x-3 min-w-0">
-                  <div className="w-9 h-9 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-white flex items-center justify-center font-bold text-sm shrink-0">
-                    {savedRecentAccount.name.charAt(0).toUpperCase()}
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-xs border border-white/20">
+                    {(rememberedUser?.name || savedRecentAccount?.name || 'V').charAt(0).toUpperCase()}
                   </div>
                   <div className="min-w-0">
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-[#B45309] dark:text-[#F3E5AB] flex items-center gap-1">
+                      <Sparkles className="w-3 h-3 text-[#D4AF37]" />
+                      <span>{currentLang === 'en' ? 'Welcome Back • Quick Re-login' : 'पुनः स्वागत है • त्वरित लॉगिन'}</span>
+                    </div>
                     <div className="text-xs font-bold text-slate-900 dark:text-white truncate">
-                      {savedRecentAccount.name}
+                      {rememberedUser?.name || savedRecentAccount?.name}
                     </div>
                     <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
-                      {savedRecentAccount.email}
+                      {rememberedUser?.email || savedRecentAccount?.email}
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center text-xs font-bold text-[#B45309] dark:text-[#F3E5AB] shrink-0">
-                  <span className="hidden sm:inline mr-1">{currentLang === 'en' ? 'Continue' : 'जारी रखें'}</span>
+                <div className="flex items-center text-xs font-bold text-[#B45309] dark:text-[#F3E5AB] shrink-0 pl-2">
+                  <span className="hidden sm:inline mr-1">{currentLang === 'en' ? 'Log In' : 'लॉगिन'}</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </div>
               </button>

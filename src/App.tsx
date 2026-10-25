@@ -69,16 +69,23 @@ function MainApp() {
     return 'light';
   });
   const { requireAuth } = useRequireAuth();
-  const { isAuthModalOpen, sessionExpiredNotification, clearSessionExpiredNotification, openAuthModal } = useAuth();
+  const { user, isAuthModalOpen, sessionExpiredNotification, clearSessionExpiredNotification, openAuthModal, rememberedUser, reloginRememberedUser } = useAuth();
   const { isCartOpen } = useCart();
 
-  // 30-Day Client Session Retention
+  // Session Inactivity Auto-Logout (15 minutes of inactivity triggers auto-signout)
   useAutoLogout({
-    timeoutMs: 30 * 24 * 60 * 60 * 1000 // 30-day persistent session
+    timeoutMs: 15 * 60 * 1000 // 15-minute standard security timeout
   });
   
   // Navigation View State: 'website' | 'dashboard' | 'generate-report' | 'checkout'
   const [activeView, setActiveView] = useState<'website' | 'dashboard' | 'generate-report' | 'checkout'>('website');
+
+  // Automatically return to website view if session terminates while on dashboard
+  useEffect(() => {
+    if (!user && activeView === 'dashboard') {
+      setActiveView('website');
+    }
+  }, [user, activeView]);
 
   // AI Generated Report State (Module 1)
   const [generatedReportData, setGeneratedReportData] = useState<any | null>(null);
@@ -219,17 +226,25 @@ function MainApp() {
           <div className="p-3.5 rounded-2xl bg-amber-500/95 dark:bg-amber-600/95 text-slate-950 shadow-2xl border border-amber-300 flex items-center justify-between gap-3 text-xs font-semibold backdrop-blur-sm">
             <div className="flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-slate-950 shrink-0" />
-              <span>{sessionExpiredNotification}</span>
+              <span>
+                {currentLang === 'hi'
+                  ? 'निष्क्रियता के कारण सत्र समाप्त हो गया है। कृपया पुनः लॉगिन करें।'
+                  : sessionExpiredNotification}
+              </span>
             </div>
             <div className="flex items-center gap-2 shrink-0">
               <button
                 onClick={() => {
                   clearSessionExpiredNotification();
-                  openAuthModal();
+                  if (rememberedUser) {
+                    reloginRememberedUser();
+                  } else {
+                    openAuthModal();
+                  }
                 }}
                 className="px-2.5 py-1 rounded-lg bg-slate-950 text-white text-[11px] font-bold hover:bg-slate-900 cursor-pointer shadow-xs"
               >
-                Log In
+                {currentLang === 'hi' ? 'पुनः लॉगिन करें' : 'Log In Again'}
               </button>
               <button
                 onClick={clearSessionExpiredNotification}

@@ -46,7 +46,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenCopilot,
   onOpenGenerateReport,
 }) => {
-  const { user, isAuthenticated, openAuthModal, logout } = useAuth();
+  const { user, isAuthenticated, openAuthModal, logout, rememberedUser, reloginRememberedUser } = useAuth();
   const { totalItems, openCart } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [astroDropdownOpen, setAstroDropdownOpen] = useState(false);
@@ -455,6 +455,23 @@ export const Header: React.FC<HeaderProps> = ({
                   <span className="hidden md:inline font-bold">{currentLang === 'en' ? 'Sign Out' : 'लॉगआउट'}</span>
                 </button>
               </div>
+            ) : rememberedUser ? (
+              <button
+                onClick={() => reloginRememberedUser()}
+                className="min-h-[44px] inline-flex items-center space-x-1.5 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-extrabold text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:brightness-105 border border-[#D4AF37] shadow-sm transition-all duration-200 cursor-pointer shrink-0"
+                title={currentLang === 'en' ? `Welcome back! Tap to log in as ${rememberedUser.name}` : `पुनः स्वागत है! ${rememberedUser.name} के रूप में लॉगिन करें`}
+                aria-label="Welcome back log in"
+              >
+                <span className="w-5 h-5 rounded-full bg-slate-950 text-[#F3E5AB] flex items-center justify-center font-bold text-[10px] shadow-xs shrink-0">
+                  {rememberedUser.name.charAt(0).toUpperCase()}
+                </span>
+                <span className="hidden sm:inline font-black tracking-wide text-slate-950">
+                  {currentLang === 'en' ? `Welcome Back (${rememberedUser.name.split(' ')[0]})` : `पुनः स्वागत (${rememberedUser.name.split(' ')[0]})`}
+                </span>
+                <span className="sm:hidden font-black tracking-tight text-slate-950 text-xs">
+                  {rememberedUser.name.split(' ')[0]}
+                </span>
+              </button>
             ) : (
               <button
                 onClick={() => openAuthModal()}
@@ -591,6 +608,26 @@ export const Header: React.FC<HeaderProps> = ({
                   <span>{currentLang === 'en' ? 'Sign Out' : 'लॉगआउट'}</span>
                 </button>
               </div>
+            ) : rememberedUser ? (
+              <button
+                onClick={() => { setMobileMenuOpen(false); reloginRememberedUser(); }}
+                className="w-full text-left font-bold text-xs text-slate-900 dark:text-white flex items-center justify-between cursor-pointer"
+              >
+                <div className="flex items-center gap-2.5">
+                  <span className="w-7 h-7 rounded-full bg-slate-950 text-[#F3E5AB] flex items-center justify-center p-1 shadow-xs border border-amber-400 font-bold text-xs shrink-0">
+                    {rememberedUser.name.charAt(0).toUpperCase()}
+                  </span>
+                  <div className="min-w-0">
+                    <div className="font-bold text-xs text-slate-900 dark:text-white truncate">
+                      {currentLang === 'en' ? `Welcome back, ${rememberedUser.name}!` : `पुनः स्वागत है, ${rememberedUser.name}!`}
+                    </div>
+                    <div className="text-[10px] text-[#B45309] dark:text-[#F3E5AB]">
+                      {currentLang === 'en' ? '1-Click Re-login' : '1-क्लिक में पुनः लॉगिन करें'}
+                    </div>
+                  </div>
+                </div>
+                <ArrowRight className="w-4 h-4 text-[#D4AF37] shrink-0" />
+              </button>
             ) : (
               <button
                 onClick={() => { setMobileMenuOpen(false); openAuthModal(); }}

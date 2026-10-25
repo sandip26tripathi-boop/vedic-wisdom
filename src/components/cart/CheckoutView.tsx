@@ -16,9 +16,11 @@ import {
   Building2, 
   Clock, 
   Sparkles,
-  Download
+  Download,
+  AlertCircle
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { initiateRazorpayCheckout } from '../../services/razorpay.ts';
 
 interface CheckoutViewProps {
   currentLang: Language;
@@ -42,12 +44,13 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
   const [gstin, setGstin] = useState('');
   const [specialInstructions, setSpecialInstructions] = useState('');
 
-  // Payment method selection: 'upi' | 'card' | 'whatsapp'
-  const [paymentMethod, setPaymentMethod] = useState<'upi' | 'card' | 'whatsapp'>('upi');
+  // Payment method selection: 'razorpay' | 'upi' | 'whatsapp'
+  const [paymentMethod, setPaymentMethod] = useState<'razorpay' | 'upi' | 'whatsapp'>('razorpay');
   const [upiUtr, setUpiUtr] = useState('');
   const [copiedUpi, setCopiedUpi] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState<any | null>(null);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
 
   const officialUpiId = 'ask.vedicwisdom@gmail.com';
 
@@ -57,56 +60,136 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
     setTimeout(() => setCopiedUpi(false), 2000);
   };
 
-  const handleCompleteOrder = (e: React.FormEvent) => {
+  const handleCompleteOrder = async (e: React.FormEvent) => {
     e.preventDefault();
+    setPaymentError(null);
 
     if (!fullName.trim() || !phone.trim() || !city.trim()) {
       alert(currentLang === 'en' ? 'Please complete your Name, Phone Number, and City.' : 'कृपया नाम, फोन नंबर और शहर दर्ज करें।');
       return;
     }
 
-    if (paymentMethod === 'upi' && !upiUtr.trim()) {
-      alert(currentLang === 'en' ? 'Please enter the 12-digit UPI Reference / UTR Number after completing your payment.' : 'कृपया भुगतान पूर्ण करने के बाद 12-अंकों का UPI UTR नंबर दर्ज करें।');
+    // Method 1: Official Razorpay Standard Web Checkout
+    if (paymentMethod === 'razorpay') {
+      setIsProcessing(true);
+
+      const amountInPaise = Math.round(total * 100);
+
+      await initiateRazorpayCheckout({
+        amountInPaise,
+        currency: 'INR',
+        name: 'Vedic Wisdom',
+        description: currentLang === 'en' ? 'Consultation & Spatial Advisory' : 'वैदिक परामर्श एवं वास्तु सेवाएं',
+        receipt: `vw_${Date.now()}`,
+        prefill: {
+          name: fullName.trim(),
+          email: email.trim() || user?.email || 'client@vedicwisdom.org',
+          contact: phone.trim() || user?.phone || ''
+        },
+        notes: {
+          city: city.trim(),
+          clientName: fullName.trim()
+        },
+        onSuccess: (result) => {
+          const generatedOrderId = `VW-ORD-${Math.floor(100000 + Math.random() * 900000)}`;
+          const completedOrder = {
+            orderId: generatedOrderId,
+            razorpayOrderId: result.razorpay_order_id,
+            paymentId: result.razorpay_payment_id,
+            clientName: fullName,
+            phone,
+            email,
+            city,
+            companyName,
+            items: [...items],
+            totalAmount: total,
+            paymentMethod: 'Razorpay Standard Web Checkout (256-Bit SSL)',
+            status: 'Verified & Paid',
+            upiUtr: 'Verified via Razorpay',
+            createdAt: new Date().toLocaleDateString('en-IN', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            })
+          };
+
+          try {
+            confetti({
+              particleCount: 120,
+              spread: 80,
+              origin: { y: 0.6 }
+            });
+          } catch {}
+
+          setOrderSuccess(completedOrder);
+          clearCart();
+          setIsProcessing(false);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        },
+        onFailure: (error: any) => {
+          setIsProcessing(false);
+          setPaymentError(error?.message || 'Payment was not completed. Please try again.');
+        },
+        onDismiss: () => {
+          setIsProcessing(false);
+        }
+      });
       return;
     }
 
-    setIsProcessing(true);
+    // Method 2: Manual UPI QR UTR
+    if (paymentMethod === 'upi') {
+      if (!upiUtr.trim()) {
+        alert(currentLang === 'en' ? 'Please enter the 12-digit UPI Reference / UTR Number after completing your payment.' : 'कृपया भुगतान पूर्ण करने के बाद 12-अंकों का UPI UTR नंबर दर्ज करें।');
+        return;
+      }
 
-    setTimeout(() => {
-      const generatedOrderId = `VW-ORD-${Math.floor(100000 + Math.random() * 900000)}`;
-      const completedOrder = {
-        orderId: generatedOrderId,
-        clientName: fullName,
-        phone,
-        email,
-        city,
-        companyName,
-        items: [...items],
-        totalAmount: total,
-        paymentMethod,
-        upiUtr: paymentMethod === 'upi' ? upiUtr : 'N/A',
-        createdAt: new Date().toLocaleDateString('en-IN', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        })
-      };
+      setIsProcessing(true);
 
-      try {
-        confetti({
-          particleCount: 100,
-          spread: 80,
-          origin: { y: 0.6 }
-        });
-      } catch {}
+      setTimeout(() => {
+        const generatedOrderId = `VW-ORD-${Math.floor(100000 + Math.random() * 900000)}`;
+        const completedOrder = {
+          orderId: generatedOrderId,
+          clientName: fullName,
+          phone,
+          email,
+          city,
+          companyName,
+          items: [...items],
+          totalAmount: total,
+          paymentMethod: 'Manual UPI QR',
+          upiUtr,
+          status: 'Submitted (Verification Pending)',
+          createdAt: new Date().toLocaleDateString('en-IN', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          })
+        };
 
-      setOrderSuccess(completedOrder);
-      clearCart();
-      setIsProcessing(false);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 1200);
+        try {
+          confetti({
+            particleCount: 100,
+            spread: 80,
+            origin: { y: 0.6 }
+          });
+        } catch {}
+
+        setOrderSuccess(completedOrder);
+        clearCart();
+        setIsProcessing(false);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 1000);
+      return;
+    }
+
+    // Method 3: WhatsApp Desk Direct
+    const link = buildWhatsAppOrderLink();
+    window.open(link, '_blank');
   };
 
   // WhatsApp Pre-Filled Confirmation Link
@@ -141,17 +224,34 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
 
           {/* Official Invoice Card */}
           <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-slate-200 dark:border-slate-700 text-xs">
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-700 text-xs">
               <div>
                 <span className="text-slate-500 block">{currentLang === 'en' ? 'Official Reference ID' : 'ऑर्डर संदर्भ क्रमांक'}</span>
                 <span className="font-mono font-bold text-sm text-[#B45309] dark:text-[#F3E5AB]">
                   {orderSuccess.orderId}
                 </span>
               </div>
+              {orderSuccess.paymentId && (
+                <div>
+                  <span className="text-slate-500 block">{currentLang === 'en' ? 'Razorpay Payment ID' : 'रेज़रपे भुगतान आईडी'}</span>
+                  <span className="font-mono font-semibold text-xs text-emerald-600 dark:text-emerald-400">
+                    {orderSuccess.paymentId}
+                  </span>
+                </div>
+              )}
+              {orderSuccess.razorpayOrderId && (
+                <div>
+                  <span className="text-slate-500 block">{currentLang === 'en' ? 'Razorpay Order ID' : 'रेज़रपे ऑर्डर आईडी'}</span>
+                  <span className="font-mono font-semibold text-xs text-slate-700 dark:text-slate-300">
+                    {orderSuccess.razorpayOrderId}
+                  </span>
+                </div>
+              )}
               <div className="text-right">
-                <span className="text-slate-500 block">{currentLang === 'en' ? 'Date & Timestamp' : 'दिनांक व समय'}</span>
-                <span className="font-medium text-slate-700 dark:text-slate-300">
-                  {orderSuccess.createdAt}
+                <span className="text-slate-500 block">{currentLang === 'en' ? 'Payment Mode & Status' : 'भुगतान माध्यम व स्थिति'}</span>
+                <span className="inline-flex items-center gap-1 font-semibold text-emerald-600 dark:text-emerald-400">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  {orderSuccess.status || 'Verified & Paid'}
                 </span>
               </div>
             </div>
@@ -352,14 +452,43 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
                 </h3>
               </div>
 
+              {/* Error message alert if any */}
+              {paymentError && (
+                <div className="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-300 text-xs flex items-start gap-3 animate-in fade-in duration-200">
+                  <AlertCircle className="w-5 h-5 shrink-0 text-rose-500 mt-0.5" />
+                  <div className="space-y-1">
+                    <div className="font-bold">
+                      {currentLang === 'en' ? 'Payment Notice' : 'भुगतान सूचना'}
+                    </div>
+                    <div>{paymentError}</div>
+                  </div>
+                </div>
+              )}
+
               {/* Payment Tabs */}
               <div className="grid grid-cols-3 gap-2 text-xs">
                 <button
                   type="button"
-                  onClick={() => setPaymentMethod('upi')}
+                  onClick={() => { setPaymentMethod('razorpay'); setPaymentError(null); }}
+                  className={`p-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center gap-1.5 relative ${
+                    paymentMethod === 'razorpay'
+                      ? 'border-[#D4AF37] bg-[#D4AF37]/10 text-slate-900 dark:text-white font-bold ring-2 ring-[#D4AF37]/50 shadow-sm'
+                      : 'border-slate-200 dark:border-slate-700 hover:border-[#D4AF37]/40 text-slate-600 dark:text-slate-400'
+                  }`}
+                >
+                  <span className="absolute -top-2 right-2 px-1.5 py-0.2 rounded-full bg-emerald-600 text-[9px] font-bold text-white uppercase tracking-wider">
+                    Instant
+                  </span>
+                  <CreditCard className="w-5 h-5 text-[#D4AF37]" />
+                  <span>Razorpay Standard</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => { setPaymentMethod('upi'); setPaymentError(null); }}
                   className={`p-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center gap-1.5 ${
                     paymentMethod === 'upi'
-                      ? 'border-[#D4AF37] bg-[#D4AF37]/10 text-slate-900 dark:text-white font-bold ring-2 ring-[#D4AF37]/50'
+                      ? 'border-[#D4AF37] bg-[#D4AF37]/10 text-slate-900 dark:text-white font-bold ring-2 ring-[#D4AF37]/50 shadow-sm'
                       : 'border-slate-200 dark:border-slate-700 hover:border-[#D4AF37]/40 text-slate-600 dark:text-slate-400'
                   }`}
                 >
@@ -369,23 +498,10 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
 
                 <button
                   type="button"
-                  onClick={() => setPaymentMethod('card')}
-                  className={`p-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center gap-1.5 ${
-                    paymentMethod === 'card'
-                      ? 'border-[#D4AF37] bg-[#D4AF37]/10 text-slate-900 dark:text-white font-bold ring-2 ring-[#D4AF37]/50'
-                      : 'border-slate-200 dark:border-slate-700 hover:border-[#D4AF37]/40 text-slate-600 dark:text-slate-400'
-                  }`}
-                >
-                  <CreditCard className="w-5 h-5 text-emerald-500" />
-                  <span>Cards / NetBanking</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod('whatsapp')}
+                  onClick={() => { setPaymentMethod('whatsapp'); setPaymentError(null); }}
                   className={`p-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center gap-1.5 ${
                     paymentMethod === 'whatsapp'
-                      ? 'border-[#D4AF37] bg-[#D4AF37]/10 text-slate-900 dark:text-white font-bold ring-2 ring-[#D4AF37]/50'
+                      ? 'border-[#D4AF37] bg-[#D4AF37]/10 text-slate-900 dark:text-white font-bold ring-2 ring-[#D4AF37]/50 shadow-sm'
                       : 'border-slate-200 dark:border-slate-700 hover:border-[#D4AF37]/40 text-slate-600 dark:text-slate-400'
                   }`}
                 >
@@ -393,6 +509,56 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
                   <span>WhatsApp Desk</span>
                 </button>
               </div>
+
+              {/* Razorpay Standard Checkout Content */}
+              {paymentMethod === 'razorpay' && (
+                <div className="p-5 rounded-2xl bg-gradient-to-br from-[#D4AF37]/10 via-[#D4AF37]/5 to-transparent border border-[#D4AF37]/30 space-y-4 text-xs">
+                  <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[#D4AF37]/20">
+                    <div className="flex items-center space-x-2">
+                      <div className="px-2.5 py-1 rounded-md bg-[#0A2540] text-white font-black text-xs tracking-wider shadow-sm">
+                        Razorpay
+                      </div>
+                      <span className="font-semibold text-slate-900 dark:text-white">
+                        Standard Web Checkout
+                      </span>
+                    </div>
+                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                      <ShieldCheck className="w-3.5 h-3.5" />
+                      256-Bit SSL Encrypted
+                    </span>
+                  </div>
+
+                  <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+                    {currentLang === 'en'
+                      ? 'Pay securely with your preferred instrument. The official Razorpay checkout window will open directly when you click the button below.'
+                      : 'अपने पसंदीदा माध्यम से सुरक्षित भुगतान करें। नीचे दिए गए बटन पर क्लिक करते ही आधिकारिक रेज़रपे चेकआउट विंडो खुल जाएगी।'}
+                  </p>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+                    <div className="p-2.5 rounded-xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                      <span className="font-bold text-slate-900 dark:text-white block">UPI Apps</span>
+                      <span className="text-[10px] text-slate-500">GPay, PhonePe, Paytm</span>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                      <span className="font-bold text-slate-900 dark:text-white block">Cards</span>
+                      <span className="text-[10px] text-slate-500">Visa, Master, RuPay</span>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                      <span className="font-bold text-slate-900 dark:text-white block">NetBanking</span>
+                      <span className="text-[10px] text-slate-500">50+ Major Banks</span>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                      <span className="font-bold text-slate-900 dark:text-white block">Wallets & EMI</span>
+                      <span className="text-[10px] text-slate-500">Instant Verification</span>
+                    </div>
+                  </div>
+
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5 pt-1">
+                    <Lock className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" />
+                    <span>RBI & PCI-DSS Level 1 Compliant • Instant signature verification • Auto GST receipt</span>
+                  </div>
+                </div>
+              )}
 
               {/* UPI QR Payment Content */}
               {paymentMethod === 'upi' && (
@@ -438,35 +604,6 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
                       onChange={(e) => setUpiUtr(e.target.value.replace(/\s+/g, ''))}
                       placeholder="e.g. 428901928374"
                       className="w-full px-3.5 py-2.5 font-mono text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
-                    />
-                  </div>
-                </div>
-              )}
-
-              {/* Cards / NetBanking Content */}
-              {paymentMethod === 'card' && (
-                <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 space-y-3 text-xs">
-                  <div className="text-slate-600 dark:text-slate-300">
-                    Enter corporate credit/debit card details for instantaneous tokenized billing:
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="Card Number (4000 1234 5678 9010)"
-                    maxLength={19}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
-                  />
-                  <div className="grid grid-cols-2 gap-3">
-                    <input
-                      type="text"
-                      placeholder="MM/YY"
-                      maxLength={5}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
-                    />
-                    <input
-                      type="password"
-                      placeholder="CVV"
-                      maxLength={4}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
                     />
                   </div>
                 </div>
@@ -567,13 +704,17 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
                 type="button"
                 onClick={handleCompleteOrder}
                 disabled={isProcessing}
-                className="w-full py-4 px-4 rounded-xl font-bold text-sm text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 shadow-lg shadow-[#D4AF37]/25 flex items-center justify-center space-x-2 transition-all cursor-pointer transform hover:-translate-y-0.5"
+                className="w-full py-4 px-4 rounded-xl font-bold text-sm text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 shadow-lg shadow-[#D4AF37]/25 flex items-center justify-center space-x-2 transition-all cursor-pointer transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Lock className="w-4 h-4 text-slate-950" />
                 <span>
                   {isProcessing
-                    ? (currentLang === 'en' ? 'Confirming Order...' : 'ऑर्डर दर्ज हो रहा है...')
-                    : (currentLang === 'en' ? `Complete Booking • ₹${total.toLocaleString('en-IN')}` : `बुकिंग पूर्ण करें • ₹${total.toLocaleString('en-IN')}`)}
+                    ? (currentLang === 'en' ? 'Opening Razorpay Secure Gateway...' : 'रेज़रपे गेटवे खुल रहा है...')
+                    : paymentMethod === 'razorpay'
+                    ? (currentLang === 'en' ? `Pay ₹${total.toLocaleString('en-IN')} via Razorpay` : `रेज़रपे द्वारा ₹${total.toLocaleString('en-IN')} का भुगतान करें`)
+                    : paymentMethod === 'upi'
+                    ? (currentLang === 'en' ? `Confirm ₹${total.toLocaleString('en-IN')} with UTR` : `UTR द्वारा ₹${total.toLocaleString('en-IN')} की पुष्टि करें`)
+                    : (currentLang === 'en' ? `Send Dossier via WhatsApp` : `व्हाट्सएप द्वारा भेजें`)}
                 </span>
               </button>
 

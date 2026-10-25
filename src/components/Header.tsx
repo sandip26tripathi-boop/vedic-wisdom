@@ -423,19 +423,27 @@ export const Header: React.FC<HeaderProps> = ({
               )}
             </button>
 
-            {/* PROMINENT TOP-RIGHT LOGIN / CLIENT PORTAL & SIGN OUT BUTTONS */}
+            {/* PROMINENT TOP-RIGHT GMAIL SIGN-IN & VERIFIED ACCOUNT BADGE */}
             {isAuthenticated ? (
               <div className="flex items-center gap-1 shrink-0">
                 <button
                   onClick={onOpenDashboard}
-                  className="min-h-[40px] inline-flex items-center space-x-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-xs font-bold text-slate-900 dark:text-white bg-amber-500/20 hover:bg-amber-500/30 border border-[#D4AF37] shadow-sm cursor-pointer transition-all shrink-0"
+                  className="min-h-[40px] inline-flex items-center space-x-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-xs font-bold text-slate-900 dark:text-white bg-amber-500/20 hover:bg-amber-500/30 border border-[#D4AF37] shadow-sm cursor-pointer transition-all shrink-0 max-w-[160px] sm:max-w-[210px]"
                   title="Open Client Dashboard"
                   aria-label="Open Vedic Client Portal Dashboard"
                 >
-                  <div className="w-4 h-4 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-white flex items-center justify-center text-[9px] font-extrabold">
-                    {user?.name ? user.name.charAt(0).toUpperCase() : 'V'}
-                  </div>
-                  <span className="font-extrabold text-[11px] sm:text-xs">Portal</span>
+                  <span className="w-4 h-4 rounded-full bg-white flex items-center justify-center p-0.5 shadow-2xs shrink-0">
+                    <svg className="w-3 h-3" viewBox="0 0 24 24" aria-hidden="true">
+                      <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.27-2.09 3.66-5.17 3.66-9.12z" />
+                      <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.26 21.36 7.33 24 12 24z" />
+                      <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.58H1.25C.45 8.17 0 9.99 0 12s.45 3.83 1.25 5.42l4.03-3.13z" />
+                      <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.13c.95-2.83 3.6-4.96 6.72-4.96z" />
+                    </svg>
+                  </span>
+                  <span className="font-extrabold text-[11px] sm:text-xs truncate">
+                    {user?.name || user?.email?.split('@')[0] || 'Gmail Client'}
+                  </span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" title="Verified Session" />
                 </button>
                 <button
                   onClick={logout}
@@ -451,8 +459,8 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 onClick={() => openAuthModal()}
                 className="min-h-[44px] inline-flex items-center space-x-1.5 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-extrabold text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:brightness-105 border border-[#D4AF37] shadow-sm transition-all duration-200 cursor-pointer shrink-0"
-                title="Client Login via Google"
-                aria-label="Client Login via Google"
+                title="Sign in with Gmail / Google"
+                aria-label="Sign in with Gmail / Google"
               >
                 <span className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-white flex items-center justify-center p-0.5 shadow-xs shrink-0">
                   <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -463,10 +471,10 @@ export const Header: React.FC<HeaderProps> = ({
                   </svg>
                 </span>
                 <span className="hidden sm:inline font-black tracking-wide text-slate-950">
-                  {currentLang === 'en' ? 'Google Login' : 'Google लॉगिन'}
+                  {currentLang === 'en' ? 'Sign in with Gmail' : 'Gmail से लॉगिन'}
                 </span>
                 <span className="sm:hidden font-black tracking-tight text-slate-950 text-xs">
-                  {currentLang === 'en' ? 'Login' : 'लॉगिन'}
+                  {currentLang === 'en' ? 'Gmail' : 'Gmail'}
                 </span>
               </button>
             )}

@@ -155,6 +155,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const finishVerificationSuccess = (verifiedUser: UserProfile) => {
     completePhoneVerification(verifiedUser.phone || '+91 90094 48601', verifiedUser);
     try {
+      localStorage.setItem('vedic_wisdom_auth_user', JSON.stringify(verifiedUser));
       sessionStorage.setItem('vedic_wisdom_session_user', JSON.stringify(verifiedUser));
       localStorage.setItem('vedic_recent_gmail_user', JSON.stringify({
         name: verifiedUser.name,
@@ -184,7 +185,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   // Perform Google Authentication with any provided email
   const executeGoogleLogin = (targetEmail: string, targetName?: string) => {
     let cleanEmail = targetEmail.trim().toLowerCase();
-    if (!cleanEmail) return;
+    if (!cleanEmail) {
+      cleanEmail = savedRecentAccount?.email || 'seeker.client@gmail.com';
+    }
 
     // Auto-append @gmail.com if user only entered username
     if (!cleanEmail.includes('@')) {
@@ -222,17 +225,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     if (e) e.preventDefault();
     setErrorMsg('');
 
-    const rawInput = gmailInput.trim();
+    let rawInput = gmailInput.trim();
 
-    // If user clicked without typing, guide them clearly or prompt
+    // If user clicked without typing, seamlessly use saved account or default client account
     if (!rawInput) {
-      setErrorMsg(
-        currentLang === 'en'
-          ? 'Please enter your Gmail address below or click 1-Click Instant Login.'
-          : 'कृपया नीचे अपनी Gmail आईडी दर्ज करें अथवा 1-क्लिक त्वरित लॉगिन पर टैप करें।'
-      );
-      emailInputRef.current?.focus();
-      return;
+      if (savedRecentAccount?.email) {
+        rawInput = savedRecentAccount.email;
+      } else {
+        rawInput = 'client.seeker@gmail.com';
+      }
     }
 
     // Try Google OAuth popup if real client ID exists

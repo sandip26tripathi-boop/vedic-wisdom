@@ -37,28 +37,23 @@ export interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Ephemeral Session Storage (Expires on tab / browser close)
+// Persistent User Storage Key
+const AUTH_STORAGE_KEY = 'vedic_wisdom_auth_user';
 const SESSION_STORAGE_KEY = 'vedic_wisdom_session_user';
-
-// Clean legacy localStorage to prevent indefinite sessions
-try {
-  localStorage.removeItem('vedic_wisdom_auth_user');
-} catch {}
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<UserProfile | null>(() => {
     try {
-      const stored = sessionStorage.getItem(SESSION_STORAGE_KEY);
+      const stored = localStorage.getItem(AUTH_STORAGE_KEY) || sessionStorage.getItem(SESSION_STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (parsed && typeof parsed === 'object') {
+        if (parsed && typeof parsed === 'object' && parsed.email) {
           return parsed;
         }
       }
     } catch {
       // ignore
     }
-    // Strict Auth: unauthenticated visitor by default until verified
     return null;
   });
 
@@ -68,12 +63,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [simulatedOtpCode, setSimulatedOtpCode] = useState('786921');
   const [sessionExpiredNotification, setSessionExpiredNotification] = useState<string | null>(null);
 
-  // Sync user state to ephemeral sessionStorage
+  // Sync user state to persistent localStorage and sessionStorage
   useEffect(() => {
     try {
       if (user) {
+        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
         sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(user));
       } else {
+        localStorage.removeItem(AUTH_STORAGE_KEY);
         sessionStorage.removeItem(SESSION_STORAGE_KEY);
       }
     } catch {
@@ -246,7 +243,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setUser(null);
     try {
       sessionStorage.removeItem(SESSION_STORAGE_KEY);
-      localStorage.removeItem('vedic_wisdom_auth_user');
+      localStorage.removeItem(AUTH_STORAGE_KEY);
+      localStorage.removeItem('vedic_recent_gmail_user');
     } catch {
       // ignore
     }

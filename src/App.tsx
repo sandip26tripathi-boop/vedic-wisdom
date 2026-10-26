@@ -52,6 +52,7 @@ const SampleReportModal = lazy(() => import('./components/reports/SampleReportMo
 const CompassCalibrationModal = lazy(() => import('./components/interactive/CompassCalibrationModal.tsx').then(m => ({ default: m.CompassCalibrationModal })));
 const LegalModal = lazy(() => import('./components/legal/LegalModal.tsx').then(m => ({ default: m.LegalModal })));
 const GoogleOneTapVisitPrompt = lazy(() => import('./components/auth/GoogleOneTapVisitPrompt.tsx').then(m => ({ default: m.GoogleOneTapVisitPrompt })));
+const AuthGate = lazy(() => import('./components/auth/AuthGate.tsx').then(m => ({ default: m.AuthGate })));
 
 function MainApp() {
   const [currentLang, setCurrentLang] = useState<Language>('en');
@@ -69,7 +70,7 @@ function MainApp() {
     return 'light';
   });
   const { requireAuth } = useRequireAuth();
-  const { user, isAuthModalOpen, sessionExpiredNotification, clearSessionExpiredNotification, openAuthModal, rememberedUser, reloginRememberedUser } = useAuth();
+  const { user, isAuthenticated, isAuthModalOpen, sessionExpiredNotification, clearSessionExpiredNotification, openAuthModal, rememberedUser, reloginRememberedUser } = useAuth();
   const { isCartOpen } = useCart();
 
   // Session Inactivity Auto-Logout (15 minutes of inactivity triggers auto-signout)
@@ -210,6 +211,29 @@ function MainApp() {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  // Auth Gate: Only authenticated / logged-in users can use the platform
+  if (!isAuthenticated && !user) {
+    return (
+      <Suspense fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[#FAF9F6] dark:bg-[#0B0F19]">
+          <div className="w-10 h-10 rounded-full border-3 border-[#D4AF37] border-t-transparent animate-spin" />
+        </div>
+      }>
+        <AuthGate
+          currentLang={currentLang}
+          onLanguageChange={setCurrentLang}
+          currentTheme={currentTheme}
+          onThemeToggle={handleThemeToggle}
+        />
+        {isAuthModalOpen && (
+          <AuthModal
+            currentLang={currentLang}
+          />
+        )}
+      </Suspense>
+    );
+  }
 
   return (
     <div className={`w-full max-w-full overflow-x-clip min-h-screen flex flex-col font-sans transition-colors duration-300 ${currentLang === 'hi' ? 'font-hindi' : ''} bg-[#FAF9F6] dark:bg-[#0B0F19] text-slate-800 dark:text-slate-100`}>

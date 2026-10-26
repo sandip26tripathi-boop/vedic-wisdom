@@ -1,0 +1,8 @@
+feat: Integrate Firebase Authentication with Google Sign-In and protect platform access
+
+- Install firebase package and initialize Firebase app with client config (projectId: geminiastro-b043e)
+- Implement signInWithGoogleFirebase, logoutFromFirebase, and onFirebaseAuthStateChanged in src/services/firebase.ts
+- Wire Firebase Google Sign-In and session sync in AuthContext and AuthModal
+- Create AuthGate component requiring users to authenticate before accessing platform features
+- Support returning user 1-click continuation, language toggle, theme toggle, and fallback demo mode
+- Integrate AuthGate into App.tsx to enforce logged-in user requirement

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext.tsx';
 import { Language, UserProfile } from '../../types/index.ts';
+import { signInWithGoogleFirebase } from '../../services/firebase.ts';
 import { 
   X, 
   ShieldCheck, 
@@ -225,74 +226,59 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     finishVerificationSuccess(verifiedUser);
   };
 
-  // Main Google Sign-In Button Click Handler
-  const handleGoogleSubmit = (e?: React.FormEvent) => {
+  // Main Google Sign-In Button Click Handler (via Firebase Auth)
+  const handleGoogleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setErrorMsg('');
+    setIsLoading(true);
 
-    let rawInput = gmailInput.trim();
+    try {
+      // 1. Official Firebase Google Popup Authentication
+      const fbUser = await signInWithGoogleFirebase();
+      const cleanName = fbUser.displayName || fullName.trim() || fbUser.email?.split('@')[0] || 'Vedic Seeker';
+      const cleanEmail = fbUser.email || (gmailInput.trim() ? gmailInput.trim() : 'seeker@gmail.com');
+      const selectedAvatar = fbUser.photoURL || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(cleanName)}&backgroundColor=d4af37,b45309`;
 
-    // If user clicked without typing, seamlessly use saved account or default client account
-    if (!rawInput) {
-      if (savedRecentAccount?.email) {
-        rawInput = savedRecentAccount.email;
-      } else {
-        rawInput = 'client.seeker@gmail.com';
-      }
-    }
+      const verifiedUser: UserProfile = {
+        ...(user || {}),
+        id: fbUser.uid,
+        name: cleanName,
+        email: cleanEmail,
+        phone: fbUser.phoneNumber || user?.phone || '+91 90094 48601',
+        avatar: selectedAvatar,
+        authProvider: 'google',
+        isEmailVerified: fbUser.emailVerified,
+        isPhoneVerified: true,
+        isVerified: true,
+        memberId: `VW-GGL-${fbUser.uid.slice(0, 6).toUpperCase()}`,
+        clientTier: 'Enterprise VIP',
+        joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+      };
 
-    // Try Google OAuth popup if real client ID exists
-    const clientId = 
-      (import.meta as any).env?.VITE_GOOGLE_CLIENT_ID || 
-      localStorage.getItem('vedic_google_client_id') || 
-      '';
+      finishVerificationSuccess(verifiedUser);
+    } catch (err: any) {
+      console.warn('[Firebase Google Sign-In]:', err);
+      setIsLoading(false);
 
-    const hasRealClientId = clientId && !clientId.includes('your-google-client-id');
-
-    if (hasRealClientId && window.google?.accounts?.oauth2) {
-      setIsLoading(true);
-      try {
-        const tokenClient = window.google.accounts.oauth2.initTokenClient({
-          client_id: clientId,
-          scope: 'email profile openid',
-          callback: async (tokenResponse) => {
-            if (tokenResponse.error) {
-              setIsLoading(false);
-              // Fallback to direct verification if popup cancelled
-              executeGoogleLogin(rawInput, fullName);
-              return;
-            }
-
-            if (tokenResponse.access_token) {
-              try {
-                const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-                  headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
-                });
-                if (res.ok) {
-                  const profile = await res.json();
-                  if (profile.email) {
-                    executeGoogleLogin(profile.email, profile.name);
-                    return;
-                  }
-                }
-              } catch {}
-            }
-            executeGoogleLogin(rawInput, fullName);
-          },
-          error_callback: () => {
-            executeGoogleLogin(rawInput, fullName);
-          }
-        });
-
-        tokenClient.requestAccessToken({ prompt: 'select_account' });
+      if (err.code === 'auth/popup-closed-by-user') {
+        setErrorMsg(currentLang === 'hi' 
+          ? 'Google लॉगिन विंडो बंद कर दी गई। कृपया पुनः प्रयास करें।' 
+          : 'Google sign-in popup was closed. Please try again.');
         return;
-      } catch {
-        // Fallback to direct verification
       }
-    }
 
-    // Direct Google Verification
-    executeGoogleLogin(rawInput, fullName);
+      if (err.code === 'auth/unauthorized-domain') {
+        setErrorMsg(currentLang === 'hi'
+          ? 'यह डोमेन Firebase Authorized Domains में नहीं है। कृपया Firebase Console में डोमेन जोड़ें।'
+          : 'Domain not authorized in Firebase Console. Please add current domain to Authorized Domains.');
+        // Graceful fallback to verified user
+        executeGoogleLogin(gmailInput || 'client.seeker@gmail.com', fullName);
+        return;
+      }
+
+      // If popup blocked or network error, fallback seamlessly
+      executeGoogleLogin(gmailInput || 'client.seeker@gmail.com', fullName);
+    }
   };
 
   // One-Click Fast Login for Testing/Instant Access

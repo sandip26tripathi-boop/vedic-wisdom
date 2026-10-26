@@ -1,5 +1,11 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { UserProfile, ClientPortalTab } from '../types/index.ts';
+import { 
+  signInWithGoogleFirebase, 
+  logoutFromFirebase, 
+  onFirebaseAuthStateChanged,
+  FirebaseUser 
+} from '../services/firebase.ts';
 
 export interface AuthModalOptions {
   prefilledData?: Partial<UserProfile>;
@@ -27,6 +33,7 @@ export interface AuthContextType {
   setActiveModalTab: (tab: 'phone' | 'google' | 'magicLink' | 'emailPassword') => void;
   loginWithPhoneOtp: (phone: string, enteredOtp: string, additionalData?: Partial<UserProfile>) => boolean;
   loginWithGoogle: (customData?: Partial<UserProfile>) => UserProfile;
+  loginWithFirebaseGoogle: () => Promise<UserProfile>;
   loginWithEmailPassword: (email: string, password?: string, isRegister?: boolean, fullName?: string) => UserProfile;
   loginWithMagicLink: (email: string) => boolean;
   completePhoneVerification: (phone: string, additionalData?: Partial<UserProfile>) => UserProfile;
@@ -106,6 +113,37 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }, [user]);
 
+  // Listen to Firebase Auth state changes
+  useEffect(() => {
+    const unsubscribe = onFirebaseAuthStateChanged((fbUser: FirebaseUser | null) => {
+      if (fbUser) {
+        setUser((prev) => {
+          if (prev && prev.id === fbUser.uid) return prev;
+          const name = fbUser.displayName || prev?.name || 'Google Seeker';
+          const email = fbUser.email || prev?.email || 'seeker@gmail.com';
+          const avatar = fbUser.photoURL || prev?.avatar || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}&backgroundColor=d4af37,b45309`;
+          const syncedUser: UserProfile = {
+            ...(prev || {}),
+            id: fbUser.uid,
+            name,
+            email,
+            phone: fbUser.phoneNumber || prev?.phone || '+91 90094 48601',
+            avatar,
+            authProvider: 'google',
+            isEmailVerified: fbUser.emailVerified,
+            isPhoneVerified: true,
+            isVerified: true,
+            memberId: prev?.memberId || `VW-GGL-${fbUser.uid.slice(0, 6).toUpperCase()}`,
+            clientTier: prev?.clientTier || 'Enterprise VIP',
+            joinedDate: prev?.joinedDate || new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+          };
+          return syncedUser;
+        });
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
   const openAuthModal = (options?: AuthModalOptions) => {
     setActiveModalOptions(options || null);
     const newCode = Math.floor(100000 + Math.random() * 900000).toString();
@@ -122,6 +160,57 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const newCode = Math.floor(100000 + Math.random() * 900000).toString();
     setSimulatedOtpCode(newCode);
     return newCode;
+  };
+
+  // Official Firebase Google Authentication
+  const loginWithFirebaseGoogle = async (): Promise<UserProfile> => {
+    const fbUser = await signInWithGoogleFirebase();
+    const prefill = activeModalOptions?.prefilledData;
+    const name = fbUser.displayName || prefill?.name || 'Google Seeker';
+    const email = fbUser.email || prefill?.email || 'seeker@gmail.com';
+    const avatar = fbUser.photoURL || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}&backgroundColor=d4af37,b45309`;
+
+    const googleUser: UserProfile = {
+      id: fbUser.uid,
+      name,
+      phone: fbUser.phoneNumber || prefill?.phone || user?.phone || '+91 90094 48601',
+      email,
+      avatar,
+      authProvider: 'google',
+      isEmailVerified: fbUser.emailVerified,
+      isPhoneVerified: true,
+      isVerified: true,
+      dob: prefill?.dob || user?.dob || '1988-06-18',
+      tob: prefill?.tob || user?.tob || '07:30',
+      pob: prefill?.pob || user?.pob || 'Bhopal, MP, India',
+      latitude: prefill?.latitude ?? user?.latitude ?? 23.2599,
+      longitude: prefill?.longitude ?? user?.longitude ?? 77.4126,
+      timezone: prefill?.timezone || user?.timezone || 'Asia/Kolkata',
+      tzOffset: prefill?.tzOffset ?? user?.tzOffset ?? 5.5,
+      rashi: prefill?.rashi || user?.rashi || 'Cancer (कर्क)',
+      lagna: prefill?.lagna || user?.lagna || 'Leo (सिंह)',
+      nakshatra: prefill?.nakshatra || user?.nakshatra || 'Pushya (पुष्य)',
+      whatsappOptIn: true,
+      memberId: `VW-GGL-${fbUser.uid.slice(0, 6).toUpperCase()}`,
+      clientTier: 'Enterprise VIP',
+      joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+    };
+
+    setUser(googleUser);
+    try {
+      sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(googleUser));
+      localStorage.setItem(REMEMBERED_USER_KEY, JSON.stringify(googleUser));
+      localStorage.setItem('vedic_recent_gmail_user', JSON.stringify({
+        name: googleUser.name,
+        email: googleUser.email
+      }));
+    } catch {}
+
+    if (activeModalOptions?.onSuccess) {
+      activeModalOptions.onSuccess(googleUser);
+    }
+    closeAuthModal();
+    return googleUser;
   };
 
   // Google 1-Click login creates a verified user profile
@@ -303,8 +392,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  // Manual sign out clears active session. Options can forget remembered device.
-  const logout = (options?: { forgetRemembered?: boolean } | any) => {
+  // Manual sign out clears active session and Firebase auth. Options can forget remembered device.
+  const logout = async (options?: { forgetRemembered?: boolean } | any) => {
+    try {
+      await logoutFromFirebase();
+    } catch (e) {
+      console.warn('Firebase logout warning:', e);
+    }
     setUser(null);
     try {
       sessionStorage.removeItem(SESSION_STORAGE_KEY);
@@ -357,6 +451,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setActiveModalTab,
         loginWithPhoneOtp,
         loginWithGoogle,
+        loginWithFirebaseGoogle,
         loginWithEmailPassword,
         loginWithMagicLink,
         completePhoneVerification,

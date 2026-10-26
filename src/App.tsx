@@ -12,6 +12,7 @@ import { useRequireAuth } from './hooks/useRequireAuth.ts';
 import { useAutoLogout } from './hooks/useAutoLogout.ts';
 import { Header } from './components/Header.tsx';
 import { Hero } from './components/Hero.tsx';
+import { GeminiPromptSection } from './components/home/GeminiPromptSection.tsx';
 import { TrustBar } from './components/TrustBar.tsx';
 import { Footer } from './components/Footer.tsx';
 import { DigitalReportItem, digitalReportsData } from './data/digitalReports.ts';
@@ -212,29 +213,6 @@ function MainApp() {
     }
   };
 
-  // Auth Gate: Only authenticated / logged-in users can use the platform
-  if (!isAuthenticated && !user) {
-    return (
-      <Suspense fallback={
-        <div className="min-h-screen flex items-center justify-center bg-[#FAF9F6] dark:bg-[#0B0F19]">
-          <div className="w-10 h-10 rounded-full border-3 border-[#D4AF37] border-t-transparent animate-spin" />
-        </div>
-      }>
-        <AuthGate
-          currentLang={currentLang}
-          onLanguageChange={setCurrentLang}
-          currentTheme={currentTheme}
-          onThemeToggle={handleThemeToggle}
-        />
-        {isAuthModalOpen && (
-          <AuthModal
-            currentLang={currentLang}
-          />
-        )}
-      </Suspense>
-    );
-  }
-
   return (
     <div className={`w-full max-w-full overflow-x-clip min-h-screen flex flex-col font-sans transition-colors duration-300 ${currentLang === 'hi' ? 'font-hindi' : ''} bg-[#FAF9F6] dark:bg-[#0B0F19] text-slate-800 dark:text-slate-100`}>
       
@@ -412,6 +390,13 @@ function MainApp() {
               currentLang={currentLang}
               onOpenBooking={handleOpenBooking}
               onScrollTo={handleScrollTo}
+            />
+
+            {/* 1.5. Interactive Gemini AI Vedic Analytics Engine (Public Preview + Action Gating) */}
+            <GeminiPromptSection
+              currentLang={currentLang}
+              onOpenBooking={handleOpenBooking}
+              onOpenCopilot={() => setIsCopilotOpen(true)}
             />
 
             {/* 2. Enterprise Trust & Credibility Strip */}

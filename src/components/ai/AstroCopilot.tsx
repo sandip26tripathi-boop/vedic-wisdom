@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { SriYantraMotif } from '../SriYantraMotif.tsx';
 import { Language } from '../../types/index.ts';
+import { useAuth } from '../../context/AuthContext.tsx';
 import { 
   Bot, 
   X, 
@@ -62,6 +63,7 @@ export const AstroCopilot: React.FC<AstroCopilotProps> = ({
   onClose,
   currentLang
 }) => {
+  const { user, isAuthenticated, openAuthModal } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'welcome_1',
@@ -88,10 +90,8 @@ export const AstroCopilot: React.FC<AstroCopilotProps> = ({
 
   if (!isOpen) return null;
 
-  const handleSendMessage = async (textToSend?: string) => {
-    const query = textToSend || inputQuery;
-    if (!query.trim() || isLoading) return;
-
+  // Execute Gemini AI response generation
+  const executeGenerateAIAnswer = async (query: string) => {
     const userMessage: ChatMessage = {
       id: `usr_${Date.now()}`,
       sender: 'user',
@@ -158,6 +158,31 @@ export const AstroCopilot: React.FC<AstroCopilotProps> = ({
         }
       ]);
     }
+  };
+
+  const handleSendMessage = async (textToSend?: string) => {
+    const query = (textToSend || inputQuery).trim();
+    if (!query || isLoading) return;
+
+    // Login Trigger on Action: Check if user is logged in
+    if (!isAuthenticated && !user) {
+      // Preserve User Query: keep prompt intact in inputQuery
+      setInputQuery(query);
+      openAuthModal({
+        message: currentLang === 'hi'
+          ? 'Gemini AI उत्तर प्राप्त करने के लिए कृपया Google से लॉगिन करें।'
+          : 'Please sign in with Google to receive your Gemini AI response.',
+        source: 'copilot-chat-action',
+        onSuccess: (_verifiedUser) => {
+          // Preserve User Query: login complete hote hi automatically answer generate ho jaye
+          executeGenerateAIAnswer(query);
+        }
+      });
+      return;
+    }
+
+    // Already logged in -> directly generate answer!
+    executeGenerateAIAnswer(query);
   };
 
   // Build WhatsApp Transfer URL with full conversation context

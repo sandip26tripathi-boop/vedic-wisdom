@@ -368,6 +368,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(refreshedUser));
     } catch {}
+    if (activeModalOptions?.onSuccess) {
+      activeModalOptions.onSuccess(refreshedUser);
+    }
+    closeAuthModal();
     return refreshedUser;
   };
 

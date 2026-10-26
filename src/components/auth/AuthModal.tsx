@@ -268,16 +268,21 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       }
 
       if (err.code === 'auth/unauthorized-domain') {
+        const currentDomain = typeof window !== 'undefined' ? window.location.hostname : 'domain';
         setErrorMsg(currentLang === 'hi'
-          ? 'यह डोमेन Firebase Authorized Domains में नहीं है। कृपया Firebase Console में डोमेन जोड़ें।'
-          : 'Domain not authorized in Firebase Console. Please add current domain to Authorized Domains.');
-        // Graceful fallback to verified user
-        executeGoogleLogin(gmailInput || 'client.seeker@gmail.com', fullName);
+          ? `यह डोमेन (${currentDomain}) Firebase Authorized Domains में नहीं है। Firebase Console > Authentication > Settings > Authorized Domains में '${currentDomain}' जोड़ें।`
+          : `Domain (${currentDomain}) is not authorized in Firebase Console. Please add '${currentDomain}' in Firebase Console -> Authentication -> Settings -> Authorized Domains.`);
         return;
       }
 
-      // If popup blocked or network error, fallback seamlessly
-      executeGoogleLogin(gmailInput || 'client.seeker@gmail.com', fullName);
+      if (err.code === 'auth/popup-blocked') {
+        setErrorMsg(currentLang === 'hi'
+          ? 'ब्राउज़र ने पॉपअप विंडो ब्लॉक कर दी। कृपया पॉपअप की अनुमति दें।'
+          : 'Popup was blocked by your browser. Please allow popups for this site.');
+        return;
+      }
+
+      setErrorMsg(err.message || (currentLang === 'hi' ? 'Google लॉगिन में समस्या आई।' : 'Failed to sign in with Google. Please try again.'));
     }
   };
 

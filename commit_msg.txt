@@ -1,0 +1,6 @@
+fix(auth): enforce prompt select_account on GoogleAuthProvider and eliminate silent default fallback
+
+- Set prompt: 'select_account' on GoogleAuthProvider instances in signInWithGoogleFirebase
+- Remove silent default email fallback on popup errors in AuthGate, AuthModal, and OneTap prompt
+- Display clear actionable alerts for unauthorized-domain and popup blockers
+- Ensure Google account selection popup appears every time user initiates login

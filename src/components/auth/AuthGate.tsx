@@ -50,15 +50,13 @@ export const AuthGate: React.FC<AuthGateProps> = ({
         return;
       }
       if (err.code === 'auth/unauthorized-domain') {
+        const currentDomain = typeof window !== 'undefined' ? window.location.hostname : 'domain';
         setErrorMsg(isHi
-          ? 'Firebase Authorized Domains में यह डोमेन नहीं है। डेमो लॉगिन से जारी रखें।'
-          : 'Domain not authorized in Firebase Console. You can continue using Demo login.');
-        // Seamless fallback
-        loginWithGoogle({ name: 'Vedic Client', email: 'client@gmail.com' });
+          ? `यह डोमेन (${currentDomain}) Firebase Authorized Domains में नहीं जुड़ा है। Firebase Console > Authentication > Settings > Authorized Domains में '${currentDomain}' जोड़ें, या नीचे दिए गए डेमो मोड से लॉगिन करें।`
+          : `Domain (${currentDomain}) is not authorized in Firebase Console. Please add '${currentDomain}' in Firebase Console -> Authentication -> Settings -> Authorized Domains, or continue with Demo mode below.`);
         return;
       }
-      // General fallback so user is never stuck
-      loginWithGoogle({ name: 'Google Seeker', email: 'seeker@gmail.com' });
+      setErrorMsg(err.message || (isHi ? 'Google साइन-इन में त्रुटि हुई। कृपया पुनः प्रयास करें।' : 'Failed to sign in with Google. Please try again.'));
     }
   };
 

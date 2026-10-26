@@ -19,6 +19,7 @@ export const GoogleOneTapVisitPrompt: React.FC<GoogleOneTapVisitPromptProps> = (
     forgetRememberedUser, 
     openAuthModal,
     loginWithGoogle, 
+    loginWithFirebaseGoogle,
     completePhoneVerification 
   } = useAuth();
 
@@ -91,6 +92,25 @@ export const GoogleOneTapVisitPrompt: React.FC<GoogleOneTapVisitPromptProps> = (
   const handleSwitchAccount = () => {
     handleDismiss();
     openAuthModal();
+  };
+
+  // Official Firebase Google Popup Authentication with prompt: 'select_account'
+  const handleFirebaseGoogleLogin = async () => {
+    setIsLoggingIn(true);
+    try {
+      await loginWithFirebaseGoogle();
+      setIsSuccess(true);
+      setTimeout(() => {
+        setIsLoggingIn(false);
+        setIsVisible(false);
+      }, 900);
+    } catch (err: any) {
+      console.warn('[OneTap Google Sign-In]:', err);
+      setIsLoggingIn(false);
+      if (err?.code !== 'auth/popup-closed-by-user') {
+        openAuthModal();
+      }
+    }
   };
 
   // Direct login via Google or typed email
@@ -271,7 +291,7 @@ export const GoogleOneTapVisitPrompt: React.FC<GoogleOneTapVisitPromptProps> = (
             <button
               type="button"
               disabled={isLoggingIn}
-              onClick={() => executeDirectLogin()}
+              onClick={() => handleFirebaseGoogleLogin()}
               className="w-full min-h-[42px] px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:brightness-105 shadow-md shadow-[#D4AF37]/25 flex items-center justify-center gap-2 transition-all cursor-pointer"
             >
               {isLoggingIn ? (

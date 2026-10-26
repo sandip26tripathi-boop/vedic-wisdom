@@ -26,8 +26,9 @@ export const firebaseApp = getApps().length > 0 ? getApp() : initializeApp(fireb
 // Initialize Firebase Authentication
 export const auth = getAuth(firebaseApp);
 
-// Configure Google Auth Provider
+// Configure Google Auth Provider with prompt: 'select_account'
 export const googleProvider = new GoogleAuthProvider();
+// Yah line har baar 'Choose an account' ki screen laati hai:
 googleProvider.setCustomParameters({
   prompt: 'select_account'
 });
@@ -45,10 +46,19 @@ if (typeof window !== 'undefined') {
 }
 
 /**
- * Triggers Google Sign In popup using Firebase Auth
+ * Triggers Google Sign In popup using Firebase Auth.
+ * Instantiates a fresh GoogleAuthProvider with prompt: 'select_account'
+ * so Google always shows the 'Choose an account' screen every single time.
  */
 export async function signInWithGoogleFirebase(): Promise<FirebaseUser> {
-  const result = await signInWithPopup(auth, googleProvider);
+  const provider = new GoogleAuthProvider();
+  // Har baar 'Choose an account' pop-up screen aayegi:
+  provider.setCustomParameters({
+    prompt: 'select_account'
+  });
+  provider.addScope('email');
+  provider.addScope('profile');
+  const result = await signInWithPopup(auth, provider);
   return result.user;
 }
 

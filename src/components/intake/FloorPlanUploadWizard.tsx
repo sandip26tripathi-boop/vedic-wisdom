@@ -14,11 +14,22 @@ import {
   Layers, 
   Sparkles,
   Check,
-  AlertCircle
+  AlertCircle,
+  FileCheck,
+  X
 } from 'lucide-react';
 import { Language } from '../../types/index.ts';
 import { useCurrency } from '../../context/CurrencyContext.tsx';
 import { CompassCalibrationModal } from '../interactive/CompassCalibrationModal.tsx';
+import {
+  validateLayoutStep1,
+  validateLayoutStep2,
+  validateLayoutStep3,
+  validateFileUpload,
+  validateName,
+  validatePhone,
+  validateLayoutAllSteps
+} from '../../utils/validation.ts';
 
 interface FloorPlanUploadWizardProps {
   currentLang?: Language;
@@ -48,8 +59,8 @@ export const FloorPlanUploadWizard: React.FC<FloorPlanUploadWizardProps> = ({
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [isCompassModalOpen, setIsCompassModalOpen] = useState<boolean>(false);
 
-  // Form State
-  const [propertyType, setPropertyType] = useState<string>('Apartment / Flat');
+  // Form State - Property type requires active selection
+  const [propertyType, setPropertyType] = useState<string>('');
   const [facingDirection, setFacingDirection] = useState<string>('North (0° - 15°)');
   const [facingDegree, setFacingDegree] = useState<number>(0);
   const [reviewFocus, setReviewFocus] = useState<string[]>(['Financial Circulation & Growth']);
@@ -58,6 +69,9 @@ export const FloorPlanUploadWizard: React.FC<FloorPlanUploadWizardProps> = ({
   const [clientContact, setClientContact] = useState<string>('');
   const [notes, setNotes] = useState<string>('');
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const propertyTypes = [
     { 
@@ -102,19 +116,128 @@ export const FloorPlanUploadWizard: React.FC<FloorPlanUploadWizardProps> = ({
   ];
 
   const toggleFocus = (item: string) => {
+    let nextFocus: string[];
     if (reviewFocus.includes(item)) {
-      if (reviewFocus.length > 1) {
-        setReviewFocus(reviewFocus.filter(f => f !== item));
-      }
+      nextFocus = reviewFocus.filter(f => f !== item);
     } else {
-      setReviewFocus([...reviewFocus, item]);
+      nextFocus = [...reviewFocus, item];
+    }
+    setReviewFocus(nextFocus);
+    if (errors.reviewFocus && nextFocus.length > 0) {
+      setErrors(prev => {
+        const copy = { ...prev };
+        delete copy.reviewFocus;
+        return copy;
+      });
     }
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setServerError(null);
     if (e.target.files && e.target.files[0]) {
-      setUploadedFile(e.target.files[0]);
+      const file = e.target.files[0];
+      const check = validateFileUpload(file, undefined, currentLang);
+      if (!check.isValid && check.error) {
+        setErrors(prev => ({ ...prev, uploadedFile: check.error! }));
+        setUploadedFile(null);
+      } else {
+        setUploadedFile(file);
+        setErrors(prev => {
+          const copy = { ...prev };
+          delete copy.uploadedFile;
+          return copy;
+        });
+      }
     }
+  };
+
+  const removeFile = () => {
+    setUploadedFile(null);
+    setErrors(prev => ({
+      ...prev,
+      uploadedFile: isHi 
+        ? 'फ़्लोर प्लान / लेआउट फ़ाइल अपलोड करना अनिवार्य है।' 
+        : 'Property layout / blueprint file upload is strictly mandatory before proceeding.'
+    }));
+  };
+
+  const validateCurrentStep = (step: number): boolean => {
+    setServerError(null);
+    if (step === 1) {
+      const v = validateLayoutStep1(propertyType, currentLang);
+      if (!v.isValid && v.error) {
+        setErrors(prev => ({ ...prev, propertyType: v.error! }));
+        return false;
+      }
+      setErrors(prev => {
+        const copy = { ...prev };
+        delete copy.propertyType;
+        return copy;
+      });
+      return true;
+    }
+
+    if (step === 2) {
+      const v = validateLayoutStep2(facingDirection, facingDegree, currentLang);
+      if (!v.isValid && v.error) {
+        setErrors(prev => ({ ...prev, facingDirection: v.error! }));
+        return false;
+      }
+      setErrors(prev => {
+        const copy = { ...prev };
+        delete copy.facingDirection;
+        return copy;
+      });
+      return true;
+    }
+
+    if (step === 3) {
+      const v = validateLayoutStep3(reviewFocus, currentLang);
+      if (!v.isValid && v.error) {
+        setErrors(prev => ({ ...prev, reviewFocus: v.error! }));
+        return false;
+      }
+      setErrors(prev => {
+        const copy = { ...prev };
+        delete copy.reviewFocus;
+        return copy;
+      });
+      return true;
+    }
+
+    if (step === 4) {
+      const vFile = validateFileUpload(uploadedFile, undefined, currentLang);
+      const vName = validateName(clientName, currentLang);
+      const vPhone = validatePhone(clientContact, currentLang);
+      const newErrors: Record<string, string> = {};
+
+      if (!vFile.isValid && vFile.error) newErrors.uploadedFile = vFile.error;
+      if (!vName.isValid && vName.error) newErrors.clientName = vName.error;
+      if (!vPhone.isValid && vPhone.error) newErrors.clientContact = vPhone.error;
+
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(prev => ({ ...prev, ...newErrors }));
+        return false;
+      }
+      return true;
+    }
+
+    return true;
+  };
+
+  const handleNext = (targetStep: number) => {
+    // If moving backwards, always permit
+    if (targetStep < currentStep) {
+      setCurrentStep(targetStep);
+      return;
+    }
+
+    // Step-by-step locking: user must satisfy current step to advance
+    if (!validateCurrentStep(currentStep)) {
+      return;
+    }
+
+    setCurrentStep(targetStep);
   };
 
   const intakeData: FloorPlanIntakeData = {
@@ -128,7 +251,61 @@ export const FloorPlanUploadWizard: React.FC<FloorPlanUploadWizardProps> = ({
     fileName: uploadedFile?.name
   };
 
-  const handleComplete = (target: 'checkout' | 'whatsapp') => {
+  const handleComplete = async (target: 'checkout' | 'whatsapp') => {
+    setServerError(null);
+
+    // Validate ALL steps strictly before unlocking checkout/whatsapp
+    const valResult = validateLayoutAllSteps({
+      propertyType,
+      facingDirection,
+      facingDegree,
+      reviewFocus,
+      clientName,
+      clientContact,
+      uploadedFile,
+      fileName: uploadedFile?.name
+    }, currentLang);
+
+    if (!valResult.isValid) {
+      setErrors(valResult.errors);
+      if (valResult.firstInvalidStep && valResult.firstInvalidStep !== currentStep) {
+        setCurrentStep(valResult.firstInvalidStep);
+      }
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    // Server-side validation dispatch
+    try {
+      const res = await fetch('/api/intake/layout-review', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          propertyType,
+          facingDirection,
+          facingDegree,
+          reviewFocus,
+          clientName,
+          clientContact,
+          fileName: uploadedFile?.name,
+          fileSize: uploadedFile?.size,
+          notes,
+          lang: currentLang
+        })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        setServerError(data.message || (isHi ? 'सर्वर सत्यापन में त्रुटि आई। कृपया विवरण जांचें।' : 'Server validation failed. Please check your inputs.'));
+        setIsSubmitting(false);
+        return;
+      }
+    } catch {
+      // Offline fallback: client validation passed, proceed safely
+    } finally {
+      setIsSubmitting(false);
+    }
+
     setIsSubmitted(true);
     if (target === 'checkout' && onProceedToCheckout) {
       onProceedToCheckout(intakeData);
@@ -142,8 +319,9 @@ export const FloorPlanUploadWizard: React.FC<FloorPlanUploadWizardProps> = ({
         `• Main Entrance: ${facingDirection} (${facingDegree}°)\n` +
         `• Primary Focus: ${reviewFocus.join(', ')}\n` +
         `• Client Name: ${clientName || 'Valued Client'}\n` +
+        `• Client Phone: ${clientContact}\n` +
         `• Blueprint File: ${uploadedFile ? uploadedFile.name : 'Ready for direct transmission'}\n\n` +
-        `Kindly advise on the next review slot.`
+        `Kindly advise on the next directional review slot.`
       );
       window.open(`https://wa.me/919009448601?text=${text}`, '_blank');
     }
@@ -164,7 +342,7 @@ export const FloorPlanUploadWizard: React.FC<FloorPlanUploadWizardProps> = ({
           <div className="text-center max-w-xl mx-auto mb-8">
             <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-950 dark:text-[#F3E5AB] border border-amber-500/20 mb-3">
               <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-              <span>{isHi ? "इंटरएक्टिव वास्तु इनटेक विज़ार्ड" : "Interactive Spatial Intake Wizard"}</span>
+              <span>{isHi ? "सत्यापित वास्तु इनटेक विज़ार्ड" : "Verified Spatial Intake Wizard"}</span>
             </span>
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900 dark:text-slate-100">
               {isHi ? "अपने परिसर का फ़्लोर प्लान मूल्यांकन सबमिट करें" : "Submit Your Layout for Directional Review"}
@@ -172,24 +350,27 @@ export const FloorPlanUploadWizard: React.FC<FloorPlanUploadWizardProps> = ({
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2">
               {isHi 
                 ? "4 सरल चरणों में अपनी संपत्ति का विवरण दर्ज करें। सभी फ़ाइलें एंड-टू-एंड एन्क्रिप्टेड व गोपनीय हैं।"
-                : "Complete 4 quick steps. All architectural sketches and blueprints are handled under strict confidentiality."}
+                : "Complete 4 mandatory verified steps. Architectural blueprints are processed under strict DPDP confidentiality."}
             </p>
 
             {/* Stepper Progress Bar */}
             <div className="flex items-center justify-center space-x-2 mt-6">
               {[1, 2, 3, 4].map((step) => (
                 <div key={step} className="flex items-center">
-                  <div 
+                  <button
+                    type="button"
+                    onClick={() => handleNext(step)}
+                    aria-label={`Step ${step}`}
                     className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
                       currentStep === step
-                        ? 'bg-amber-600 text-white shadow-md'
+                        ? 'bg-amber-600 text-white shadow-md ring-2 ring-amber-400'
                         : currentStep > step
-                        ? 'bg-emerald-600 text-white'
-                        : 'bg-slate-200 dark:bg-slate-800 text-slate-500'
+                        ? 'bg-emerald-600 text-white cursor-pointer'
+                        : 'bg-slate-200 dark:bg-slate-800 text-slate-500 cursor-pointer'
                     }`}
                   >
                     {currentStep > step ? <Check className="w-4 h-4" /> : step}
-                  </div>
+                  </button>
                   {step < 4 && (
                     <div className={`w-8 sm:w-16 h-1 mx-1 rounded-full ${
                       currentStep > step ? 'bg-emerald-600' : 'bg-slate-200 dark:bg-slate-800'
@@ -203,19 +384,41 @@ export const FloorPlanUploadWizard: React.FC<FloorPlanUploadWizardProps> = ({
           {/* STEP 1: PROPERTY TYPE */}
           {currentStep === 1 && (
             <div className="space-y-4 animate-in fade-in duration-200">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-amber-900 dark:text-[#F3E5AB]">
-                {isHi ? "चरण 1: संपत्ति का प्रकार चुनें" : "Step 1: Select Your Property Classification"}
-              </h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-amber-900 dark:text-[#F3E5AB]">
+                  {isHi ? "चरण 1: संपत्ति का प्रकार चुनें *" : "Step 1: Select Your Property Classification *"}
+                </h3>
+                <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                  {isHi ? "अनिवार्य चयन" : "Mandatory Selection"}
+                </span>
+              </div>
+
+              {errors.propertyType && (
+                <div className="p-3.5 rounded-2xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs flex items-center space-x-2 animate-in fade-in duration-200">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
+                  <span className="font-semibold">{errors.propertyType}</span>
+                </div>
+              )}
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 {propertyTypes.map((item) => {
                   const Icon = item.icon;
-                  const isSelected = propertyType === (isHi ? item.titleHi : item.titleEn);
+                  const itemValue = isHi ? item.titleHi : item.titleEn;
+                  const isSelected = propertyType === itemValue;
                   return (
                     <button
                       key={item.id}
                       type="button"
-                      onClick={() => setPropertyType(isHi ? item.titleHi : item.titleEn)}
+                      onClick={() => {
+                        setPropertyType(itemValue);
+                        if (errors.propertyType) {
+                          setErrors(prev => {
+                            const copy = { ...prev };
+                            delete copy.propertyType;
+                            return copy;
+                          });
+                        }
+                      }}
                       className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex items-start space-x-3.5 ${
                         isSelected
                           ? 'bg-amber-500/10 dark:bg-amber-500/15 border-amber-600 dark:border-amber-500 shadow-md ring-2 ring-amber-500/30'
@@ -245,8 +448,12 @@ export const FloorPlanUploadWizard: React.FC<FloorPlanUploadWizardProps> = ({
               <div className="flex justify-end pt-4">
                 <button
                   type="button"
-                  onClick={() => setCurrentStep(2)}
-                  className="px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-amber-600 hover:bg-amber-500 shadow-md transition-all flex items-center space-x-2 cursor-pointer"
+                  onClick={() => handleNext(2)}
+                  className={`px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white shadow-md transition-all flex items-center space-x-2 cursor-pointer ${
+                    propertyType
+                      ? 'bg-amber-600 hover:bg-amber-500'
+                      : 'bg-amber-600/70 hover:bg-amber-600'
+                  }`}
                 >
                   <span>{isHi ? "आगे बढ़ें (दिशा चयन)" : "Next: Cardinal Facing"}</span>
                   <ArrowRight className="w-4 h-4" />
@@ -260,7 +467,7 @@ export const FloorPlanUploadWizard: React.FC<FloorPlanUploadWizardProps> = ({
             <div className="space-y-5 animate-in fade-in duration-200">
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-bold uppercase tracking-wider text-amber-900 dark:text-[#F3E5AB]">
-                  {isHi ? "चरण 2: मुख्य द्वार की दिशा व कोण" : "Step 2: Main Entrance Cardinal Facing"}
+                  {isHi ? "चरण 2: मुख्य द्वार की दिशा व कोण *" : "Step 2: Main Entrance Cardinal Facing *"}
                 </h3>
 
                 {/* Compass Calibration Trigger Button */}
@@ -274,15 +481,31 @@ export const FloorPlanUploadWizard: React.FC<FloorPlanUploadWizardProps> = ({
                 </button>
               </div>
 
+              {errors.facingDirection && (
+                <div className="p-3.5 rounded-2xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs flex items-center space-x-2 animate-in fade-in duration-200">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
+                  <span className="font-semibold">{errors.facingDirection}</span>
+                </div>
+              )}
+
               <div className="p-4 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-4">
                 <div>
                   <label htmlFor="facing-direction-select" className="text-xs font-bold text-slate-800 dark:text-slate-200 block mb-1.5">
-                    {isHi ? "मुख्य प्रवेश द्वार की अनुमानित दिशा चुनें" : "Select Main Entrance Orientation"}
+                    {isHi ? "मुख्य प्रवेश द्वार की दिशा चुनें *" : "Select Main Entrance Orientation *"}
                   </label>
                   <select
                     id="facing-direction-select"
                     value={facingDirection}
-                    onChange={(e) => setFacingDirection(e.target.value)}
+                    onChange={(e) => {
+                      setFacingDirection(e.target.value);
+                      if (errors.facingDirection) {
+                        setErrors(prev => {
+                          const copy = { ...prev };
+                          delete copy.facingDirection;
+                          return copy;
+                        });
+                      }
+                    }}
                     className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs sm:text-sm text-slate-800 dark:text-slate-100 font-medium focus:outline-none focus:ring-2 focus:ring-amber-500"
                   >
                     <option value="North (0° - 15°)">North (0° - 15°) — उत्तर (कुबेर द्वार / नवीन अवसर)</option>
@@ -298,7 +521,7 @@ export const FloorPlanUploadWizard: React.FC<FloorPlanUploadWizardProps> = ({
 
                 <div>
                   <label htmlFor="facing-degree-input" className="text-xs font-bold text-slate-800 dark:text-slate-200 block mb-1.5">
-                    {isHi ? "स्मार्टफोन कंपास द्वारा प्राप्त सटीक डिग्री (वैकल्पिक)" : "Exact Compass Degree from Smartphone (Optional)"}
+                    {isHi ? "स्मार्टफोन कंपास द्वारा प्राप्त सटीक डिग्री (वैकल्पिक, 0°-359°)" : "Exact Compass Degree from Smartphone (Optional, 0°-359°)"}
                   </label>
                   <div className="flex items-center space-x-3">
                     <input
@@ -306,13 +529,23 @@ export const FloorPlanUploadWizard: React.FC<FloorPlanUploadWizardProps> = ({
                       type="number"
                       min="0"
                       max="359"
-                      value={facingDegree || ''}
-                      onChange={(e) => setFacingDegree(Number(e.target.value))}
+                      value={facingDegree ?? ''}
+                      onChange={(e) => {
+                        const deg = Number(e.target.value);
+                        setFacingDegree(deg);
+                        if (errors.facingDirection && deg >= 0 && deg <= 359) {
+                          setErrors(prev => {
+                            const copy = { ...prev };
+                            delete copy.facingDirection;
+                            return copy;
+                          });
+                        }
+                      }}
                       placeholder="e.g. 45"
                       className="w-32 px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs sm:text-sm font-mono text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
                     />
                     <span className="text-xs text-slate-600 dark:text-slate-400">
-                      {isHi ? "0° से 359° के बीच (यदि उपलब्ध हो)" : "Degrees (0° to 359°)"}
+                      {isHi ? "0° से 359° के बीच" : "Degrees (0° to 359°)"}
                     </span>
                   </div>
                 </div>
@@ -329,7 +562,7 @@ export const FloorPlanUploadWizard: React.FC<FloorPlanUploadWizardProps> = ({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setCurrentStep(3)}
+                  onClick={() => handleNext(3)}
                   className="px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-amber-600 hover:bg-amber-500 shadow-md transition-all flex items-center space-x-2 cursor-pointer"
                 >
                   <span>{isHi ? "आगे बढ़ें (समीक्षा क्षेत्र)" : "Next: Areas of Review"}</span>
@@ -342,9 +575,21 @@ export const FloorPlanUploadWizard: React.FC<FloorPlanUploadWizardProps> = ({
           {/* STEP 3: PRIMARY AREA OF REVIEW */}
           {currentStep === 3 && (
             <div className="space-y-4 animate-in fade-in duration-200">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-amber-900 dark:text-[#F3E5AB]">
-                {isHi ? "चरण 3: प्राथमिक समीक्षा क्षेत्र (कम से कम 1 चुनें)" : "Step 3: Primary Areas for Directional Review"}
-              </h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-amber-900 dark:text-[#F3E5AB]">
+                  {isHi ? "चरण 3: प्राथमिक समीक्षा क्षेत्र (कम से कम 1 चुनें) *" : "Step 3: Primary Areas for Directional Review *"}
+                </h3>
+                <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                  {isHi ? "न्यूनतम 1 अनिवार्य" : "At least 1 required"}
+                </span>
+              </div>
+
+              {errors.reviewFocus && (
+                <div className="p-3.5 rounded-2xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs flex items-center space-x-2 animate-in fade-in duration-200">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
+                  <span className="font-semibold">{errors.reviewFocus}</span>
+                </div>
+              )}
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {focusOptions.map((opt) => {
@@ -387,7 +632,7 @@ export const FloorPlanUploadWizard: React.FC<FloorPlanUploadWizardProps> = ({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setCurrentStep(4)}
+                  onClick={() => handleNext(4)}
                   className="px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-amber-600 hover:bg-amber-500 shadow-md transition-all flex items-center space-x-2 cursor-pointer"
                 >
                   <span>{isHi ? "आगे बढ़ें (नक्शा अपलोड)" : "Next: Secure Upload"}</span>
@@ -400,37 +645,84 @@ export const FloorPlanUploadWizard: React.FC<FloorPlanUploadWizardProps> = ({
           {/* STEP 4: SECURE UPLOAD & CONFIDENTIALITY COMMITMENT */}
           {currentStep === 4 && (
             <div className="space-y-5 animate-in fade-in duration-200">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-amber-900 dark:text-[#F3E5AB]">
-                {isHi ? "चरण 4: सुरक्षित फ़ाइल अपलोड व संपर्क विवरण" : "Step 4: Secure Upload & Client Information"}
-              </h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-amber-900 dark:text-[#F3E5AB]">
+                  {isHi ? "चरण 4: अनिवार्य फ़ाइल अपलोड व संपर्क विवरण *" : "Step 4: Mandatory Blueprint Upload & Contact Details *"}
+                </h3>
+                <span className="text-[11px] text-amber-800 dark:text-amber-300 font-semibold flex items-center gap-1">
+                  <Lock className="w-3 h-3" />
+                  {isHi ? "सख्त सत्यापन" : "Strict Validation"}
+                </span>
+              </div>
 
-              {/* Upload Box */}
-              <div className="p-6 rounded-2xl border-2 border-dashed border-amber-500/40 bg-amber-50/30 dark:bg-slate-950/40 text-center relative hover:bg-amber-50/50 transition-colors">
-                <UploadCloud className="w-10 h-10 text-amber-600 mx-auto mb-2" />
-                <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">
-                  {uploadedFile 
-                    ? uploadedFile.name 
-                    : (isHi ? "फ़्लोर प्लान / हाथ से बना स्केच अपलोड करें" : "Upload Architectural PDF, CAD, JPG, or Hand-Drawn Sketch")}
-                </h4>
-                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 max-w-sm mx-auto">
-                  {isHi 
-                    ? "समर्थित प्रारूप: PDF, PNG, JPG (अधिकतम 25 MB). यदि वर्तमान में फ़ाइल उपलब्ध नहीं है, तो भी आप परामर्श बुक कर सकते हैं।" 
-                    : "Supported formats: PDF, PNG, JPG (up to 25 MB). You may also submit via WhatsApp post-booking."}
-                </p>
+              {serverError && (
+                <div className="p-3.5 rounded-2xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs flex items-center space-x-2 animate-in fade-in duration-200">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
+                  <span className="font-semibold">{serverError}</span>
+                </div>
+              )}
 
-                <input
-                  type="file"
-                  accept=".pdf,.png,.jpg,.jpeg,.dwg"
-                  onChange={handleFileUpload}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                  aria-label="Upload floor plan file"
-                />
+              {/* Upload Box (Strictly Mandatory) */}
+              <div className="space-y-1.5">
+                <div className={`p-6 rounded-2xl border-2 border-dashed text-center relative transition-colors ${
+                  errors.uploadedFile
+                    ? 'border-red-500/70 bg-red-50/20 dark:bg-red-950/20'
+                    : uploadedFile
+                    ? 'border-emerald-500/60 bg-emerald-50/20 dark:bg-emerald-950/20'
+                    : 'border-amber-500/40 bg-amber-50/30 dark:bg-slate-950/40 hover:bg-amber-50/50'
+                }`}>
+                  {uploadedFile ? (
+                    <FileCheck className="w-10 h-10 text-emerald-600 mx-auto mb-2" />
+                  ) : (
+                    <UploadCloud className="w-10 h-10 text-amber-600 mx-auto mb-2" />
+                  )}
+                  
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">
+                    {uploadedFile 
+                      ? uploadedFile.name 
+                      : (isHi ? "फ़्लोर प्लान / संपत्ति का नक्शा अपलोड करें *" : "Upload Architectural PDF, PNG, JPG, or DWG Blueprint *")}
+                  </h4>
+                  
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 max-w-sm mx-auto">
+                    {isHi 
+                      ? "अनिवार्य फ़ाइल (PDF, PNG, JPG, DWG, अधिकतम 25 MB)। सटीक दिशांकन हेतु आवश्यक।" 
+                      : "Strictly mandatory (PDF, PNG, JPG, JPEG, DWG up to 25 MB) for directional review."}
+                  </p>
 
-                {uploadedFile && (
-                  <div className="mt-3 inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 text-xs font-bold border border-emerald-500/20">
-                    <CheckCircle className="w-3.5 h-3.5" />
-                    <span>{isHi ? "फ़ाइल सफलता पूर्वक संलग्न" : "File successfully attached"}</span>
-                  </div>
+                  {!uploadedFile && (
+                    <input
+                      type="file"
+                      required
+                      accept=".pdf,.png,.jpg,.jpeg,.dwg"
+                      onChange={handleFileUpload}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      aria-label="Upload floor plan file"
+                    />
+                  )}
+
+                  {uploadedFile && (
+                    <div className="mt-3 inline-flex items-center space-x-2">
+                      <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 text-xs font-bold border border-emerald-500/20">
+                        <CheckCircle className="w-3.5 h-3.5" />
+                        <span>{isHi ? "फ़ाइल सत्यापित व संलग्न" : "File verified & attached"} ({(uploadedFile.size / 1024 / 1024).toFixed(2)} MB)</span>
+                      </span>
+                      <button
+                        type="button"
+                        onClick={removeFile}
+                        className="p-1 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-red-600 dark:hover:text-red-400"
+                        title={isHi ? "फ़ाइल हटाएं" : "Remove file"}
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {errors.uploadedFile && (
+                  <p className="text-xs text-red-600 dark:text-red-400 font-semibold flex items-center gap-1.5 pt-1">
+                    <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                    <span>{errors.uploadedFile}</span>
+                  </p>
                 )}
               </div>
 
@@ -438,32 +730,78 @@ export const FloorPlanUploadWizard: React.FC<FloorPlanUploadWizardProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
                   <label htmlFor="intake-client-name" className="text-xs font-bold text-slate-800 dark:text-slate-200 block mb-1">
-                    {isHi ? "आपका नाम *" : "Your Full Name *"}
+                    {isHi ? "आपका पूरा नाम *" : "Your Full Name *"}
                   </label>
                   <input
                     id="intake-client-name"
                     type="text"
                     required
                     value={clientName}
-                    onChange={(e) => setClientName(e.target.value)}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setClientName(val);
+                      if (errors.clientName && val.trim().length >= 3) {
+                        const check = validateName(val, currentLang);
+                        if (check.isValid) {
+                          setErrors(prev => {
+                            const copy = { ...prev };
+                            delete copy.clientName;
+                            return copy;
+                          });
+                        }
+                      }
+                    }}
                     placeholder="e.g. Rajesh Sharma"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    className={`w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border text-xs sm:text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 ${
+                      errors.clientName 
+                        ? 'border-red-500 focus:ring-red-400' 
+                        : 'border-slate-300 dark:border-slate-700 focus:ring-amber-500'
+                    }`}
                   />
+                  {errors.clientName && (
+                    <p className="text-xs text-red-600 dark:text-red-400 font-medium mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                      <span>{errors.clientName}</span>
+                    </p>
+                  )}
                 </div>
 
                 <div>
                   <label htmlFor="intake-client-contact" className="text-xs font-bold text-slate-800 dark:text-slate-200 block mb-1">
-                    {isHi ? "व्हाट्सएप / संपर्क नंबर *" : "WhatsApp or Contact Number *"}
+                    {isHi ? "व्हाट्सएप / 10-अंकीय मोबाइल नंबर *" : "WhatsApp / 10-Digit Mobile Number *"}
                   </label>
                   <input
                     id="intake-client-contact"
                     type="tel"
                     required
                     value={clientContact}
-                    onChange={(e) => setClientContact(e.target.value)}
-                    placeholder="e.g. +91 98765 43210"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setClientContact(val);
+                      if (errors.clientContact) {
+                        const check = validatePhone(val, currentLang);
+                        if (check.isValid) {
+                          setErrors(prev => {
+                            const copy = { ...prev };
+                            delete copy.clientContact;
+                            return copy;
+                          });
+                        }
+                      }
+                    }}
+                    placeholder="e.g. 9876543210"
+                    className={`w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border text-xs sm:text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 ${
+                      errors.clientContact 
+                        ? 'border-red-500 focus:ring-red-400' 
+                        : 'border-slate-300 dark:border-slate-700 focus:ring-amber-500'
+                    }`}
                   />
+                  {errors.clientContact && (
+                    <p className="text-xs text-red-600 dark:text-red-400 font-medium mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                      <span>{errors.clientContact}</span>
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -509,19 +847,21 @@ export const FloorPlanUploadWizard: React.FC<FloorPlanUploadWizardProps> = ({
                 <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full sm:w-auto">
                   <button
                     type="button"
+                    disabled={isSubmitting}
                     onClick={() => handleComplete('whatsapp')}
-                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs font-bold text-emerald-900 dark:text-emerald-200 bg-emerald-500/15 border border-emerald-500/30 hover:bg-emerald-500/25 transition-all flex items-center justify-center space-x-2 cursor-pointer"
+                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs font-bold text-emerald-900 dark:text-emerald-200 bg-emerald-500/15 border border-emerald-500/30 hover:bg-emerald-500/25 transition-all flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-50"
                   >
                     <span>{isHi ? "व्हाट्सएप इनटेक पर भेजें" : "Submit via WhatsApp Desk"}</span>
                   </button>
 
                   <button
                     type="button"
+                    disabled={isSubmitting}
                     onClick={() => handleComplete('checkout')}
-                    className="w-full sm:w-auto px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 shadow-md transition-all flex items-center justify-center space-x-2 cursor-pointer"
+                    className="w-full sm:w-auto px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 shadow-md transition-all flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-50"
                   >
                     <ShieldCheck className="w-4 h-4" />
-                    <span>{isHi ? "परामर्श स्लॉट बुक करें" : "Confirm & Proceed to Booking"}</span>
+                    <span>{isSubmitting ? (isHi ? "सत्यापित हो रहा है..." : "Verifying...") : (isHi ? "परामर्श स्लॉट बुक करें" : "Confirm & Proceed to Booking")}</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>

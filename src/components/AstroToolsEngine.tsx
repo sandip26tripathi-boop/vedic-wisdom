@@ -42,6 +42,7 @@ import {
   resolveCityCoordinates, 
   CityLocation 
 } from '../data/vedicAstroCalc.ts';
+import { validateName, validatePhone, validateCity, validateDob, validateTob } from '../utils/validation.ts';
 
 interface AstroToolsEngineProps {
   currentLang: Language;
@@ -60,6 +61,8 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
   const [userPhone, setUserPhone] = useState(user?.phone || '');
   const [userCity, setUserCity] = useState(user?.pob || '');
   const [isUnlocked, setIsUnlocked] = useState(Boolean(user && user.isPhoneVerified));
+  const [leadErrors, setLeadErrors] = useState<Record<string, string>>({});
+  const [kundliErrors, setKundliErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (user && user.isPhoneVerified) {
@@ -171,6 +174,19 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
       return;
     }
 
+    const nameToValidate = userName || kundliName;
+    const nameVal = validateName(nameToValidate, currentLang);
+    const phoneVal = validatePhone(userPhone, currentLang);
+    const newErrors: Record<string, string> = {};
+    if (!nameVal.isValid && nameVal.error) newErrors.userName = nameVal.error;
+    if (!phoneVal.isValid && phoneVal.error) newErrors.userPhone = phoneVal.error;
+
+    if (Object.keys(newErrors).length > 0) {
+      setLeadErrors(newErrors);
+      return;
+    }
+    setLeadErrors({});
+
     openAuthModal({
       prefilledData: {
         name: userName || kundliName,
@@ -204,6 +220,24 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
 
   const handleComputeKundli = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const nameVal = validateName(kundliName, currentLang);
+    const pobVal = validateCity(pob, currentLang);
+    const dobVal = validateDob(dob, currentLang);
+    const tobVal = validateTob(tob, currentLang);
+
+    const newErrors: Record<string, string> = {};
+    if (!nameVal.isValid && nameVal.error) newErrors.kundliName = nameVal.error;
+    if (!pobVal.isValid && pobVal.error) newErrors.pob = pobVal.error;
+    if (!dobVal.isValid && dobVal.error) newErrors.dob = dobVal.error;
+    if (!tobVal.isValid && tobVal.error) newErrors.tob = tobVal.error;
+
+    if (Object.keys(newErrors).length > 0) {
+      setKundliErrors(newErrors);
+      return;
+    }
+    setKundliErrors({});
+
     // Automatically resolve city coordinates if user typed without explicitly clicking dropdown
     const resolved = resolveCityCoordinates(pob);
     let lat = selectedCoords.lat;
@@ -359,9 +393,24 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                   aria-label={tools.form.name}
                   placeholder={tools.form.name}
                   value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl text-xs bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-[#D4AF37]"
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setUserName(val);
+                    if (leadErrors.userName && val.trim().length >= 3) {
+                      setLeadErrors(prev => {
+                        const copy = { ...prev };
+                        delete copy.userName;
+                        return copy;
+                      });
+                    }
+                  }}
+                  className={`w-full px-3.5 py-2.5 rounded-xl text-xs bg-white dark:bg-slate-800 border text-slate-900 dark:text-white focus:outline-none ${
+                    leadErrors.userName ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:border-[#D4AF37]'
+                  }`}
                 />
+                {leadErrors.userName && (
+                  <p className="text-[10px] text-red-500 font-semibold mt-1 text-left">{leadErrors.userName}</p>
+                )}
               </div>
               <div>
                 <label htmlFor="lead-user-phone" className="sr-only">
@@ -374,9 +423,27 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                   aria-label={tools.form.phone}
                   placeholder={tools.form.phone}
                   value={userPhone}
-                  onChange={(e) => setUserPhone(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl text-xs bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-[#D4AF37]"
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setUserPhone(val);
+                    if (leadErrors.userPhone) {
+                      const check = validatePhone(val, currentLang);
+                      if (check.isValid) {
+                        setLeadErrors(prev => {
+                          const copy = { ...prev };
+                          delete copy.userPhone;
+                          return copy;
+                        });
+                      }
+                    }
+                  }}
+                  className={`w-full px-3.5 py-2.5 rounded-xl text-xs bg-white dark:bg-slate-800 border text-slate-900 dark:text-white focus:outline-none ${
+                    leadErrors.userPhone ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:border-[#D4AF37]'
+                  }`}
                 />
+                {leadErrors.userPhone && (
+                  <p className="text-[10px] text-red-500 font-semibold mt-1 text-left">{leadErrors.userPhone}</p>
+                )}
               </div>
               <div className="relative">
                 <label htmlFor="lead-user-city" className="sr-only">
@@ -446,7 +513,7 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
               <form onSubmit={handleComputeKundli} className="space-y-3.5">
                 <div>
                   <label htmlFor="kundli-user-name" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                    {tools.kundliEngine.nameLabel}
+                    {tools.kundliEngine.nameLabel} *
                   </label>
                   <input
                     id="kundli-user-name"
@@ -454,15 +521,30 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                     required
                     aria-label={tools.kundliEngine.nameLabel}
                     value={kundliName}
-                    onChange={(e) => setKundliName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white"
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setKundliName(val);
+                      if (kundliErrors.kundliName && val.trim().length >= 3) {
+                        setKundliErrors(prev => {
+                          const copy = { ...prev };
+                          delete copy.kundliName;
+                          return copy;
+                        });
+                      }
+                    }}
+                    className={`w-full px-3.5 py-2.5 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border text-slate-900 dark:text-white focus:outline-none ${
+                      kundliErrors.kundliName ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:border-[#D4AF37]'
+                    }`}
                   />
+                  {kundliErrors.kundliName && (
+                    <p className="text-[10px] text-red-500 font-semibold mt-1">{kundliErrors.kundliName}</p>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label htmlFor="kundli-dob" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                      {tools.kundliEngine.dobLabel}
+                      {tools.kundliEngine.dobLabel} *
                     </label>
                     <input
                       id="kundli-dob"
@@ -470,14 +552,29 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                       required
                       aria-label={tools.kundliEngine.dobLabel}
                       value={dob}
-                      onChange={(e) => setDob(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white"
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setDob(val);
+                        if (kundliErrors.dob) {
+                          setKundliErrors(prev => {
+                            const copy = { ...prev };
+                            delete copy.dob;
+                            return copy;
+                          });
+                        }
+                      }}
+                      className={`w-full px-3 py-2 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border text-slate-900 dark:text-white ${
+                        kundliErrors.dob ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:border-[#D4AF37]'
+                      }`}
                     />
+                    {kundliErrors.dob && (
+                      <p className="text-[10px] text-red-500 font-semibold mt-1">{kundliErrors.dob}</p>
+                    )}
                   </div>
 
                   <div>
                     <label htmlFor="kundli-tob" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                      {tools.kundliEngine.tobLabel}
+                      {tools.kundliEngine.tobLabel} *
                     </label>
                     <input
                       id="kundli-tob"
@@ -485,9 +582,24 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                       required
                       aria-label={tools.kundliEngine.tobLabel}
                       value={tob}
-                      onChange={(e) => setTob(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white"
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setTob(val);
+                        if (kundliErrors.tob) {
+                          setKundliErrors(prev => {
+                            const copy = { ...prev };
+                            delete copy.tob;
+                            return copy;
+                          });
+                        }
+                      }}
+                      className={`w-full px-3 py-2 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border text-slate-900 dark:text-white ${
+                        kundliErrors.tob ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:border-[#D4AF37]'
+                      }`}
                     />
+                    {kundliErrors.tob && (
+                      <p className="text-[10px] text-red-500 font-semibold mt-1">{kundliErrors.tob}</p>
+                    )}
                   </div>
                 </div>
 
@@ -511,13 +623,32 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
                         lon: place.longitude,
                         tzOffset: place.tzOffset
                       });
+                      if (kundliErrors.pob) {
+                        setKundliErrors(prev => {
+                          const copy = { ...prev };
+                          delete copy.pob;
+                          return copy;
+                        });
+                      }
                     }}
-                    onRawChange={(raw) => setPob(raw)}
+                    onRawChange={(raw) => {
+                      setPob(raw);
+                      if (kundliErrors.pob && raw.trim().length >= 2) {
+                        setKundliErrors(prev => {
+                          const copy = { ...prev };
+                          delete copy.pob;
+                          return copy;
+                        });
+                      }
+                    }}
                     currentLang={currentLang}
                     placeholder={currentLang === 'en' ? 'Search global city (e.g. Bhopal, London, Dubai, New York)...' : 'विश्व के किसी भी नगर/शहर का नाम लिखें...'}
                     required
                     showQuickPills={true}
                   />
+                  {kundliErrors.pob && (
+                    <p className="text-[10px] text-red-500 font-semibold mt-1">{kundliErrors.pob}</p>
+                  )}
                 </div>
 
                 <button

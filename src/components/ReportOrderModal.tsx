@@ -3,8 +3,9 @@ import { DigitalReportItem } from '../data/digitalReports.ts';
 import { Language } from '../types/index.ts';
 import { useAuth } from '../context/AuthContext.tsx';
 import { useCart } from '../context/CartContext.tsx';
-import { X, FileText, CheckCircle2, Download, Send, ArrowRight, ShieldCheck, Clock, Sparkles, ShoppingBag } from 'lucide-react';
+import { X, FileText, CheckCircle2, Download, Send, ArrowRight, ShieldCheck, Clock, Sparkles, ShoppingBag, AlertCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { validateName, validatePhone, validateEmail, validateCity, validateDob, validateTob } from '../utils/validation.ts';
 
 interface ReportOrderModalProps {
   isOpen: boolean;
@@ -33,6 +34,7 @@ export const ReportOrderModal: React.FC<ReportOrderModalProps> = ({
   const [partnerTob, setPartnerTob] = useState('');
   const [partnerPob, setPartnerPob] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (user && isOpen) {
@@ -48,6 +50,7 @@ export const ReportOrderModal: React.FC<ReportOrderModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      setErrors({});
     } else {
       document.body.style.overflow = '';
     }
@@ -60,10 +63,53 @@ export const ReportOrderModal: React.FC<ReportOrderModalProps> = ({
 
   const isMarriage = report.id === 'marriageMatch';
 
+  const validateAllFields = (): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    const nameVal = validateName(name, currentLang);
+    if (!nameVal.isValid && nameVal.error) newErrors.name = nameVal.error;
+
+    const phoneVal = validatePhone(phone, currentLang);
+    if (!phoneVal.isValid && phoneVal.error) newErrors.phone = phoneVal.error;
+
+    const dobVal = validateDob(dob, currentLang);
+    if (!dobVal.isValid && dobVal.error) newErrors.dob = dobVal.error;
+
+    const tobVal = validateTob(tob, currentLang);
+    if (!tobVal.isValid && tobVal.error) newErrors.tob = tobVal.error;
+
+    const pobVal = validateCity(pob, currentLang);
+    if (!pobVal.isValid && pobVal.error) newErrors.pob = pobVal.error;
+
+    const emailVal = validateEmail(email, false, currentLang);
+    if (!emailVal.isValid && emailVal.error) newErrors.email = emailVal.error;
+
+    if (isMarriage) {
+      const pNameVal = validateName(partnerName, currentLang);
+      if (!pNameVal.isValid && pNameVal.error) newErrors.partnerName = pNameVal.error;
+
+      const pDobVal = validateDob(partnerDob, currentLang);
+      if (!pDobVal.isValid && pDobVal.error) newErrors.partnerDob = pDobVal.error;
+
+      const pTobVal = validateTob(partnerTob, currentLang);
+      if (!pTobVal.isValid && pTobVal.error) newErrors.partnerTob = pTobVal.error;
+
+      const pPobVal = validateCity(partnerPob, currentLang);
+      if (!pPobVal.isValid && pPobVal.error) newErrors.partnerPob = pPobVal.error;
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return false;
+    }
+
+    setErrors({});
+    return true;
+  };
+
   const handleOrderSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !phone.trim() || !pob.trim()) {
-      alert(currentLang === 'en' ? 'Please fill in Name, WhatsApp Phone, and Birth Place.' : 'कृपया नाम, व्हाट्सएप नंबर और जन्म स्थान भरें।');
+    if (!validateAllFields()) {
       return;
     }
 
@@ -96,6 +142,23 @@ export const ReportOrderModal: React.FC<ReportOrderModalProps> = ({
     setTimeout(() => {
       window.open(`https://wa.me/919009448601?text=${encodeURIComponent(text)}`, '_blank');
     }, 800);
+  };
+
+  const handleAddToCart = () => {
+    if (!validateAllFields()) {
+      return;
+    }
+
+    addToCart({
+      id: report.id,
+      title: currentLang === 'en' ? report.titleEn : report.titleHi,
+      category: 'Digital Report',
+      price: parseInt(report.priceInr.replace(/\D/g, ''), 10) || 999,
+      turnaround: report.deliveryTimeEn,
+      badge: report.badgeEn
+    });
+    onClose();
+    openCart();
   };
 
   const handleDownloadSample = async () => {
@@ -138,45 +201,9 @@ export const ReportOrderModal: React.FC<ReportOrderModalProps> = ({
       doc.line(20, 66, 190, 66);
 
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(12);
-      doc.setTextColor(180, 83, 9);
-      doc.text('Analytical Modules Included in This Report:', 20, 75);
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(10);
-      doc.setTextColor(51, 65, 85);
-      let y = 84;
-      report.sampleTopicsEn.forEach((topic) => {
-        doc.circle(23, y - 1, 1.2, 'F');
-        doc.text(topic, 28, y);
-        y += 8;
-      });
-
-      y += 6;
-      doc.setFillColor(250, 249, 246);
-      doc.roundedRect(20, y, 170, 45, 3, 3, 'F');
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(11);
-      doc.setTextColor(11, 15, 25);
-      doc.text('Master Astrologer Methodology Note:', 25, y + 10);
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(9);
-      doc.setTextColor(71, 85, 105);
-      const note = 'This report incorporates classical Cuspal Interlink (CIL) Sub-Sub Lord analysis, combined with 16-Zone Non-Demolition Elemental Vastu remedies. Rooted in traditional Vedic scriptures, astrological beliefs, and faith-based cultural heritage.';
-      const lines = doc.splitTextToSize(note, 160);
-      doc.text(lines, 25, y + 18);
-
-      // Footer
-      doc.setFontSize(8);
-      doc.setTextColor(148, 163, 184);
-      doc.text('To order your personalized full dossier, contact WhatsApp: +91 90094 48601 or visit www.vedicwisdom.com', 20, 285);
-
-      doc.save(`VedicWisdom_${report.id}_Sample_Excerpt.pdf`);
+      doc.save(`${report.id}_sample_preview.pdf`);
     } catch (e) {
       console.error(e);
-      alert(currentLang === 'en' 
-        ? `Sample excerpt for "${report.titleEn}" could not be generated.` 
-        : `नमूना पीडीएफ तैयार नहीं किया जा सका।`);
     }
   };
 
@@ -194,47 +221,48 @@ export const ReportOrderModal: React.FC<ReportOrderModalProps> = ({
 
         {!isSuccess ? (
           <>
-            {/* Header */}
+            {/* Modal Header */}
             <div className="mb-6 pr-8">
-              <span className="text-[10px] sm:text-[11px] font-bold px-3 py-1 rounded-full bg-[#D4AF37]/15 text-[#B45309] dark:text-[#F3E5AB] border border-[#D4AF37]/30 inline-block mb-2">
-                {currentLang === 'en' ? report.badgeEn : report.badgeHi}
-              </span>
+              <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/30 text-xs font-bold text-[#B45309] dark:text-[#F3E5AB] mb-2">
+                <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
+                <span>{currentLang === 'en' ? report.badgeEn : report.badgeHi}</span>
+              </div>
               <h3 className="font-cinzel text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
                 {currentLang === 'en' ? report.titleEn : report.titleHi}
               </h3>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
                 {currentLang === 'en' ? report.descriptionEn : report.descriptionHi}
               </p>
+            </div>
 
-              {/* Price & Specs Badge */}
-              <div className="flex flex-wrap items-center gap-3 mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
-                <span className="font-mono text-base font-extrabold text-[#B45309] dark:text-[#F3E5AB]">
-                  {report.priceInr} <span className="text-xs font-normal text-slate-500">({report.priceUsd})</span>
-                </span>
-                <span className="text-slate-400">•</span>
-                <span className="text-slate-700 dark:text-slate-300 font-medium">
-                  {currentLang === 'en' ? report.pagesEn : report.pagesHi}
-                </span>
-                <span className="text-slate-400">•</span>
-                <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5" />
-                  {currentLang === 'en' ? report.deliveryTimeEn : report.deliveryTimeHi}
-                </span>
+            {/* Quick Meta Stats */}
+            <div className="grid grid-cols-3 gap-2 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 mb-5 text-center text-xs">
+              <div>
+                <span className="text-slate-500 block text-[10px] uppercase font-bold">{currentLang === 'en' ? 'Pages' : 'पृष्ठ'}</span>
+                <span className="font-bold text-slate-800 dark:text-slate-200">{currentLang === 'en' ? report.pagesEn : report.pagesHi}</span>
+              </div>
+              <div className="border-x border-slate-200 dark:border-slate-700">
+                <span className="text-slate-500 block text-[10px] uppercase font-bold">{currentLang === 'en' ? 'Delivery' : 'समय'}</span>
+                <span className="font-bold text-emerald-600 dark:text-emerald-400">{currentLang === 'en' ? report.deliveryTimeEn : report.deliveryTimeHi}</span>
+              </div>
+              <div>
+                <span className="text-slate-500 block text-[10px] uppercase font-bold">{currentLang === 'en' ? 'Official Fee' : 'शुल्क'}</span>
+                <span className="font-bold text-[#B45309] dark:text-[#F3E5AB]">{report.priceInr}</span>
               </div>
             </div>
 
-            {/* Sub-tabs: Order Form vs Sample Preview */}
-            <div className="flex items-center space-x-2 border-b border-slate-200 dark:border-slate-800 mb-5">
+            {/* Tabs: Order Form vs Preview */}
+            <div className="flex border-b border-slate-200 dark:border-slate-800 mb-5">
               <button
                 type="button"
                 onClick={() => setActiveTab('order')}
                 className={`pb-2.5 px-3 text-xs sm:text-sm font-bold border-b-2 transition-all cursor-pointer ${
                   activeTab === 'order'
-                    ? 'border-[#D4AF37] text-slate-900 dark:text-white'
+                    ? 'border-[#D4AF37] text-[#B45309] dark:text-[#F3E5AB]'
                     : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
                 }`}
               >
-                {currentLang === 'en' ? '1. Order & Birth Input' : '1. जन्म विवरण एवं ऑर्डर'}
+                {currentLang === 'en' ? '1. Order Details & Natal Input' : '1. जन्म विवरण व ऑर्डर'}
               </button>
               <button
                 type="button"
@@ -263,23 +291,65 @@ export const ReportOrderModal: React.FC<ReportOrderModalProps> = ({
                       required
                       placeholder="e.g. Vikramaditya Sharma"
                       value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-[#D4AF37]"
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setName(val);
+                        if (errors.name && val.trim().length >= 3) {
+                          const check = validateName(val, currentLang);
+                          if (check.isValid) {
+                            setErrors(prev => {
+                              const copy = { ...prev };
+                              delete copy.name;
+                              return copy;
+                            });
+                          }
+                        }
+                      }}
+                      className={`w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border text-slate-900 dark:text-white focus:outline-none ${
+                        errors.name ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:border-[#D4AF37]'
+                      }`}
                     />
+                    {errors.name && (
+                      <p className="text-[11px] text-red-500 font-semibold mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3 shrink-0" />
+                        <span>{errors.name}</span>
+                      </p>
+                    )}
                   </div>
 
                   <div>
                     <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                      {currentLang === 'en' ? 'WhatsApp Number (for PDF dispatch) *' : 'व्हाट्सएप नंबर (पीडीएफ प्रेषण हेतु) *'}
+                      {currentLang === 'en' ? 'WhatsApp Number (10-Digit Mobile) *' : 'व्हाट्सएप नंबर (10-अंक) *'}
                     </label>
                     <input
                       type="tel"
                       required
-                      placeholder="+91 90094 48601"
+                      placeholder="e.g. 9009448601"
                       value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-[#D4AF37]"
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setPhone(val);
+                        if (errors.phone) {
+                          const check = validatePhone(val, currentLang);
+                          if (check.isValid) {
+                            setErrors(prev => {
+                              const copy = { ...prev };
+                              delete copy.phone;
+                              return copy;
+                            });
+                          }
+                        }
+                      }}
+                      className={`w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border text-slate-900 dark:text-white focus:outline-none ${
+                        errors.phone ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:border-[#D4AF37]'
+                      }`}
                     />
+                    {errors.phone && (
+                      <p className="text-[11px] text-red-500 font-semibold mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3 shrink-0" />
+                        <span>{errors.phone}</span>
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -292,9 +362,30 @@ export const ReportOrderModal: React.FC<ReportOrderModalProps> = ({
                       type="date"
                       required
                       value={dob}
-                      onChange={(e) => setDob(e.target.value)}
-                      className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-[#D4AF37]"
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setDob(val);
+                        if (errors.dob) {
+                          const check = validateDob(val, currentLang);
+                          if (check.isValid) {
+                            setErrors(prev => {
+                              const copy = { ...prev };
+                              delete copy.dob;
+                              return copy;
+                            });
+                          }
+                        }
+                      }}
+                      className={`w-full px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border text-slate-900 dark:text-white focus:outline-none ${
+                        errors.dob ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:border-[#D4AF37]'
+                      }`}
                     />
+                    {errors.dob && (
+                      <p className="text-[11px] text-red-500 font-semibold mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3 shrink-0" />
+                        <span>{errors.dob}</span>
+                      </p>
+                    )}
                   </div>
 
                   <div>
@@ -305,9 +396,30 @@ export const ReportOrderModal: React.FC<ReportOrderModalProps> = ({
                       type="time"
                       required
                       value={tob}
-                      onChange={(e) => setTob(e.target.value)}
-                      className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-[#D4AF37]"
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setTob(val);
+                        if (errors.tob) {
+                          const check = validateTob(val, currentLang);
+                          if (check.isValid) {
+                            setErrors(prev => {
+                              const copy = { ...prev };
+                              delete copy.tob;
+                              return copy;
+                            });
+                          }
+                        }
+                      }}
+                      className={`w-full px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border text-slate-900 dark:text-white focus:outline-none ${
+                        errors.tob ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:border-[#D4AF37]'
+                      }`}
                     />
+                    {errors.tob && (
+                      <p className="text-[11px] text-red-500 font-semibold mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3 shrink-0" />
+                        <span>{errors.tob}</span>
+                      </p>
+                    )}
                   </div>
 
                   <div>
@@ -319,9 +431,30 @@ export const ReportOrderModal: React.FC<ReportOrderModalProps> = ({
                       required
                       placeholder="e.g. Bhopal, MP"
                       value={pob}
-                      onChange={(e) => setPob(e.target.value)}
-                      className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-[#D4AF37]"
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setPob(val);
+                        if (errors.pob && val.trim().length >= 2) {
+                          const check = validateCity(val, currentLang);
+                          if (check.isValid) {
+                            setErrors(prev => {
+                              const copy = { ...prev };
+                              delete copy.pob;
+                              return copy;
+                            });
+                          }
+                        }
+                      }}
+                      className={`w-full px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border text-slate-900 dark:text-white focus:outline-none ${
+                        errors.pob ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:border-[#D4AF37]'
+                      }`}
                     />
+                    {errors.pob && (
+                      <p className="text-[11px] text-red-500 font-semibold mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3 shrink-0" />
+                        <span>{errors.pob}</span>
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -333,50 +466,135 @@ export const ReportOrderModal: React.FC<ReportOrderModalProps> = ({
                     type="email"
                     placeholder="client@domain.com"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-[#D4AF37]"
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setEmail(val);
+                      if (errors.email) {
+                        const check = validateEmail(val, false, currentLang);
+                        if (check.isValid) {
+                          setErrors(prev => {
+                            const copy = { ...prev };
+                            delete copy.email;
+                            return copy;
+                          });
+                        }
+                      }
+                    }}
+                    className={`w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border text-slate-900 dark:text-white focus:outline-none ${
+                      errors.email ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:border-[#D4AF37]'
+                    }`}
                   />
+                  {errors.email && (
+                    <p className="text-[11px] text-red-500 font-semibold mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3 shrink-0" />
+                      <span>{errors.email}</span>
+                    </p>
+                  )}
                 </div>
 
                 {/* If Marriage Compatibility Report, require Partner's details */}
                 {isMarriage && (
                   <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/25 space-y-3">
                     <div className="text-xs font-bold text-rose-800 dark:text-rose-300">
-                      {currentLang === 'en' ? 'Partner / Prospective Spouse Details:' : 'जीवनसाथी का विवरण:'}
+                      {currentLang === 'en' ? 'Partner / Prospective Spouse Details *:' : 'जीवनसाथी का विवरण *:'}
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
                         <input
                           type="text"
-                          placeholder={currentLang === 'en' ? "Partner's Full Name" : "जीवनसाथी का नाम"}
+                          required
+                          placeholder={currentLang === 'en' ? "Partner's Full Name *" : "जीवनसाथी का नाम *"}
                           value={partnerName}
-                          onChange={(e) => setPartnerName(e.target.value)}
-                          className="w-full px-3 py-2 text-xs rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white"
+                          onChange={(e) => {
+                            setPartnerName(e.target.value);
+                            if (errors.partnerName) {
+                              setErrors(prev => {
+                                const copy = { ...prev };
+                                delete copy.partnerName;
+                                return copy;
+                              });
+                            }
+                          }}
+                          className={`w-full px-3 py-2 text-xs rounded-xl bg-white dark:bg-slate-800 border text-slate-900 dark:text-white ${
+                            errors.partnerName ? 'border-red-500' : 'border-slate-300 dark:border-slate-700'
+                          }`}
                         />
+                        {errors.partnerName && (
+                          <p className="text-[11px] text-red-500 font-semibold mt-1">{errors.partnerName}</p>
+                        )}
                       </div>
                       <div>
                         <input
                           type="text"
-                          placeholder={currentLang === 'en' ? "Partner's Birth Place" : "जीवनसाथी का जन्म स्थान"}
+                          required
+                          placeholder={currentLang === 'en' ? "Partner's Birth Place *" : "जीवनसाथी का जन्म स्थान *"}
                           value={partnerPob}
-                          onChange={(e) => setPartnerPob(e.target.value)}
-                          className="w-full px-3 py-2 text-xs rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white"
+                          onChange={(e) => {
+                            setPartnerPob(e.target.value);
+                            if (errors.partnerPob) {
+                              setErrors(prev => {
+                                const copy = { ...prev };
+                                delete copy.partnerPob;
+                                return copy;
+                              });
+                            }
+                          }}
+                          className={`w-full px-3 py-2 text-xs rounded-xl bg-white dark:bg-slate-800 border text-slate-900 dark:text-white ${
+                            errors.partnerPob ? 'border-red-500' : 'border-slate-300 dark:border-slate-700'
+                          }`}
                         />
+                        {errors.partnerPob && (
+                          <p className="text-[11px] text-red-500 font-semibold mt-1">{errors.partnerPob}</p>
+                        )}
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-3">
-                      <input
-                        type="date"
-                        value={partnerDob}
-                        onChange={(e) => setPartnerDob(e.target.value)}
-                        className="w-full px-3 py-2 text-xs rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white"
-                      />
-                      <input
-                        type="time"
-                        value={partnerTob}
-                        onChange={(e) => setPartnerTob(e.target.value)}
-                        className="w-full px-3 py-2 text-xs rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white"
-                      />
+                      <div>
+                        <input
+                          type="date"
+                          required
+                          value={partnerDob}
+                          onChange={(e) => {
+                            setPartnerDob(e.target.value);
+                            if (errors.partnerDob) {
+                              setErrors(prev => {
+                                const copy = { ...prev };
+                                delete copy.partnerDob;
+                                return copy;
+                              });
+                            }
+                          }}
+                          className={`w-full px-3 py-2 text-xs rounded-xl bg-white dark:bg-slate-800 border text-slate-900 dark:text-white ${
+                            errors.partnerDob ? 'border-red-500' : 'border-slate-300 dark:border-slate-700'
+                          }`}
+                        />
+                        {errors.partnerDob && (
+                          <p className="text-[11px] text-red-500 font-semibold mt-1">{errors.partnerDob}</p>
+                        )}
+                      </div>
+                      <div>
+                        <input
+                          type="time"
+                          required
+                          value={partnerTob}
+                          onChange={(e) => {
+                            setPartnerTob(e.target.value);
+                            if (errors.partnerTob) {
+                              setErrors(prev => {
+                                const copy = { ...prev };
+                                delete copy.partnerTob;
+                                return copy;
+                              });
+                            }
+                          }}
+                          className={`w-full px-3 py-2 text-xs rounded-xl bg-white dark:bg-slate-800 border text-slate-900 dark:text-white ${
+                            errors.partnerTob ? 'border-red-500' : 'border-slate-300 dark:border-slate-700'
+                          }`}
+                        />
+                        {errors.partnerTob && (
+                          <p className="text-[11px] text-red-500 font-semibold mt-1">{errors.partnerTob}</p>
+                        )}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -395,18 +613,7 @@ export const ReportOrderModal: React.FC<ReportOrderModalProps> = ({
                 <div className="space-y-2">
                   <button
                     type="button"
-                    onClick={() => {
-                      addToCart({
-                        id: report.id,
-                        title: currentLang === 'en' ? report.titleEn : report.titleHi,
-                        category: 'Digital Report',
-                        price: parseInt(report.priceInr.replace(/\D/g, ''), 10) || 999,
-                        turnaround: report.deliveryTimeEn,
-                        badge: report.badgeEn
-                      });
-                      onClose();
-                      openCart();
-                    }}
+                    onClick={handleAddToCart}
                     className="w-full py-3.5 rounded-xl font-bold text-xs sm:text-sm text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:brightness-105 shadow-lg shadow-[#D4AF37]/25 transition-all flex items-center justify-center space-x-2 cursor-pointer"
                   >
                     <ShoppingBag className="w-4 h-4 text-slate-950" />
@@ -483,7 +690,7 @@ export const ReportOrderModal: React.FC<ReportOrderModalProps> = ({
             <div className="pt-4">
               <button
                 onClick={onClose}
-                className="px-6 py-2.5 rounded-xl font-semibold text-xs text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 transition-colors"
+                className="px-6 py-2.5 rounded-xl font-semibold text-xs text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 transition-colors cursor-pointer"
               >
                 {currentLang === 'en' ? 'Close Window' : 'खिड़की बंद करें'}
               </button>

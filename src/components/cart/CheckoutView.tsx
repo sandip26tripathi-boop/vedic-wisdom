@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { initiateRazorpayCheckout } from '../../services/razorpay.ts';
+import { validateName, validatePhone, validateEmail, validateCity } from '../../utils/validation.ts';
 
 interface CheckoutViewProps {
   currentLang: Language;
@@ -56,6 +57,7 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState<any | null>(null);
   const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleApplyPromo = () => {
     if (!couponInput.trim()) {
@@ -93,14 +95,35 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
     setTimeout(() => setCopiedUpi(false), 2000);
   };
 
-  const handleCompleteOrder = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleCompleteOrder = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     setPaymentError(null);
 
-    if (!fullName.trim() || !phone.trim() || !city.trim()) {
-      alert(currentLang === 'en' ? 'Please complete your Name, Phone Number, and City.' : 'कृपया नाम, फोन नंबर और शहर दर्ज करें।');
+    const nameVal = validateName(fullName, currentLang);
+    const phoneVal = validatePhone(phone, currentLang);
+    const emailVal = validateEmail(email, true, currentLang);
+    const cityVal = validateCity(city, currentLang);
+
+    const newErrors: Record<string, string> = {};
+    if (!nameVal.isValid && nameVal.error) newErrors.fullName = nameVal.error;
+    if (!phoneVal.isValid && phoneVal.error) newErrors.phone = phoneVal.error;
+    if (!emailVal.isValid && emailVal.error) newErrors.email = emailVal.error;
+    if (!cityVal.isValid && cityVal.error) newErrors.city = cityVal.error;
+
+    if (paymentMethod === 'upi') {
+      const cleanUtr = upiUtr.trim();
+      if (!cleanUtr || cleanUtr.length < 10) {
+        newErrors.upiUtr = currentLang === 'en'
+          ? 'Please enter a valid 12-digit UPI UTR / Transaction Reference Number.'
+          : 'कृपया 12-अंकों का मान्य UPI UTR नंबर दर्ज करें।';
+      }
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
+    setErrors({});
 
     // Method 1: Official Razorpay Standard Web Checkout
     if (paymentMethod === 'razorpay') {
@@ -176,11 +199,6 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
 
     // Method 2: Manual UPI QR UTR
     if (paymentMethod === 'upi') {
-      if (!upiUtr.trim()) {
-        alert(currentLang === 'en' ? 'Please enter the 12-digit UPI Reference / UTR Number after completing your payment.' : 'कृपया भुगतान पूर्ण करने के बाद 12-अंकों का UPI UTR नंबर दर्ज करें।');
-        return;
-      }
-
       setIsProcessing(true);
 
       setTimeout(() => {
@@ -422,24 +440,66 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
                     type="text"
                     required
                     value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setFullName(val);
+                      if (errors.fullName && val.trim().length >= 3) {
+                        const check = validateName(val, currentLang);
+                        if (check.isValid) {
+                          setErrors(prev => {
+                            const copy = { ...prev };
+                            delete copy.fullName;
+                            return copy;
+                          });
+                        }
+                      }
+                    }}
                     placeholder="e.g. Vikramaditya Sharma"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                    className={`w-full px-3.5 py-2.5 rounded-xl border bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 ${
+                      errors.fullName ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:ring-[#D4AF37]'
+                    }`}
                   />
+                  {errors.fullName && (
+                    <p className="text-[11px] text-red-500 font-semibold mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3 shrink-0" />
+                      <span>{errors.fullName}</span>
+                    </p>
+                  )}
                 </div>
 
                 <div>
                   <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                    {currentLang === 'en' ? 'WhatsApp Phone Number' : 'व्हाट्सएप फोन नंबर'} *
+                    {currentLang === 'en' ? 'WhatsApp Phone Number (10-Digit Mobile)' : 'व्हाट्सएप फोन नंबर (10-अंक)'} *
                   </label>
                   <input
                     type="tel"
                     required
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setPhone(val);
+                      if (errors.phone) {
+                        const check = validatePhone(val, currentLang);
+                        if (check.isValid) {
+                          setErrors(prev => {
+                            const copy = { ...prev };
+                            delete copy.phone;
+                            return copy;
+                          });
+                        }
+                      }
+                    }}
                     placeholder="+91 90094 48601"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                    className={`w-full px-3.5 py-2.5 rounded-xl border bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 ${
+                      errors.phone ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:ring-[#D4AF37]'
+                    }`}
                   />
+                  {errors.phone && (
+                    <p className="text-[11px] text-red-500 font-semibold mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3 shrink-0" />
+                      <span>{errors.phone}</span>
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -450,10 +510,31 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
                     type="email"
                     required
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setEmail(val);
+                      if (errors.email) {
+                        const check = validateEmail(val, true, currentLang);
+                        if (check.isValid) {
+                          setErrors(prev => {
+                            const copy = { ...prev };
+                            delete copy.email;
+                            return copy;
+                          });
+                        }
+                      }
+                    }}
                     placeholder="client@enterprise.com"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                    className={`w-full px-3.5 py-2.5 rounded-xl border bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 ${
+                      errors.email ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:ring-[#D4AF37]'
+                    }`}
                   />
+                  {errors.email && (
+                    <p className="text-[11px] text-red-500 font-semibold mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3 shrink-0" />
+                      <span>{errors.email}</span>
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -464,10 +545,31 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
                     type="text"
                     required
                     value={city}
-                    onChange={(e) => setCity(e.target.value)}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setCity(val);
+                      if (errors.city && val.trim().length >= 2) {
+                        const check = validateCity(val, currentLang);
+                        if (check.isValid) {
+                          setErrors(prev => {
+                            const copy = { ...prev };
+                            delete copy.city;
+                            return copy;
+                          });
+                        }
+                      }
+                    }}
                     placeholder="e.g. Bhopal, MP"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                    className={`w-full px-3.5 py-2.5 rounded-xl border bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 ${
+                      errors.city ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:ring-[#D4AF37]'
+                    }`}
                   />
+                  {errors.city && (
+                    <p className="text-[11px] text-red-500 font-semibold mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3 shrink-0" />
+                      <span>{errors.city}</span>
+                    </p>
+                  )}
                 </div>
 
                 <div className="sm:col-span-2">
@@ -685,10 +787,28 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
                       maxLength={16}
                       required
                       value={upiUtr}
-                      onChange={(e) => setUpiUtr(e.target.value.replace(/\s+/g, ''))}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\s+/g, '');
+                        setUpiUtr(val);
+                        if (errors.upiUtr && val.length >= 10) {
+                          setErrors(prev => {
+                            const copy = { ...prev };
+                            delete copy.upiUtr;
+                            return copy;
+                          });
+                        }
+                      }}
                       placeholder="e.g. 428901928374"
-                      className="w-full px-3.5 py-2.5 font-mono text-sm rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                      className={`w-full px-3.5 py-2.5 font-mono text-sm rounded-xl border bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 ${
+                        errors.upiUtr ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:ring-[#D4AF37]'
+                      }`}
                     />
+                    {errors.upiUtr && (
+                      <p className="text-[11px] text-red-500 font-semibold mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3 shrink-0" />
+                        <span>{errors.upiUtr}</span>
+                      </p>
+                    )}
                   </div>
                 </div>
               )}
@@ -703,15 +823,14 @@ export const CheckoutView: React.FC<CheckoutViewProps> = ({
                   <p className="text-slate-600 dark:text-slate-300">
                     Prefer direct bank wire transfer (NEFT/RTGS/IMPS) or custom corporate requisition order? Click below to send your pre-formatted cart dossier directly to our senior desk.
                   </p>
-                  <a
-                    href={buildWhatsAppOrderLink()}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs text-white bg-emerald-600 hover:bg-emerald-500 shadow-sm transition-all"
+                  <button
+                    type="button"
+                    onClick={() => handleCompleteOrder()}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs text-white bg-emerald-600 hover:bg-emerald-500 shadow-sm transition-all cursor-pointer"
                   >
                     <MessageCircle className="w-4 h-4" />
                     <span>Confirm Order via WhatsApp (+91 90094 48601)</span>
-                  </a>
+                  </button>
                 </div>
               )}
 

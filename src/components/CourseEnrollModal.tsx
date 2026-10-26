@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { translations } from '../data/translations.ts';
 import { Language } from '../types/index.ts';
 import { useAuth } from '../context/AuthContext.tsx';
-import { X, GraduationCap, CheckCircle2, Clock, Calendar, ArrowRight, ShieldCheck, Download } from 'lucide-react';
+import { X, GraduationCap, CheckCircle2, Clock, Calendar, ArrowRight, ShieldCheck, Download, AlertCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { validateName, validatePhone, validateEmail } from '../utils/validation.ts';
 
 interface CourseEnrollModalProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ export const CourseEnrollModal: React.FC<CourseEnrollModalProps> = ({
   const [studentPhone, setStudentPhone] = useState(user?.phone || '');
   const [studentEmail, setStudentEmail] = useState(user?.email || '');
   const [priorExperience, setPriorExperience] = useState('beginner');
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (user && isOpen) {
@@ -35,6 +37,7 @@ export const CourseEnrollModal: React.FC<CourseEnrollModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      setErrors({});
     } else {
       document.body.style.overflow = '';
     }
@@ -51,10 +54,22 @@ export const CourseEnrollModal: React.FC<CourseEnrollModalProps> = ({
 
   const handleEnrollSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!studentName.trim() || !studentPhone.trim()) {
-      alert(currentLang === 'en' ? 'Please provide your name and WhatsApp number.' : 'कृपया नाम और व्हाट्सएप नंबर दर्ज करें।');
+
+    const nameVal = validateName(studentName, currentLang);
+    const phoneVal = validatePhone(studentPhone, currentLang);
+    const emailVal = validateEmail(studentEmail, false, currentLang);
+
+    const newErrors: Record<string, string> = {};
+    if (!nameVal.isValid && nameVal.error) newErrors.studentName = nameVal.error;
+    if (!phoneVal.isValid && phoneVal.error) newErrors.studentPhone = phoneVal.error;
+    if (!emailVal.isValid && emailVal.error) newErrors.studentEmail = emailVal.error;
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
+
+    setErrors({});
 
     try {
       confetti({
@@ -149,36 +164,99 @@ export const CourseEnrollModal: React.FC<CourseEnrollModalProps> = ({
                 required
                 placeholder="Dr. / Er. / Pt."
                 value={studentName}
-                onChange={(e) => setStudentName(e.target.value)}
-                className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-[#D4AF37]"
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setStudentName(val);
+                  if (errors.studentName && val.trim().length >= 3) {
+                    const check = validateName(val, currentLang);
+                    if (check.isValid) {
+                      setErrors(prev => {
+                        const copy = { ...prev };
+                        delete copy.studentName;
+                        return copy;
+                      });
+                    }
+                  }
+                }}
+                className={`w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border text-slate-900 dark:text-white focus:outline-none ${
+                  errors.studentName ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:border-[#D4AF37]'
+                }`}
               />
+              {errors.studentName && (
+                <p className="text-[11px] text-red-500 font-semibold mt-1 flex items-center gap-1">
+                  <AlertCircle className="w-3 h-3 shrink-0" />
+                  <span>{errors.studentName}</span>
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                {currentLang === 'en' ? 'WhatsApp Number *' : 'व्हाट्सएप नंबर *'}
+                {currentLang === 'en' ? 'WhatsApp / 10-Digit Mobile *' : 'व्हाट्सएप / मोबाइल नंबर *'}
               </label>
               <input
                 type="tel"
                 required
-                placeholder="+91 90094 48601"
+                placeholder="e.g. 9009448601"
                 value={studentPhone}
-                onChange={(e) => setStudentPhone(e.target.value)}
-                className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-[#D4AF37]"
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setStudentPhone(val);
+                  if (errors.studentPhone) {
+                    const check = validatePhone(val, currentLang);
+                    if (check.isValid) {
+                      setErrors(prev => {
+                        const copy = { ...prev };
+                        delete copy.studentPhone;
+                        return copy;
+                      });
+                    }
+                  }
+                }}
+                className={`w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border text-slate-900 dark:text-white focus:outline-none ${
+                  errors.studentPhone ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:border-[#D4AF37]'
+                }`}
               />
+              {errors.studentPhone && (
+                <p className="text-[11px] text-red-500 font-semibold mt-1 flex items-center gap-1">
+                  <AlertCircle className="w-3 h-3 shrink-0" />
+                  <span>{errors.studentPhone}</span>
+                </p>
+              )}
             </div>
           </div>
 
           <div>
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-              {currentLang === 'en' ? 'Email Address' : 'ईमेल पता'}
+              {currentLang === 'en' ? 'Email Address (Optional)' : 'ईमेल पता (वैकल्पिक)'}
             </label>
             <input
               type="email"
               placeholder="scholar@domain.com"
               value={studentEmail}
-              onChange={(e) => setStudentEmail(e.target.value)}
-              className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-[#D4AF37]"
+              onChange={(e) => {
+                const val = e.target.value;
+                setStudentEmail(val);
+                if (errors.studentEmail) {
+                  const check = validateEmail(val, false, currentLang);
+                  if (check.isValid) {
+                    setErrors(prev => {
+                      const copy = { ...prev };
+                      delete copy.studentEmail;
+                      return copy;
+                    });
+                  }
+                }
+              }}
+              className={`w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border text-slate-900 dark:text-white focus:outline-none ${
+                errors.studentEmail ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:border-[#D4AF37]'
+              }`}
             />
+            {errors.studentEmail && (
+              <p className="text-[11px] text-red-500 font-semibold mt-1 flex items-center gap-1">
+                <AlertCircle className="w-3 h-3 shrink-0" />
+                <span>{errors.studentEmail}</span>
+              </p>
+            )}
           </div>
 
           <div>

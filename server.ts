@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import crypto from 'crypto';
 import Razorpay from 'razorpay';
+import { validateLayoutPayload } from './api/intake/layout-review.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -724,6 +725,46 @@ app.get('/api/geo/search', async (req: Request, res: Response) => {
   } catch (err: any) {
     console.warn('Geocoding proxy error:', err);
     return res.json({ results: [] });
+  }
+});
+
+// ============================================================================
+// Layout Review Intake Strict Validation Endpoint (/api/intake/layout-review)
+// ============================================================================
+app.post('/api/intake/layout-review', (req: Request, res: Response) => {
+  try {
+    const { lang = 'en' } = req.body || {};
+    const validation = validateLayoutPayload(req.body, lang);
+
+    if (!validation.isValid) {
+      return res.status(400).json({
+        success: false,
+        message: lang === 'hi'
+          ? 'फ़ॉर्म सत्यापन विफल रहा। कृपया लाल रंग में दर्शाई गई त्रुटियों को ठीक करें।'
+          : 'Form validation failed. Please correct the highlighted errors.',
+        errors: validation.errors
+      });
+    }
+
+    const intakeId = `VW-INTAKE-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+
+    return res.status(200).json({
+      success: true,
+      intakeId,
+      message: lang === 'hi'
+        ? 'फ़्लोर प्लान मूल्यांकन डेटा सफलतापूर्वक सत्यापित व पंजीकृत हुआ।'
+        : 'Floor plan review intake successfully verified and registered under DPDP compliance.',
+      data: {
+        intakeId,
+        receivedAt: new Date().toISOString()
+      }
+    });
+  } catch (error: any) {
+    console.error('[Layout Intake Server Error]:', error);
+    return res.status(500).json({
+      success: false,
+      message: error?.message || 'Server error processing layout intake'
+    });
   }
 });
 

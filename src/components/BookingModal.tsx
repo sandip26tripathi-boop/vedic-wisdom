@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { translations } from '../data/translations.ts';
 import { Language } from '../types/index.ts';
 import { useAuth } from '../context/AuthContext.tsx';
-import { X, Calendar, MapPin, Building, Phone, Mail, User, ShieldCheck, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { X, Calendar, MapPin, Building, Phone, Mail, User, ShieldCheck, ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { validateName, validatePhone, validateEmail, validateCity } from '../utils/validation.ts';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -29,6 +30,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const [date, setDate] = useState('');
   const [notes, setNotes] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (initialServiceId) {
@@ -48,6 +50,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      setErrors({});
     } else {
       document.body.style.overflow = '';
     }
@@ -63,11 +66,24 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !phone.trim()) {
-      alert(currentLang === 'en' ? 'Please provide your name and WhatsApp number.' : 'कृपया अपना नाम और व्हाट्सएप नंबर भरें।');
+
+    const nameVal = validateName(name, currentLang);
+    const phoneVal = validatePhone(phone, currentLang);
+    const emailVal = validateEmail(email, false, currentLang);
+    const cityVal = city.trim() ? validateCity(city, currentLang) : { isValid: true };
+
+    const newErrors: Record<string, string> = {};
+    if (!nameVal.isValid && nameVal.error) newErrors.name = nameVal.error;
+    if (!phoneVal.isValid && phoneVal.error) newErrors.phone = phoneVal.error;
+    if (!emailVal.isValid && emailVal.error) newErrors.email = emailVal.error;
+    if (!cityVal.isValid && cityVal.error) newErrors.city = cityVal.error;
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
 
+    setErrors({});
     setIsSuccess(true);
     try {
       confetti({
@@ -203,9 +219,30 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     required
                     placeholder="e.g. Rameshwar Agarwal"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-[#D4AF37]"
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setName(val);
+                      if (errors.name) {
+                        const check = validateName(val, currentLang);
+                        if (check.isValid) {
+                          setErrors(prev => {
+                            const copy = { ...prev };
+                            delete copy.name;
+                            return copy;
+                          });
+                        }
+                      }
+                    }}
+                    className={`w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border text-slate-900 dark:text-white focus:outline-none ${
+                      errors.name ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:border-[#D4AF37]'
+                    }`}
                   />
+                  {errors.name && (
+                    <p className="text-[11px] text-red-500 font-semibold mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3 shrink-0" />
+                      <span>{errors.name}</span>
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -215,11 +252,32 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                   <input
                     type="tel"
                     required
-                    placeholder="+91 98765 43210"
+                    placeholder="e.g. 9876543210"
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-[#D4AF37]"
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setPhone(val);
+                      if (errors.phone) {
+                        const check = validatePhone(val, currentLang);
+                        if (check.isValid) {
+                          setErrors(prev => {
+                            const copy = { ...prev };
+                            delete copy.phone;
+                            return copy;
+                          });
+                        }
+                      }
+                    }}
+                    className={`w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border text-slate-900 dark:text-white focus:outline-none ${
+                      errors.phone ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:border-[#D4AF37]'
+                    }`}
                   />
+                  {errors.phone && (
+                    <p className="text-[11px] text-red-500 font-semibold mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3 shrink-0" />
+                      <span>{errors.phone}</span>
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -233,9 +291,30 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     type="email"
                     placeholder="director@enterprise.com"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-[#D4AF37]"
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setEmail(val);
+                      if (errors.email) {
+                        const check = validateEmail(val, false, currentLang);
+                        if (check.isValid) {
+                          setErrors(prev => {
+                            const copy = { ...prev };
+                            delete copy.email;
+                            return copy;
+                          });
+                        }
+                      }
+                    }}
+                    className={`w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border text-slate-900 dark:text-white focus:outline-none ${
+                      errors.email ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:border-[#D4AF37]'
+                    }`}
                   />
+                  {errors.email && (
+                    <p className="text-[11px] text-red-500 font-semibold mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3 shrink-0" />
+                      <span>{errors.email}</span>
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -246,9 +325,30 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     type="text"
                     placeholder="e.g. Indore / Dubai"
                     value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-[#D4AF37]"
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setCity(val);
+                      if (errors.city && val.trim()) {
+                        const check = validateCity(val, currentLang);
+                        if (check.isValid) {
+                          setErrors(prev => {
+                            const copy = { ...prev };
+                            delete copy.city;
+                            return copy;
+                          });
+                        }
+                      }
+                    }}
+                    className={`w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border text-slate-900 dark:text-white focus:outline-none ${
+                      errors.city ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700 focus:border-[#D4AF37]'
+                    }`}
                   />
+                  {errors.city && (
+                    <p className="text-[11px] text-red-500 font-semibold mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3 shrink-0" />
+                      <span>{errors.city}</span>
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -324,7 +424,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             <div className="pt-4">
               <button
                 onClick={onClose}
-                className="px-6 py-2.5 rounded-xl font-semibold text-xs text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 transition-colors"
+                className="px-6 py-2.5 rounded-xl font-semibold text-xs text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 transition-colors cursor-pointer"
               >
                 {currentLang === 'en' ? 'Close Window' : 'खिड़की बंद करें'}
               </button>

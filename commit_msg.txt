@@ -1,8 +1,0 @@
-feat(auth): enable public preview landing page with action-gated Gemini AI prompt
-
-- Remove initial mandatory AuthGate wall in App.tsx allowing all visitors to freely explore and scroll the website
-- Add interactive GeminiPromptSection on the landing page with preset chips and prompt input box
-- Enforce action-gated authentication when user clicks 'Submit'/'Analyze' on the Gemini AI prompt or in AstroCopilot
-- Preserve user query text during Google Sign-In popup/modal without losing input
-- Automatically execute and stream Gemini AI answer immediately upon successful authentication
-- Support onSuccess callback in reloginRememberedUser for 1-click returning users

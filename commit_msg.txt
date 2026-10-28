@@ -1,8 +1,0 @@
-feat(mobile): add right-side sticky category drawer and optimize responsive UX
-
-- Implement MobileCategoryDrawer with floating action button on mobile right edge (bottom-20 md:hidden)
-- Structure slide-over drawer into 6 platform categories (Astrology, Vastu, Numerology, Gemini AI, Services/Pricing, Knowledge/Trust)
-- Support smooth scrolling directly to sections on category click with automatic drawer dismissal
-- Enforce overflow-x-hidden and overflow-x-clip across html, body, and root for zero horizontal scrolling
-- Optimize all mobile touch targets to minimum 44x44px for thumb comfort
-- Align floating WhatsApp button and floating category button on mobile right stack without overlap

@@ -96,6 +96,9 @@ function MainApp() {
   // AstroCopilot Modal State
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
 
+  // Category Directory Slide-Over Drawer State (Accessible on Mobile & Desktop)
+  const [isCategoryDrawerOpen, setIsCategoryDrawerOpen] = useState(false);
+
   // Modals state
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [bookingServiceId, setBookingServiceId] = useState('industrial');
@@ -273,6 +276,7 @@ function MainApp() {
             onOpenDashboard={() => setActiveView('dashboard')}
             onOpenCopilot={() => setIsCopilotOpen(true)}
             onOpenGenerateReport={handleOpenGenerateReport}
+            onOpenCategoryDrawer={() => setIsCategoryDrawerOpen(true)}
           />
 
           <main className="w-full max-w-full overflow-x-clip flex-1">
@@ -318,6 +322,7 @@ function MainApp() {
             onOpenDashboard={() => setActiveView('dashboard')}
             onOpenCopilot={() => setIsCopilotOpen(true)}
             onOpenGenerateReport={handleOpenGenerateReport}
+            onOpenCategoryDrawer={() => setIsCategoryDrawerOpen(true)}
           />
 
           <main className="w-full max-w-full overflow-x-clip flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -382,6 +387,7 @@ function MainApp() {
             onOpenDashboard={() => setActiveView('dashboard')}
             onOpenCopilot={() => setIsCopilotOpen(true)}
             onOpenGenerateReport={handleOpenGenerateReport}
+            onOpenCategoryDrawer={() => setIsCategoryDrawerOpen(true)}
           />
 
           {/* Main Content Sections */}
@@ -513,7 +519,7 @@ function MainApp() {
         />
       </Suspense>
 
-      {/* Mobile Right-Side Sticky Category Action Menu & Slide-Over Drawer */}
+      {/* Category Action Menu & Slide-Over Drawer (Mobile & Desktop) */}
       <Suspense fallback={null}>
         <MobileCategoryDrawer
           currentLang={currentLang}
@@ -524,6 +530,9 @@ function MainApp() {
           onOpenCopilot={() => setIsCopilotOpen(true)}
           onOpenBooking={handleOpenBooking}
           onOpenGenerateReport={handleOpenGenerateReport}
+          isOpen={isCategoryDrawerOpen}
+          onClose={() => setIsCategoryDrawerOpen(false)}
+          onOpen={() => setIsCategoryDrawerOpen(true)}
         />
       </Suspense>
 

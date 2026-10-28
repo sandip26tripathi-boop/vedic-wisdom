@@ -40,6 +40,9 @@ interface MobileCategoryDrawerProps {
   onOpenCopilot?: () => void;
   onOpenBooking?: (service?: string) => void;
   onOpenGenerateReport?: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
+  onOpen?: () => void;
 }
 
 interface CategoryItem {
@@ -73,9 +76,23 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
   onOpenCopilot,
   onOpenBooking,
   onOpenGenerateReport,
+  isOpen: controlledIsOpen,
+  onClose,
+  onOpen,
 }) => {
   const isHi = currentLang === 'hi';
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
+
+  const handleOpen = () => {
+    if (onOpen) onOpen();
+    setInternalIsOpen(true);
+  };
+
+  const handleClose = () => {
+    if (onClose) onClose();
+    setInternalIsOpen(false);
+  };
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
 
   // Prevent background scroll when drawer is open
@@ -88,6 +105,17 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
     return () => {
       document.body.style.overflow = '';
     };
+  }, [isOpen]);
+
+  // Keyboard accessibility: close drawer on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        handleClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen]);
 
   // Categories grounded strictly in the website architecture
@@ -103,8 +131,8 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
           id: 'kundli-calc',
           nameEn: 'Janam Kundli Calculator',
           nameHi: 'जन्मपत्री एवं लग्न कुंडली',
-          descEn: 'Instant astronomical Lagna, Moon Sign & Nakshatra',
-          descHi: 'सटीक लग्न, चंद्र राशि एवं नक्षत्र गणना',
+          descEn: 'Astronomical Lagna, Moon Sign & Nakshatra',
+          descHi: 'प्रामाणिक लग्न, चंद्र राशि एवं नक्षत्र गणना',
           icon: Compass,
           targetId: 'free-calculators',
           badge: { en: 'Free Tool', hi: 'निःशुल्क' }
@@ -150,13 +178,13 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
       items: [
         {
           id: 'vastu-services',
-          nameEn: '0% Non-Demolition Vastu',
+          nameEn: 'Non-Demolition Energy Vastu',
           nameHi: 'शून्य तोड़-फोड़ ऊर्जा वास्तु',
           descEn: 'Elemental metallic strips & pyramid frequency tuning',
-          descHi: 'बिना दीवार तोड़े तांबा/पीतल धातु पट्टियों से उपचार',
+          descHi: 'बिना दीवार तोड़े धातु पट्टियों व पिरामिड ऊर्जा से उपचार',
           icon: ShieldCheck,
           targetId: 'services',
-          badge: { en: '0% Demolition', hi: '0% तोड़-फोड़' }
+          badge: { en: 'Non-Demolition', hi: 'बिना तोड़-फोड़' }
         },
         {
           id: 'cad-intake',
@@ -173,7 +201,7 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
           nameEn: 'Commercial & Factory Audits',
           nameHi: 'औद्योगिक व फैक्ट्री ऑडिट',
           descEn: 'Machinery stabilization & geopathic stress clearing',
-          descHi: 'भारी मशीनरी स्थिरीकरण व जियोपैथिक स्ट्रेस मुक्ति',
+          descHi: 'भारी मशीनरी स्थिरीकरण व जियोपैथिक स्ट्रेस शोधन',
           icon: Factory,
           targetId: 'consultations'
         },
@@ -182,7 +210,7 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
           nameEn: '16-Zone Digital Compass',
           nameHi: '16-जोन लाइव वास्तु कम्पास',
           descEn: 'Calibrate cardinal degrees and inspect Devta zones',
-          descHi: 'सटीक डिग्री व 16 दिशाओं का तात्कालिक परीक्षण',
+          descHi: 'अंकीय डिग्री व 16 दिशाओं का तात्कालिक परीक्षण',
           icon: Compass,
           targetId: 'free-calculators'
         }
@@ -342,7 +370,7 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
   ];
 
   const handleItemClick = (item: CategoryItem) => {
-    setIsOpen(false);
+    handleClose();
 
     if (item.actionType === 'copilot' && onOpenCopilot) {
       onOpenCopilot();
@@ -361,14 +389,14 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
 
   return (
     <>
-      {/* 1. RIGHT-SIDE FLOATING ACTION BUTTON (Mobile Only) */}
+      {/* 1. RIGHT-SIDE FLOATING ACTION BUTTON (Mobile & Desktop) */}
       <aside 
-        aria-label="Mobile Category Menu Trigger"
-        className="fixed right-3.5 bottom-20 sm:bottom-22 z-40 md:hidden flex items-center justify-center animate-in fade-in zoom-in-95 duration-200"
+        aria-label="Category Menu Trigger"
+        className="fixed right-3.5 sm:right-6 bottom-20 sm:bottom-24 z-40 flex items-center justify-center animate-in fade-in zoom-in-95 duration-200"
       >
         <button
           type="button"
-          onClick={() => setIsOpen(true)}
+          onClick={handleOpen}
           className="group relative min-h-[48px] min-w-[48px] px-3.5 py-2.5 rounded-full bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] text-slate-950 font-extrabold shadow-xl shadow-[#D4AF37]/35 border-2 border-amber-200 hover:brightness-110 active:scale-95 transition-all flex items-center space-x-2 cursor-pointer focus:outline-hidden focus:ring-4 focus:ring-[#D4AF37]/50"
           aria-label={isHi ? "विषय श्रेणियां मेनू खोलें" : "Open Vedic Category Menu"}
           aria-expanded={isOpen}
@@ -382,13 +410,18 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
               {isHi ? "श्रेणियां" : "Menu"}
             </span>
           </div>
+
+          {/* Desktop Hover Tooltip */}
+          <span className="hidden md:group-hover:block absolute right-full mr-3 px-2.5 py-1 rounded-lg bg-slate-900 text-[#F3E5AB] text-[11px] font-bold whitespace-nowrap shadow-xl border border-[#D4AF37]/40 pointer-events-none">
+            {isHi ? "सभी श्रेणियां देखें" : "Explore All Categories"}
+          </span>
         </button>
       </aside>
 
-      {/* 2. SLIDE-OVER DRAWER & BACKDROP */}
+      {/* 2. SLIDE-OVER DRAWER & BACKDROP (Mobile & Desktop) */}
       {isOpen && (
         <div 
-          className="fixed inset-0 z-50 md:hidden flex justify-end"
+          className="fixed inset-0 z-50 flex justify-end"
           role="dialog"
           aria-modal="true"
           aria-label="Vedic Categories Slide-Over Menu"
@@ -396,13 +429,13 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
           {/* Backdrop Tap-to-Dismiss */}
           <div 
             className="fixed inset-0 bg-slate-950/75 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
-            onClick={() => setIsOpen(false)}
+            onClick={handleClose}
             aria-hidden="true"
           />
 
           {/* Drawer Container (Slides from Right) */}
           <div 
-            className="relative w-[86vw] max-w-[340px] h-full bg-[#FAF9F6] dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 z-10 shadow-2xl flex flex-col border-l-2 border-[#D4AF37]/40 animate-in slide-in-from-right duration-300 ease-out"
+            className="relative w-[86vw] sm:w-[390px] max-w-[420px] h-full bg-[#FAF9F6] dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 z-10 shadow-2xl flex flex-col border-l-2 border-[#D4AF37]/40 animate-in slide-in-from-right duration-300 ease-out"
           >
             {/* Top Gold Gradient Bar */}
             <div className="h-1.5 w-full bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] shrink-0" />
@@ -428,7 +461,7 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
               {/* Close Button (44x44px minimum touch area) */}
               <button
                 type="button"
-                onClick={() => setIsOpen(false)}
+                onClick={handleClose}
                 className="min-h-[44px] min-w-[44px] p-2 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer flex items-center justify-center"
                 aria-label={isHi ? "मेनू बंद करें" : "Close menu"}
               >
@@ -441,7 +474,7 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
               <button
                 type="button"
                 onClick={() => {
-                  setIsOpen(false);
+                  handleClose();
                   if (onOpenCopilot) onOpenCopilot();
                 }}
                 className="flex-1 min-h-[40px] px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-[#D4AF37]/40 shadow-xs flex items-center justify-center space-x-1.5 text-xs font-bold text-[#B45309] dark:text-[#F3E5AB] cursor-pointer"
@@ -453,7 +486,7 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
               <button
                 type="button"
                 onClick={() => {
-                  setIsOpen(false);
+                  handleClose();
                   onScrollTo('free-calculators');
                 }}
                 className="flex-1 min-h-[40px] px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] text-slate-950 font-bold text-xs shadow-xs flex items-center justify-center space-x-1.5 cursor-pointer"

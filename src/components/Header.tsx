@@ -17,7 +17,8 @@ import {
   Award,
   Calculator,
   Compass,
-  LogOut
+  LogOut,
+  LayoutGrid
 } from 'lucide-react';
 import { translations } from '../data/translations.ts';
 import { Language, Theme } from '../types/index.ts';
@@ -34,6 +35,7 @@ interface HeaderProps {
   onOpenDashboard?: () => void;
   onOpenCopilot?: () => void;
   onOpenGenerateReport?: () => void;
+  onOpenCategoryDrawer?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -45,6 +47,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenDashboard,
   onOpenCopilot,
   onOpenGenerateReport,
+  onOpenCategoryDrawer,
 }) => {
   const { user, isAuthenticated, openAuthModal, logout, rememberedUser, reloginRememberedUser } = useAuth();
   const { totalItems, openCart } = useCart();
@@ -166,6 +169,18 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Center: Desktop Navigation Items (Streamlined to prevent 100% zoom clipping) */}
           <nav className="hidden lg:flex items-center space-x-1 xl:space-x-1.5 text-xs xl:text-sm font-semibold text-slate-700 dark:text-slate-200">
             
+            {/* 0. All Categories Trigger Button */}
+            <button 
+              type="button"
+              onClick={onOpenCategoryDrawer}
+              className="flex items-center space-x-1.5 px-2.5 xl:px-3 py-1.5 rounded-xl font-bold text-xs xl:text-sm text-[#B45309] dark:text-[#F3E5AB] bg-[#D4AF37]/15 hover:bg-[#D4AF37]/25 border border-[#D4AF37]/45 shadow-2xs hover:scale-[1.02] active:scale-95 transition-all cursor-pointer shrink-0"
+              title={currentLang === 'en' ? 'Open All Categories Directory' : 'सभी वैदिक विषय श्रेणियां देखें'}
+              aria-label="All Categories Directory"
+            >
+              <LayoutGrid className="w-3.5 h-3.5 text-[#B45309] dark:text-[#D4AF37]" />
+              <span>{currentLang === 'en' ? 'Categories' : 'श्रेणियां'}</span>
+            </button>
+
             {/* 1. Astrology Dropdown */}
             <div 
               className="relative"
@@ -697,6 +712,13 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           <div className="flex flex-col space-y-1.5 pt-2 text-sm">
+            <button
+              onClick={() => { setMobileMenuOpen(false); onOpenCategoryDrawer && onOpenCategoryDrawer(); }}
+              className="min-h-[44px] text-left py-2.5 px-3 rounded-xl font-bold text-[#B45309] dark:text-[#F3E5AB] bg-[#D4AF37]/15 border border-[#D4AF37]/40 flex items-center space-x-2 cursor-pointer"
+            >
+              <LayoutGrid className="w-4 h-4 text-[#D4AF37]" />
+              <span>{currentLang === 'en' ? 'All Categories Directory' : 'सभी विषय श्रेणियां (Menu)'}</span>
+            </button>
             <button
               onClick={() => handleNavClick('consultations')}
               className="min-h-[44px] text-left py-2.5 px-3 rounded-xl font-medium text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10 flex items-center"

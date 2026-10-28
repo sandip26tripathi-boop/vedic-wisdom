@@ -36,6 +36,7 @@ const CaseStudiesSection = lazy(() => import('./components/home/CaseStudiesSecti
 const BlogSection = lazy(() => import('./components/blog/BlogSection.tsx').then(m => ({ default: m.BlogSection })));
 const FAQSection = lazy(() => import('./components/home/FAQSection.tsx').then(m => ({ default: m.FAQSection })));
 const FloatingWhatsAppButton = lazy(() => import('./components/common/FloatingWhatsAppButton.tsx').then(m => ({ default: m.FloatingWhatsAppButton })));
+const MobileCategoryDrawer = lazy(() => import('./components/common/MobileCategoryDrawer.tsx').then(m => ({ default: m.MobileCategoryDrawer })));
 
 // Code-split heavy interactive modals & secondary views for 95+ Mobile Performance
 const BookingModal = lazy(() => import('./components/BookingModal.tsx').then(m => ({ default: m.BookingModal })));
@@ -509,6 +510,20 @@ function MainApp() {
         <FloatingWhatsAppButton 
           currentLang={currentLang} 
           onOpenConsultation={() => handleOpenBooking('general')}
+        />
+      </Suspense>
+
+      {/* Mobile Right-Side Sticky Category Action Menu & Slide-Over Drawer */}
+      <Suspense fallback={null}>
+        <MobileCategoryDrawer
+          currentLang={currentLang}
+          onLanguageChange={setCurrentLang}
+          currentTheme={currentTheme}
+          onThemeToggle={handleThemeToggle}
+          onScrollTo={handleScrollTo}
+          onOpenCopilot={() => setIsCopilotOpen(true)}
+          onOpenBooking={handleOpenBooking}
+          onOpenGenerateReport={handleOpenGenerateReport}
         />
       </Suspense>
 

@@ -397,7 +397,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={onThemeToggle}
-              className="sm:hidden min-h-[40px] min-w-[40px] flex items-center justify-center p-2 rounded-xl text-slate-800 dark:text-slate-100 bg-white/90 dark:bg-slate-800/90 border border-slate-300 dark:border-slate-700 shadow-2xs transition-colors cursor-pointer"
+              className="sm:hidden min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-xl text-slate-800 dark:text-slate-100 bg-white/90 dark:bg-slate-800/90 border border-slate-300 dark:border-slate-700 shadow-2xs transition-colors cursor-pointer"
               title={currentTheme === 'dark' ? (currentLang === 'en' ? 'Switch to Day Mode' : 'दिन मोड करें') : (currentLang === 'en' ? 'Switch to Night Mode' : 'रात मोड करें')}
               aria-label="Toggle Day and Night Mode"
             >
@@ -428,7 +428,7 @@ export const Header: React.FC<HeaderProps> = ({
               <div className="flex items-center gap-1 shrink-0">
                 <button
                   onClick={onOpenDashboard}
-                  className="min-h-[40px] inline-flex items-center space-x-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-xs font-bold text-slate-900 dark:text-white bg-amber-500/20 hover:bg-amber-500/30 border border-[#D4AF37] shadow-sm cursor-pointer transition-all shrink-0 max-w-[160px] sm:max-w-[210px]"
+                  className="min-h-[44px] inline-flex items-center space-x-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-xs font-bold text-slate-900 dark:text-white bg-amber-500/20 hover:bg-amber-500/30 border border-[#D4AF37] shadow-sm cursor-pointer transition-all shrink-0 max-w-[160px] sm:max-w-[210px]"
                   title="Open Client Dashboard"
                   aria-label="Open Vedic Client Portal Dashboard"
                 >
@@ -447,7 +447,7 @@ export const Header: React.FC<HeaderProps> = ({
                 </button>
                 <button
                   onClick={logout}
-                  className="min-h-[40px] inline-flex items-center space-x-1 px-2 py-1.5 rounded-xl text-xs font-bold text-red-600 dark:text-red-400 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 cursor-pointer transition-all shrink-0"
+                  className="min-h-[44px] inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold text-red-600 dark:text-red-400 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 cursor-pointer transition-all shrink-0"
                   title={currentLang === 'en' ? 'Sign Out / Logout' : 'साइन आउट'}
                   aria-label={currentLang === 'en' ? 'Sign Out of Vedic Wisdom' : 'साइन आउट करें'}
                 >
@@ -520,7 +520,7 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
               <button
                 onClick={() => onLanguageChange('en')}
-                className={`min-h-[34px] px-2.5 py-1 text-xs font-bold rounded-lg cursor-pointer transition-all ${
+                className={`min-h-[44px] px-3 py-1.5 text-xs font-bold rounded-xl cursor-pointer transition-all flex items-center justify-center ${
                   currentLang === 'en'
                     ? 'bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-white shadow-xs'
                     : 'text-slate-700 dark:text-slate-300'
@@ -530,7 +530,7 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
               <button
                 onClick={() => onLanguageChange('hi')}
-                className={`min-h-[34px] px-2.5 py-1 text-xs font-bold rounded-lg cursor-pointer transition-all ${
+                className={`min-h-[44px] px-3 py-1.5 text-xs font-bold rounded-xl cursor-pointer transition-all flex items-center justify-center ${
                   currentLang === 'hi'
                     ? 'bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-white shadow-xs'
                     : 'text-slate-700 dark:text-slate-300'
@@ -559,7 +559,7 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 type="button"
                 onClick={() => { if (currentTheme !== 'light') onThemeToggle(); }}
-                className={`min-h-[36px] px-3 py-1 text-xs font-bold rounded-lg flex items-center space-x-1.5 cursor-pointer transition-all ${
+                className={`min-h-[44px] px-3.5 py-1.5 text-xs font-bold rounded-lg flex items-center space-x-1.5 cursor-pointer transition-all ${
                   currentTheme === 'light'
                     ? 'bg-amber-500 text-slate-950 font-black shadow-xs'
                     : 'text-slate-600 dark:text-slate-400'
@@ -572,7 +572,7 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 type="button"
                 onClick={() => { if (currentTheme !== 'dark') onThemeToggle(); }}
-                className={`min-h-[36px] px-3 py-1 text-xs font-bold rounded-lg flex items-center space-x-1.5 cursor-pointer transition-all ${
+                className={`min-h-[44px] px-3.5 py-1.5 text-xs font-bold rounded-lg flex items-center space-x-1.5 cursor-pointer transition-all ${
                   currentTheme === 'dark'
                     ? 'bg-slate-950 text-amber-300 border border-amber-500/40 font-black shadow-xs'
                     : 'text-slate-600 dark:text-slate-400'
@@ -682,48 +682,48 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="grid grid-cols-2 gap-2">
             <button
               onClick={() => { setMobileMenuOpen(false); onOpenCopilot && onOpenCopilot(); }}
-              className="py-2 px-3 rounded-lg font-bold text-xs bg-[#D4AF37]/15 text-[#B45309] dark:text-[#F3E5AB] border border-[#D4AF37]/35 flex items-center justify-center gap-1.5 cursor-pointer"
+              className="min-h-[44px] py-2.5 px-3 rounded-xl font-bold text-xs bg-[#D4AF37]/15 text-[#B45309] dark:text-[#F3E5AB] border border-[#D4AF37]/35 flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              <Bot className="w-3.5 h-3.5 text-[#D4AF37]" />
+              <Bot className="w-4 h-4 text-[#D4AF37]" />
               <span>AI Copilot</span>
             </button>
             <button
               onClick={() => { setMobileMenuOpen(false); onOpenGenerateReport && onOpenGenerateReport(); }}
-              className="py-2 px-3 rounded-lg font-bold text-xs bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white border border-[#D4AF37]/35 flex items-center justify-center gap-1.5 cursor-pointer"
+              className="min-h-[44px] py-2.5 px-3 rounded-xl font-bold text-xs bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white border border-[#D4AF37]/35 flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
+              <Sparkles className="w-4 h-4 text-[#D4AF37]" />
               <span>AI Dossier</span>
             </button>
           </div>
 
-          <div className="flex flex-col space-y-2 pt-2 text-sm">
+          <div className="flex flex-col space-y-1.5 pt-2 text-sm">
             <button
               onClick={() => handleNavClick('consultations')}
-              className="text-left py-2 px-3 rounded-lg font-medium text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10"
+              className="min-h-[44px] text-left py-2.5 px-3 rounded-xl font-medium text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10 flex items-center"
             >
               {t.nav.astrology} & {t.nav.astroVastu}
             </button>
             <button
               onClick={() => handleNavClick('digital-reports')}
-              className="text-left py-2 px-3 rounded-lg font-medium text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10"
+              className="min-h-[44px] text-left py-2.5 px-3 rounded-xl font-medium text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10 flex items-center"
             >
               {t.nav.digitalReports}
             </button>
             <button
               onClick={() => handleNavClick('academy')}
-              className="text-left py-2 px-3 rounded-lg font-medium text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10"
+              className="min-h-[44px] text-left py-2.5 px-3 rounded-xl font-medium text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10 flex items-center"
             >
               {t.nav.academy}
             </button>
             <button
               onClick={() => handleNavClick('free-calculators')}
-              className="text-left py-2 px-3 rounded-lg font-medium text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10"
+              className="min-h-[44px] text-left py-2.5 px-3 rounded-xl font-medium text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10 flex items-center"
             >
               {t.nav.calculators}
             </button>
             <button
               onClick={() => handleNavClick('faq')}
-              className="text-left py-2 px-3 rounded-lg font-medium text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10"
+              className="min-h-[44px] text-left py-2.5 px-3 rounded-xl font-medium text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10 flex items-center"
             >
               FAQ
             </button>

@@ -22,7 +22,7 @@ export const FloatingWhatsAppButton: React.FC<FloatingWhatsAppButtonProps> = ({
   return (
     <aside 
       aria-label="Direct WhatsApp Contact"
-      className="fixed bottom-6 right-5 sm:right-6 z-40 flex flex-col items-end"
+      className="fixed bottom-4 right-3.5 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end"
     >
       {/* Subtle Notification Badge Tooltip on Hover / Focus */}
       {showTooltip && (

@@ -17,8 +17,7 @@ import {
   Award,
   Calculator,
   Compass,
-  LogOut,
-  LayoutGrid
+  LogOut
 } from 'lucide-react';
 import { translations } from '../data/translations.ts';
 import { Language, Theme } from '../types/index.ts';
@@ -147,40 +146,50 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="max-w-[1400px] mx-auto px-3 sm:px-4 lg:px-6">
         <div className="flex items-center justify-between h-16 sm:h-20 gap-2 sm:gap-4">
           
-          {/* Left: Brand Logo */}
-          <a 
-            href="#" 
-            onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-            className="flex items-center space-x-2.5 sm:space-x-3 group cursor-pointer shrink-0"
-          >
-            <div className="relative p-1 rounded-xl bg-gradient-to-br from-[#D4AF37]/30 via-[#B45309]/20 to-transparent border border-[#D4AF37]/40 shadow-sm group-hover:border-[#D4AF37] transition-all duration-300">
-              <SriYantraMotif className="w-7 h-7 sm:w-9 sm:h-9 transform group-hover:scale-105 transition-transform duration-300" animate={false} />
+          {/* Left: Brand Logo & Executive Menu Trigger */}
+          <div className="flex items-center space-x-2 sm:space-x-3 shrink-0">
+            <a 
+              href="#" 
+              onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+              className="flex items-center space-x-2.5 sm:space-x-3 group cursor-pointer shrink-0"
+            >
+              <div className="relative p-1 rounded-xl bg-gradient-to-br from-[#D4AF37]/30 via-[#B45309]/20 to-transparent border border-[#D4AF37]/40 shadow-sm group-hover:border-[#D4AF37] transition-all duration-300">
+                <SriYantraMotif className="w-7 h-7 sm:w-9 sm:h-9 transform group-hover:scale-105 transition-transform duration-300" animate={false} />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-cinzel text-base sm:text-xl font-black tracking-wider text-slate-900 dark:text-white flex items-center gap-1">
+                  VEDIC <span className="gold-gradient-text">WISDOM</span>
+                </span>
+                <span className="hidden xl:block text-[10px] font-medium tracking-tight text-slate-600 dark:text-slate-400 truncate max-w-[280px]">
+                  {t.nav.tagline}
+                </span>
+              </div>
+            </a>
+
+            {/* Desktop Executive "Menu" Pill next to Brand Logo */}
+            <div className="hidden lg:flex items-center pl-1 xl:pl-2">
+              <div className="h-6 w-px bg-slate-300 dark:bg-slate-700/80 mr-3" />
+              <button 
+                type="button"
+                onClick={onOpenCategoryDrawer}
+                className="group flex items-center space-x-2 px-3.5 py-1.5 rounded-full border border-[#D4AF37]/50 bg-white/90 dark:bg-[#111827]/90 hover:bg-[#D4AF37]/15 dark:hover:bg-[#D4AF37]/25 hover:border-[#D4AF37] text-slate-800 dark:text-slate-100 transition-all shadow-xs cursor-pointer active:scale-95"
+                title={currentLang === 'en' ? 'Open Vedic Wisdom Menu' : 'वैदिक विजडम मेनू खोलें'}
+                aria-label="Open Vedic Wisdom Menu"
+              >
+                <div className="w-4 h-3.5 flex flex-col justify-between py-0.5">
+                  <span className="block h-0.5 w-3.5 bg-[#B45309] dark:bg-[#F3E5AB] rounded-full transition-all group-hover:w-4" />
+                  <span className="block h-0.5 w-2.5 bg-[#D4AF37] rounded-full transition-all group-hover:w-4" />
+                  <span className="block h-0.5 w-3.5 bg-[#B45309] dark:bg-[#F3E5AB] rounded-full transition-all group-hover:w-4" />
+                </div>
+                <span className="font-extrabold tracking-wide text-xs">
+                  {currentLang === 'en' ? 'Menu' : 'मेनू'}
+                </span>
+              </button>
             </div>
-            <div className="flex flex-col">
-              <span className="font-cinzel text-base sm:text-xl font-black tracking-wider text-slate-900 dark:text-white flex items-center gap-1">
-                VEDIC <span className="gold-gradient-text">WISDOM</span>
-              </span>
-              <span className="hidden xl:block text-[10px] font-medium tracking-tight text-slate-600 dark:text-slate-400 truncate max-w-[280px]">
-                {t.nav.tagline}
-              </span>
-            </div>
-          </a>
+          </div>
 
           {/* Center: Desktop Navigation Items (Streamlined to prevent 100% zoom clipping) */}
           <nav className="hidden lg:flex items-center space-x-1 xl:space-x-1.5 text-xs xl:text-sm font-semibold text-slate-700 dark:text-slate-200">
-            
-            {/* 0. All Categories Trigger Button */}
-            <button 
-              type="button"
-              onClick={onOpenCategoryDrawer}
-              className="flex items-center space-x-1.5 px-2.5 xl:px-3 py-1.5 rounded-xl font-bold text-xs xl:text-sm text-[#B45309] dark:text-[#F3E5AB] bg-[#D4AF37]/15 hover:bg-[#D4AF37]/25 border border-[#D4AF37]/45 shadow-2xs hover:scale-[1.02] active:scale-95 transition-all cursor-pointer shrink-0"
-              title={currentLang === 'en' ? 'Open All Categories Directory' : 'सभी वैदिक विषय श्रेणियां देखें'}
-              aria-label="All Categories Directory"
-            >
-              <LayoutGrid className="w-3.5 h-3.5 text-[#B45309] dark:text-[#D4AF37]" />
-              <span>{currentLang === 'en' ? 'Categories' : 'श्रेणियां'}</span>
-            </button>
-
             {/* 1. Astrology Dropdown */}
             <div 
               className="relative"
@@ -714,10 +723,10 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex flex-col space-y-1.5 pt-2 text-sm">
             <button
               onClick={() => { setMobileMenuOpen(false); onOpenCategoryDrawer && onOpenCategoryDrawer(); }}
-              className="min-h-[44px] text-left py-2.5 px-3 rounded-xl font-bold text-[#B45309] dark:text-[#F3E5AB] bg-[#D4AF37]/15 border border-[#D4AF37]/40 flex items-center space-x-2 cursor-pointer"
+              className="min-h-[44px] text-left py-2.5 px-3 rounded-xl font-bold text-[#B45309] dark:text-[#F3E5AB] bg-[#D4AF37]/15 border border-[#D4AF37]/40 flex items-center space-x-2.5 cursor-pointer"
             >
-              <LayoutGrid className="w-4 h-4 text-[#D4AF37]" />
-              <span>{currentLang === 'en' ? 'All Categories Directory' : 'सभी विषय श्रेणियां (Menu)'}</span>
+              <Menu className="w-4 h-4 text-[#D4AF37]" />
+              <span>{currentLang === 'en' ? 'Explore Site Menu' : 'संपूर्ण वेबसाइट मेनू'}</span>
             </button>
             <button
               onClick={() => handleNavClick('consultations')}

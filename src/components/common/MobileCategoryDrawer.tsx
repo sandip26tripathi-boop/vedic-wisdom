@@ -18,6 +18,7 @@ import {
   Moon,
   Layers,
   LayoutGrid,
+  Menu,
   TrendingUp,
   Flame,
   Calendar,
@@ -389,31 +390,31 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
 
   return (
     <>
-      {/* 1. RIGHT-SIDE FLOATING ACTION BUTTON (Mobile & Desktop) */}
+      {/* 1. RIGHT-SIDE FLOATING ACTION BUTTON (Executive Obsidian & Gold Theme) */}
       <aside 
-        aria-label="Category Menu Trigger"
+        aria-label="Website Menu Trigger"
         className="fixed right-3.5 sm:right-6 bottom-20 sm:bottom-24 z-40 flex items-center justify-center animate-in fade-in zoom-in-95 duration-200"
       >
         <button
           type="button"
           onClick={handleOpen}
-          className="group relative min-h-[48px] min-w-[48px] px-3.5 py-2.5 rounded-full bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] text-slate-950 font-extrabold shadow-xl shadow-[#D4AF37]/35 border-2 border-amber-200 hover:brightness-110 active:scale-95 transition-all flex items-center space-x-2 cursor-pointer focus:outline-hidden focus:ring-4 focus:ring-[#D4AF37]/50"
-          aria-label={isHi ? "विषय श्रेणियां मेनू खोलें" : "Open Vedic Category Menu"}
+          className="group relative min-h-[46px] min-w-[46px] px-3.5 py-2 rounded-full bg-slate-950/95 dark:bg-[#111827]/95 text-[#F3E5AB] font-extrabold shadow-xl shadow-amber-950/30 border border-[#D4AF37]/60 hover:border-[#D4AF37] hover:scale-105 active:scale-95 transition-all flex items-center space-x-2 cursor-pointer focus:outline-hidden backdrop-blur-md"
+          aria-label={isHi ? "वेबसाइट मेनू खोलें" : "Open Website Menu"}
           aria-expanded={isOpen}
         >
-          {/* Subtle Ambient Glow Ring */}
-          <span className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-amber-400 to-[#D4AF37] opacity-60 blur-xs group-hover:opacity-100 animate-pulse pointer-events-none" />
+          {/* Subtle Ambient Gold Glow Ring */}
+          <span className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-amber-500/20 to-[#D4AF37]/30 blur-xs group-hover:opacity-100 pointer-events-none" />
 
-          <div className="relative flex items-center space-x-1.5">
-            <LayoutGrid className="w-4 h-4 text-slate-950 shrink-0" />
-            <span className="text-[11px] font-black tracking-wide uppercase">
-              {isHi ? "श्रेणियां" : "Menu"}
+          <div className="relative flex items-center space-x-2">
+            <Menu className="w-4 h-4 text-[#D4AF37] shrink-0" />
+            <span className="text-xs font-black tracking-wider uppercase text-white dark:text-[#F3E5AB]">
+              {isHi ? "मेनू" : "Menu"}
             </span>
           </div>
 
           {/* Desktop Hover Tooltip */}
           <span className="hidden md:group-hover:block absolute right-full mr-3 px-2.5 py-1 rounded-lg bg-slate-900 text-[#F3E5AB] text-[11px] font-bold whitespace-nowrap shadow-xl border border-[#D4AF37]/40 pointer-events-none">
-            {isHi ? "सभी श्रेणियां देखें" : "Explore All Categories"}
+            {isHi ? "वेबसाइट मेनू खोलें" : "Open Website Menu"}
           </span>
         </button>
       </aside>
@@ -424,7 +425,7 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
           className="fixed inset-0 z-50 flex justify-end"
           role="dialog"
           aria-modal="true"
-          aria-label="Vedic Categories Slide-Over Menu"
+          aria-label="Vedic Wisdom Platform Menu"
         >
           {/* Backdrop Tap-to-Dismiss */}
           <div 
@@ -453,7 +454,7 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
                     VEDIC WISDOM
                   </h3>
                   <p className="text-[10px] text-slate-500 dark:text-slate-400">
-                    {isHi ? "मुख्य विषय श्रेणियां" : "Platform Category Directory"}
+                    {isHi ? "वैदिक ज्ञान एवं सेवा मेनू" : "Platform Navigation Menu"}
                   </p>
                 </div>
               </div>

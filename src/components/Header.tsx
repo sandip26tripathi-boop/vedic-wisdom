@@ -479,43 +479,18 @@ export const Header: React.FC<HeaderProps> = ({
                   <span className="hidden md:inline font-bold">{currentLang === 'en' ? 'Sign Out' : 'लॉगआउट'}</span>
                 </button>
               </div>
-            ) : rememberedUser ? (
-              <button
-                onClick={() => reloginRememberedUser()}
-                className="min-h-[44px] inline-flex items-center space-x-1.5 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-extrabold text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:brightness-105 border border-[#D4AF37] shadow-sm transition-all duration-200 cursor-pointer shrink-0"
-                title={currentLang === 'en' ? `Welcome back! Tap to log in as ${rememberedUser.name}` : `पुनः स्वागत है! ${rememberedUser.name} के रूप में लॉगिन करें`}
-                aria-label="Welcome back log in"
-              >
-                <span className="w-5 h-5 rounded-full bg-slate-950 text-[#F3E5AB] flex items-center justify-center font-bold text-[10px] shadow-xs shrink-0">
-                  {rememberedUser.name.charAt(0).toUpperCase()}
-                </span>
-                <span className="hidden sm:inline font-black tracking-wide text-slate-950">
-                  {currentLang === 'en' ? `Welcome Back (${rememberedUser.name.split(' ')[0]})` : `पुनः स्वागत (${rememberedUser.name.split(' ')[0]})`}
-                </span>
-                <span className="sm:hidden font-black tracking-tight text-slate-950 text-xs">
-                  {rememberedUser.name.split(' ')[0]}
-                </span>
-              </button>
             ) : (
               <button
                 onClick={() => openAuthModal()}
-                className="min-h-[44px] inline-flex items-center space-x-1.5 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-extrabold text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:brightness-105 border border-[#D4AF37] shadow-sm transition-all duration-200 cursor-pointer shrink-0"
-                title="Sign in with Gmail / Google"
-                aria-label="Sign in with Gmail / Google"
+                className="min-h-[44px] inline-flex items-center space-x-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-extrabold text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:brightness-105 active:scale-95 border border-[#D4AF37] shadow-sm transition-all duration-200 cursor-pointer shrink-0"
+                title={currentLang === 'en' ? 'Sign In / Sign Up' : 'साइन इन / साइन अप'}
+                aria-label={currentLang === 'en' ? 'Sign In or Sign Up to Vedic Wisdom' : 'साइन इन या साइन अप करें'}
               >
-                <span className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-white flex items-center justify-center p-0.5 shadow-xs shrink-0">
-                  <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" viewBox="0 0 24 24" aria-hidden="true">
-                    <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.27-2.09 3.66-5.17 3.66-9.12z" />
-                    <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.26 21.36 7.33 24 12 24z" />
-                    <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.58H1.25C.45 8.17 0 9.99 0 12s.45 3.83 1.25 5.42l4.03-3.13z" />
-                    <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.13c.95-2.83 3.6-4.96 6.72-4.96z" />
-                  </svg>
+                <span className="w-5 h-5 rounded-full bg-slate-950 text-[#F3E5AB] flex items-center justify-center p-0.5 shadow-xs shrink-0">
+                  <User className="w-3.5 h-3.5" />
                 </span>
-                <span className="hidden sm:inline font-black tracking-wide text-slate-950">
-                  {currentLang === 'en' ? 'Sign in with Gmail' : 'Gmail से लॉगिन'}
-                </span>
-                <span className="sm:hidden font-black tracking-tight text-slate-950 text-xs">
-                  {currentLang === 'en' ? 'Gmail' : 'Gmail'}
+                <span className="font-black tracking-wide text-slate-950 whitespace-nowrap">
+                  {currentLang === 'en' ? 'Sign In / Sign Up' : 'साइन इन / साइन अप'}
                 </span>
               </button>
             )}
@@ -632,50 +607,25 @@ export const Header: React.FC<HeaderProps> = ({
                   <span>{currentLang === 'en' ? 'Sign Out' : 'लॉगआउट'}</span>
                 </button>
               </div>
-            ) : rememberedUser ? (
+            ) : (
               <button
-                onClick={() => { setMobileMenuOpen(false); reloginRememberedUser(); }}
-                className="w-full text-left font-bold text-xs text-slate-900 dark:text-white flex items-center justify-between cursor-pointer"
+                onClick={() => { setMobileMenuOpen(false); openAuthModal(); }}
+                className="w-full text-left font-bold text-xs text-slate-900 dark:text-white flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-[#F3E5AB]/25 via-[#D4AF37]/15 to-transparent border border-[#D4AF37]/50 hover:border-[#D4AF37] transition-all cursor-pointer"
               >
                 <div className="flex items-center gap-2.5">
-                  <span className="w-7 h-7 rounded-full bg-slate-950 text-[#F3E5AB] flex items-center justify-center p-1 shadow-xs border border-amber-400 font-bold text-xs shrink-0">
-                    {rememberedUser.name.charAt(0).toUpperCase()}
+                  <span className="w-7 h-7 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-slate-950 flex items-center justify-center p-1 shadow-xs font-bold text-xs shrink-0">
+                    <User className="w-4 h-4 text-slate-950" />
                   </span>
-                  <div className="min-w-0">
-                    <div className="font-bold text-xs text-slate-900 dark:text-white truncate">
-                      {currentLang === 'en' ? `Welcome back, ${rememberedUser.name}!` : `पुनः स्वागत है, ${rememberedUser.name}!`}
+                  <div>
+                    <div className="font-extrabold text-xs text-slate-900 dark:text-white">
+                      {currentLang === 'en' ? 'Sign In / Sign Up' : 'साइन इन / साइन अप'}
                     </div>
                     <div className="text-[10px] text-[#B45309] dark:text-[#F3E5AB]">
-                      {currentLang === 'en' ? '1-Click Re-login' : '1-क्लिक में पुनः लॉगिन करें'}
+                      {currentLang === 'en' ? 'Access your dashboard & reports' : 'डैशबोर्ड एवं रिपोर्ट्स एक्सेस करें'}
                     </div>
                   </div>
                 </div>
                 <ArrowRight className="w-4 h-4 text-[#D4AF37] shrink-0" />
-              </button>
-            ) : (
-              <button
-                onClick={() => { setMobileMenuOpen(false); openAuthModal(); }}
-                className="w-full text-left font-bold text-xs text-slate-900 dark:text-white flex items-center justify-between cursor-pointer"
-              >
-                <div className="flex items-center gap-2.5">
-                  <span className="w-6 h-6 rounded-full bg-white flex items-center justify-center p-1 shadow-xs border border-slate-200">
-                    <svg className="w-4 h-4" viewBox="0 0 24 24" aria-hidden="true">
-                      <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.27-2.09 3.66-5.17 3.66-9.12z" />
-                      <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.26 21.36 7.33 24 12 24z" />
-                      <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.58H1.25C.45 8.17 0 9.99 0 12s.45 3.83 1.25 5.42l4.03-3.13z" />
-                      <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.13c.95-2.83 3.6-4.96 6.72-4.96z" />
-                    </svg>
-                  </span>
-                  <div>
-                    <div className="font-bold text-xs text-slate-900 dark:text-white">
-                      {currentLang === 'en' ? 'Sign in with Google' : 'Google से लॉगिन करें'}
-                    </div>
-                    <div className="text-[10px] text-[#B45309] dark:text-[#F3E5AB]">
-                      {currentLang === 'en' ? '1-Click Instant Login' : '1-क्लिक त्वरित लॉगिन'}
-                    </div>
-                  </div>
-                </div>
-                <ArrowRight className="w-4 h-4 text-[#D4AF37]" />
               </button>
             )}
           </div>

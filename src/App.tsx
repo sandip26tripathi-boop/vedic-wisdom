@@ -54,7 +54,6 @@ const CheckoutView = lazy(() => import('./components/cart/CheckoutView.tsx').the
 const SampleReportModal = lazy(() => import('./components/reports/SampleReportModal.tsx').then(m => ({ default: m.SampleReportModal })));
 const CompassCalibrationModal = lazy(() => import('./components/interactive/CompassCalibrationModal.tsx').then(m => ({ default: m.CompassCalibrationModal })));
 const LegalModal = lazy(() => import('./components/legal/LegalModal.tsx').then(m => ({ default: m.LegalModal })));
-const GoogleOneTapVisitPrompt = lazy(() => import('./components/auth/GoogleOneTapVisitPrompt.tsx').then(m => ({ default: m.GoogleOneTapVisitPrompt })));
 const AuthGate = lazy(() => import('./components/auth/AuthGate.tsx').then(m => ({ default: m.AuthGate })));
 
 function MainApp() {
@@ -647,9 +646,6 @@ function MainApp() {
             currentLang={currentLang}
           />
         )}
-
-        {/* Google Direct Gmail One-Tap Visit Prompt */}
-        <GoogleOneTapVisitPrompt currentLang={currentLang} />
       </Suspense>
 
     </div>

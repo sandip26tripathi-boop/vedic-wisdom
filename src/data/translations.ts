@@ -444,17 +444,16 @@ export const translations = {
         ravi: {
           name: "Ravi Kumar Nigam",
           role: "Senior K.P. Astrologer",
-          age: "Age 63",
           experience: "10+ Years Experience",
           image: "/assets/ravi-kumar-nigam.jpg",
-          badge: "Senior K.P. Astrologer • Age 63",
+          badge: "Senior K.P. Astrologer • 10+ Yrs Experience",
           credentials: [
             "10+ Years Dedicated Practical Experience in Krishnamurti Padhdhati (K.P.) Astrology",
             "Specialist in Cuspal Interlinks (CIL), Sub-Lord Theory & Precise Life Event Timing",
             "Practical Chart Auditing & Astrological Consultations for Over 1,200+ Seekers",
             "Lifelong Scholar of Classical Indian Astrological Wisdom & Jyotish Vidyarthi"
           ],
-          bio: "With over 10 years of focused practice in Krishnamurti Padhdhati (K.P.) Astrology at the age of 63, Ravi Kumar Nigam brings seasoned wisdom, patience, and meticulous precision to every chart analysis. His systematic application of Sub-Lord cuspal interlinks helps individuals and business owners navigate career transitions, financial decisions, and family well-being with clarity and peace of mind.",
+          bio: "With over 10 years of focused practice in Krishnamurti Padhdhati (K.P.) Astrology, Ravi Kumar Nigam brings seasoned wisdom, patience, and meticulous precision to every chart analysis. His systematic application of Sub-Lord cuspal interlinks helps individuals and business owners navigate career transitions, financial decisions, and family well-being with clarity and peace of mind.",
           quote: "Astrology is a divine compass meant to illuminate the path forward, not to induce fear. Through truthful K.P. calculations, one discovers clarity and rightful action."
         }
       }
@@ -1013,17 +1012,16 @@ export const translations = {
         ravi: {
           name: "रवि कुमार निगम",
           role: "वरिष्ठ के.पी. ज्योतिषाचार्य",
-          age: "आयु 63 वर्ष",
           experience: "10+ वर्ष का अनुभव",
           image: "/assets/ravi-kumar-nigam.jpg",
-          badge: "वरिष्ठ के.पी. ज्योतिषाचार्य • आयु 63 वर्ष",
+          badge: "वरिष्ठ के.पी. ज्योतिषाचार्य • 10+ वर्ष अनुभव",
           credentials: [
             "कृष्णमूर्ति पद्धति (K.P. Astrology) में 10+ वर्षों का गहन व्यावहारिक अनुभव",
             "कस्पल इंटरलिंक्स (CIL), सब-लॉर्ड सिद्धांत एवं समय निर्धारण के मर्मज्ञ",
             "1,200+ जातकों को प्रामाणिक, भयमुक्त एवं तर्कसंगत ज्योतिषीय परामर्श",
             "शास्त्रीय भारतीय ज्योतिष परंपरा के समर्पित अध्येता व ज्योतिष विद्यार्थी"
           ],
-          bio: "63 वर्ष की परिपक्व आयु में के.पी. ज्योतिष (Krishnamurti Padhdhati) के 10+ वर्षों के सघन अनुभव के साथ, रवि कुमार निगम जी कुंडली विश्लेषण में गहन धैर्य, सूक्ष्म दृष्टि और शास्त्रीय सटीकता लाते हैं। सब-लॉर्ड और कस्पल इंटरलिंक्स के नियमों के सूक्ष्म अध्ययन द्वारा वे करियर, आर्थिक उन्नति, व्यापार एवं पारिवारिक जीवन में अत्यंत व्यावहारिक व स्पष्ट मार्गदर्शन प्रदान करते हैं।",
+          bio: "के.पी. ज्योतिष (Krishnamurti Padhdhati) के 10+ वर्षों के सघन अनुभव के साथ, रवि कुमार निगम जी कुंडली विश्लेषण में गहन धैर्य, सूक्ष्म दृष्टि और शास्त्रीय सटीकता लाते हैं। सब-लॉर्ड और कस्पल इंटरलिंक्स के नियमों के सूक्ष्म अध्ययन द्वारा वे करियर, आर्थिक उन्नति, व्यापार एवं पारिवारिक जीवन में अत्यंत व्यावहारिक व स्पष्ट मार्गदर्शन प्रदान करते हैं।",
           quote: "ज्योतिष भय उत्पन्न करने का साधन नहीं, बल्कि जीवन मार्ग को प्रकाशित करने वाला दिव्य प्रकाश है। के.पी. गणनाओं से जातक को सही समय और सही दिशा की स्पष्ट पहचान होती है।"
         }
       }

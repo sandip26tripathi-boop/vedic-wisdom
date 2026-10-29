@@ -197,7 +197,7 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({
 
           </div>
 
-          {/* 3. Ravi Kumar Nigam — Senior K.P. Astrologer (Age 63, 10+ Years Experience) */}
+          {/* 3. Ravi Kumar Nigam — Senior K.P. Astrologer (10+ Years Experience) */}
           <div className="rounded-3xl p-6 sm:p-8 bg-white dark:bg-[#111827] border border-[#D4AF37]/40 shadow-xl relative overflow-hidden flex flex-col justify-between hover:shadow-2xl transition-all">
             <div className="absolute top-0 right-0 w-40 h-40 bg-radial from-[#D4AF37]/15 to-transparent blur-2xl pointer-events-none"></div>
 
@@ -223,7 +223,7 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({
                 </div>
 
                 <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[#D4AF37]/20 text-[#B45309] dark:text-[#F3E5AB] border border-[#D4AF37]/40 self-start sm:self-auto shrink-0">
-                  {currentLang === 'en' ? 'Age 63 • 10+ Yrs KP Experience' : 'आयु 63 • 10+ वर्ष के.पी. अनुभव'}
+                  {currentLang === 'en' ? '10+ Yrs KP Experience' : '10+ वर्ष के.पी. अनुभव'}
                 </span>
               </div>
 

@@ -439,7 +439,7 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                         Ravi Kumar Nigam
                       </h4>
                       <p className="text-xs text-[#B45309] dark:text-[#F3E5AB] font-medium">
-                        Senior K.P. Astrologer (Age 63)
+                        Senior K.P. Astrologer
                       </p>
                       <p className="text-[11px] text-slate-500 dark:text-slate-400">
                         10+ Yrs Krishnamurti Padhdhati, Sub-Lord & Chart Auditing Specialist.

@@ -4,6 +4,7 @@ import { Language } from '../types/index.ts';
 import { SriYantraMotif } from './SriYantraMotif.tsx';
 import ravindraPhoto from '../assets/ravindra-pathak.jpg';
 import sandeepPhoto from '../assets/sandeep-tripathi.jpg';
+import raviPhoto from '../assets/ravi-kumar-nigam.jpg';
 import { 
   Award, 
   BookOpen, 
@@ -51,18 +52,18 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({
           </p>
         </div>
 
-        {/* 2 Co-Founders Featured Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-16">
+        {/* 3 Core Leadership & Senior Astrologer Featured Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-7 mb-16">
           
-          {/* Ravindra Pathak — Founder & Visionary Leader */}
-          <div className="rounded-3xl p-8 sm:p-10 bg-white dark:bg-[#111827] border border-[#D4AF37]/40 shadow-xl relative overflow-hidden flex flex-col justify-between hover:shadow-2xl transition-all">
+          {/* 1. Ravindra Pathak — Founder & Visionary Leader */}
+          <div className="rounded-3xl p-6 sm:p-8 bg-white dark:bg-[#111827] border border-[#D4AF37]/40 shadow-xl relative overflow-hidden flex flex-col justify-between hover:shadow-2xl transition-all">
             <div className="absolute top-0 right-0 w-40 h-40 bg-radial from-[#D4AF37]/10 to-transparent blur-2xl pointer-events-none"></div>
 
             <div>
               {/* Profile Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
-                <div className="flex items-center space-x-4">
-                  <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-gradient-to-br from-[#D4AF37] via-amber-400 to-[#B45309] p-1 shadow-lg shrink-0 flex items-center justify-center text-slate-950 font-bold overflow-hidden relative">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-200 dark:border-slate-800">
+                <div className="flex items-center space-x-3.5">
+                  <div className="w-20 h-20 sm:w-22 sm:h-22 rounded-2xl bg-gradient-to-br from-[#D4AF37] via-amber-400 to-[#B45309] p-1 shadow-lg shrink-0 flex items-center justify-center text-slate-950 font-bold overflow-hidden relative">
                     <img
                       src={ravindraPhoto}
                       alt={l.founders.ravindra.name}
@@ -70,7 +71,7 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({
                     />
                   </div>
                   <div>
-                    <h3 className="font-cinzel text-2xl font-extrabold text-slate-900 dark:text-white">
+                    <h3 className="font-cinzel text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">
                       {l.founders.ravindra.name}
                     </h3>
                     <div className="text-xs font-bold text-amber-950 dark:text-[#F3E5AB] mt-0.5">
@@ -79,61 +80,61 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({
                   </div>
                 </div>
 
-                <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-950 dark:text-emerald-200 border border-emerald-500/40 self-start sm:self-auto">
+                <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-950 dark:text-emerald-200 border border-emerald-500/40 self-start sm:self-auto shrink-0">
                   {currentLang === 'en' ? 'Institutional Strategist' : 'संस्थागत रणनीतिकार'}
                 </span>
               </div>
 
               {/* Bio */}
-              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed my-6">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed my-5">
                 {l.founders.ravindra.bio}
               </p>
 
               {/* Core Credentials List */}
-              <div className="space-y-2.5 mb-6">
-                <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              <div className="space-y-2 mb-5">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   {currentLang === 'en' ? 'Key Credentials & Impact:' : 'प्रमुख उपलब्धियां:'}
                 </div>
                 {l.founders.ravindra.credentials.map((cred, idx) => (
-                  <div key={idx} className="flex items-start space-x-2 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
-                    <CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" />
+                  <div key={idx} className="flex items-start space-x-2 text-xs text-slate-700 dark:text-slate-300">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#D4AF37] shrink-0 mt-0.5" />
                     <span>{cred}</span>
                   </div>
                 ))}
               </div>
 
               {/* Philosophy Quote */}
-              <div className="p-4 rounded-2xl bg-[#D4AF37]/10 border-l-4 border-[#D4AF37] text-xs sm:text-sm italic text-slate-800 dark:text-slate-200 mb-6">
-                <Quote className="w-4 h-4 text-[#D4AF37] inline-block mr-1 mb-1" />
+              <div className="p-3.5 rounded-2xl bg-[#D4AF37]/10 border-l-4 border-[#D4AF37] text-xs italic text-slate-800 dark:text-slate-200 mb-5">
+                <Quote className="w-3.5 h-3.5 text-[#D4AF37] inline-block mr-1 mb-1" />
                 <span>"{l.founders.ravindra.quote}"</span>
               </div>
             </div>
 
             {/* Bottom Contact / Direct Consult */}
             <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
-              <span className="text-xs text-slate-500">
-                {currentLang === 'en' ? 'Enterprise Land & Factory Audit' : 'बड़े उद्योगों का मास्टर अलाइनमेंट'}
+              <span className="text-[11px] text-slate-500">
+                {currentLang === 'en' ? 'Enterprise Land & Factory Audit' : 'उद्योग व लैंड अलाइनमेंट'}
               </span>
               <button
                 onClick={() => onOpenBooking('industrial')}
-                className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-xs font-bold text-slate-950 bg-gradient-to-r from-[#F3E5AB] to-[#D4AF37] hover:brightness-105 transition-all shadow-sm cursor-pointer"
+                className="flex items-center space-x-1 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-950 bg-gradient-to-r from-[#F3E5AB] to-[#D4AF37] hover:brightness-105 transition-all shadow-sm cursor-pointer shrink-0"
               >
-                <span>{currentLang === 'en' ? 'Consult Ravindra Pathak' : 'परामर्श बुक करें'}</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <span>{currentLang === 'en' ? 'Consult Ravindra' : 'परामर्श बुक करें'}</span>
+                <ArrowRight className="w-3 h-3" />
               </button>
             </div>
 
           </div>
 
-          {/* Sandeep K. Tripathi — Principal Researcher & Chief Educator */}
-          <div className="rounded-3xl p-8 sm:p-10 bg-white dark:bg-[#111827] border border-[#D4AF37]/40 shadow-xl relative overflow-hidden flex flex-col justify-between hover:shadow-2xl transition-all">
+          {/* 2. Sandeep K. Tripathi — Principal Researcher & Chief Educator */}
+          <div className="rounded-3xl p-6 sm:p-8 bg-white dark:bg-[#111827] border border-[#D4AF37]/40 shadow-xl relative overflow-hidden flex flex-col justify-between hover:shadow-2xl transition-all">
             <div className="absolute top-0 right-0 w-40 h-40 bg-radial from-amber-500/10 to-transparent blur-2xl pointer-events-none"></div>
 
             <div>
               {/* Profile Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
-                <div className="flex items-center space-x-4">
-                  <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-gradient-to-br from-[#D4AF37] via-amber-400 to-[#B45309] p-1 shadow-lg shrink-0 flex items-center justify-center text-slate-950 font-bold overflow-hidden relative">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-200 dark:border-slate-800">
+                <div className="flex items-center space-x-3.5">
+                  <div className="w-20 h-20 sm:w-22 sm:h-22 rounded-2xl bg-gradient-to-br from-[#D4AF37] via-amber-400 to-[#B45309] p-1 shadow-lg shrink-0 flex items-center justify-center text-slate-950 font-bold overflow-hidden relative">
                     <img
                       src={sandeepPhoto}
                       alt={l.founders.sandeep.name}
@@ -141,7 +142,7 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({
                     />
                   </div>
                   <div>
-                    <h3 className="font-cinzel text-2xl font-extrabold text-slate-900 dark:text-white">
+                    <h3 className="font-cinzel text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">
                       {l.founders.sandeep.name}
                     </h3>
                     <div className="text-xs font-bold text-amber-950 dark:text-[#F3E5AB] mt-0.5">
@@ -150,47 +151,118 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({
                   </div>
                 </div>
 
-                <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-amber-500/20 text-amber-950 dark:text-amber-200 border border-amber-500/40 self-start sm:self-auto">
+                <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-950 dark:text-amber-200 border border-amber-500/40 self-start sm:self-auto shrink-0">
                   {currentLang === 'en' ? '12+ Yrs KP & Vastu Researcher' : '12+ वर्ष पारंपरिक शोध'}
                 </span>
               </div>
 
               {/* Bio */}
-              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed my-6">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed my-5">
                 {l.founders.sandeep.bio}
               </p>
 
               {/* Core Credentials List */}
-              <div className="space-y-2.5 mb-6">
-                <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              <div className="space-y-2 mb-5">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   {currentLang === 'en' ? 'Research Domain & Accreditations:' : 'शोध विषय व विशेषज्ञता:'}
                 </div>
                 {l.founders.sandeep.credentials.map((cred, idx) => (
-                  <div key={idx} className="flex items-start space-x-2 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                  <div key={idx} className="flex items-start space-x-2 text-xs text-slate-700 dark:text-slate-300">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
                     <span>{cred}</span>
                   </div>
                 ))}
               </div>
 
               {/* Philosophy Quote */}
-              <div className="p-4 rounded-2xl bg-amber-500/10 border-l-4 border-[#B45309] text-xs sm:text-sm italic text-slate-800 dark:text-slate-200 mb-6">
-                <Quote className="w-4 h-4 text-[#B45309] inline-block mr-1 mb-1" />
+              <div className="p-3.5 rounded-2xl bg-amber-500/10 border-l-4 border-[#B45309] text-xs italic text-slate-800 dark:text-slate-200 mb-5">
+                <Quote className="w-3.5 h-3.5 text-[#B45309] inline-block mr-1 mb-1" />
                 <span>"{l.founders.sandeep.quote}"</span>
               </div>
             </div>
 
             {/* Bottom Contact / Direct Consult */}
             <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
-              <span className="text-xs text-slate-500">
+              <span className="text-[11px] text-slate-500">
                 {currentLang === 'en' ? 'Private Kundli / Academy Mastermind' : 'व्यक्तिगत केपी कुंडली व कोर्सेज'}
               </span>
               <button
                 onClick={() => onOpenBooking('astrology')}
-                className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-xs font-bold text-slate-950 bg-gradient-to-r from-[#F3E5AB] to-[#D4AF37] hover:brightness-105 transition-all shadow-sm cursor-pointer"
+                className="flex items-center space-x-1 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-950 bg-gradient-to-r from-[#F3E5AB] to-[#D4AF37] hover:brightness-105 transition-all shadow-sm cursor-pointer shrink-0"
               >
-                <span>{currentLang === 'en' ? 'Consult Sandeep Tripathi' : 'परामर्श बुक करें'}</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <span>{currentLang === 'en' ? 'Consult Sandeep' : 'परामर्श बुक करें'}</span>
+                <ArrowRight className="w-3 h-3" />
+              </button>
+            </div>
+
+          </div>
+
+          {/* 3. Ravi Kumar Nigam — Senior K.P. Astrologer (Age 63, 10+ Years Experience) */}
+          <div className="rounded-3xl p-6 sm:p-8 bg-white dark:bg-[#111827] border border-[#D4AF37]/40 shadow-xl relative overflow-hidden flex flex-col justify-between hover:shadow-2xl transition-all">
+            <div className="absolute top-0 right-0 w-40 h-40 bg-radial from-[#D4AF37]/15 to-transparent blur-2xl pointer-events-none"></div>
+
+            <div>
+              {/* Profile Header */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-200 dark:border-slate-800">
+                <div className="flex items-center space-x-3.5">
+                  <div className="w-20 h-20 sm:w-22 sm:h-22 rounded-2xl bg-gradient-to-br from-[#D4AF37] via-amber-400 to-[#B45309] p-1 shadow-lg shrink-0 flex items-center justify-center text-slate-950 font-bold overflow-hidden relative">
+                    <img
+                      src={raviPhoto}
+                      alt={l.founders.ravi.name}
+                      className="w-full h-full object-cover object-top rounded-xl"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="font-cinzel text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">
+                      {l.founders.ravi.name}
+                    </h3>
+                    <div className="text-xs font-bold text-amber-950 dark:text-[#F3E5AB] mt-0.5">
+                      {l.founders.ravi.role}
+                    </div>
+                  </div>
+                </div>
+
+                <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[#D4AF37]/20 text-[#B45309] dark:text-[#F3E5AB] border border-[#D4AF37]/40 self-start sm:self-auto shrink-0">
+                  {currentLang === 'en' ? 'Age 63 • 10+ Yrs KP Experience' : 'आयु 63 • 10+ वर्ष के.पी. अनुभव'}
+                </span>
+              </div>
+
+              {/* Bio */}
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed my-5">
+                {l.founders.ravi.bio}
+              </p>
+
+              {/* Core Credentials List */}
+              <div className="space-y-2 mb-5">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  {currentLang === 'en' ? 'Astrological Expertise & Credentials:' : 'ज्योतिषीय विशेषज्ञता एवं कार्य:'}
+                </div>
+                {l.founders.ravi.credentials.map((cred, idx) => (
+                  <div key={idx} className="flex items-start space-x-2 text-xs text-slate-700 dark:text-slate-300">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#D4AF37] shrink-0 mt-0.5" />
+                    <span>{cred}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Philosophy Quote */}
+              <div className="p-3.5 rounded-2xl bg-[#D4AF37]/10 border-l-4 border-[#D4AF37] text-xs italic text-slate-800 dark:text-slate-200 mb-5">
+                <Quote className="w-3.5 h-3.5 text-[#D4AF37] inline-block mr-1 mb-1" />
+                <span>"{l.founders.ravi.quote}"</span>
+              </div>
+            </div>
+
+            {/* Bottom Contact / Direct Consult */}
+            <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+              <span className="text-[11px] text-slate-500">
+                {currentLang === 'en' ? 'Direct K.P. Chart Consultation' : 'प्रत्यक्ष के.पी. कुंडली परामर्श'}
+              </span>
+              <button
+                onClick={() => onOpenBooking('astrology')}
+                className="flex items-center space-x-1 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-950 bg-gradient-to-r from-[#F3E5AB] to-[#D4AF37] hover:brightness-105 transition-all shadow-sm cursor-pointer shrink-0"
+              >
+                <span>{currentLang === 'en' ? 'Consult Ravi Nigam' : 'परामर्श बुक करें'}</span>
+                <ArrowRight className="w-3 h-3" />
               </button>
             </div>
 

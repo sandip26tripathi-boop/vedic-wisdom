@@ -4,6 +4,7 @@ import { Language, ClientPortalTab } from '../types/index.ts';
 import { SriYantraMotif } from './SriYantraMotif.tsx';
 import ravindraPhoto from '../assets/ravindra-pathak.jpg';
 import sandeepPhoto from '../assets/sandeep-tripathi.jpg';
+import raviPhoto from '../assets/ravi-kumar-nigam.jpg';
 import { 
   sampleFloorplans, 
   mockActiveConsultations, 
@@ -183,7 +184,7 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
               
               {/* WhatsApp VIP Direct Desk */}
               <a
-                href={`https://wa.me/919009448601?text=${encodeURIComponent(`Namaste Sandeep Ji & Ravindra Ji, I am accessing my Vedic Wisdom Portal (Member ID: ${user?.memberId || 'VW-VIP'}). Please connect regarding my consultation.`)}`}
+                href={`https://wa.me/919009448601?text=${encodeURIComponent(`Namaste Sandeep Ji, Ravindra Ji & Ravi Ji, I am accessing my Vedic Wisdom Portal (Member ID: ${user?.memberId || 'VW-VIP'}). Please connect regarding my consultation.`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center space-x-1.5 px-3 py-2 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 text-xs font-semibold hover:bg-emerald-500/25 transition-all"
@@ -275,7 +276,7 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                 </h2>
 
                 <p className="text-sm text-slate-300 leading-relaxed">
-                  Your enterprise spaces and personal destiny trajectories are actively monitored under the direct research oversight of <strong className="text-white">Master Sandeep K. Tripathi</strong> and <strong className="text-white">Ravindra Pathak</strong>.
+                  Your enterprise spaces and personal destiny trajectories are actively monitored under the direct research oversight of <strong className="text-white">Master Sandeep K. Tripathi</strong>, <strong className="text-white">Ravindra Pathak</strong> and <strong className="text-white">Ravi Kumar Nigam</strong>.
                 </p>
 
                 <div className="pt-2 flex flex-wrap items-center gap-3">
@@ -382,7 +383,7 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                   <span className="text-xs font-mono text-slate-500">Bhopal Head Office</span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 flex items-start space-x-3">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#D4AF37] to-[#B45309] text-white flex items-center justify-center font-bold text-lg shrink-0 shadow-sm border border-[#D4AF37]/40 overflow-hidden">
                       <img
@@ -421,6 +422,27 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                       </p>
                       <p className="text-[11px] text-slate-500 dark:text-slate-400">
                         Institutional Spatial Alignment, Land Selection & Enterprise Strategy.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 flex items-start space-x-3">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#D4AF37] to-[#B45309] text-white flex items-center justify-center font-bold text-lg shrink-0 shadow-sm border border-[#D4AF37]/40 overflow-hidden">
+                      <img
+                        src={raviPhoto}
+                        alt="Ravi Kumar Nigam"
+                        className="w-full h-full object-cover object-top"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="font-bold text-sm text-slate-900 dark:text-white">
+                        Ravi Kumar Nigam
+                      </h4>
+                      <p className="text-xs text-[#B45309] dark:text-[#F3E5AB] font-medium">
+                        Senior K.P. Astrologer (Age 63)
+                      </p>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                        10+ Yrs Krishnamurti Padhdhati, Sub-Lord & Chart Auditing Specialist.
                       </p>
                     </div>
                   </div>

@@ -438,6 +438,22 @@ export const translations = {
           ],
           bio: "Renowned as one of modern India's most dedicated astrological scholars, Sandeep K. Tripathi brings deep scriptural clarity to Vedic arts. His dedicated study of KP Cuspal Interlinks and the Sub-Sub Lord micro-timing system has unlocked traditional clarity in career, corporate litigation, and life forecasting. As chief educator of Vedic Wisdom Academy, he mentors students across 25+ countries.",
           quote: "Astrology is celestial wisdom and Vastu is sacred spatial harmony. When you harmonize both with classical Vedic traditions, uncertainty transforms into spiritual clarity."
+        },
+        ravi: {
+          name: "Ravi Kumar Nigam",
+          role: "Senior K.P. Astrologer",
+          age: "Age 63",
+          experience: "10+ Years Experience",
+          image: "/assets/ravi-kumar-nigam.jpg",
+          badge: "Senior K.P. Astrologer • Age 63",
+          credentials: [
+            "10+ Years Dedicated Practical Experience in Krishnamurti Padhdhati (K.P.) Astrology",
+            "Specialist in Cuspal Interlinks (CIL), Sub-Lord Theory & Precise Life Event Timing",
+            "Practical Chart Auditing & Astrological Consultations for Over 1,200+ Seekers",
+            "Lifelong Scholar of Classical Indian Astrological Wisdom & Jyotish Vidyarthi"
+          ],
+          bio: "With over 10 years of focused practice in Krishnamurti Padhdhati (K.P.) Astrology at the age of 63, Ravi Kumar Nigam brings seasoned wisdom, patience, and meticulous precision to every chart analysis. His systematic application of Sub-Lord cuspal interlinks helps individuals and business owners navigate career transitions, financial decisions, and family well-being with clarity and peace of mind.",
+          quote: "Astrology is a divine compass meant to illuminate the path forward, not to induce fear. Through truthful K.P. calculations, one discovers clarity and rightful action."
         }
       }
     },
@@ -989,6 +1005,22 @@ export const translations = {
           ],
           bio: "आधुनिक भारत के निष्ठावान ज्योतिषीय शोधकर्ताओं में गिने जाने वाले संदीप के. त्रिपाठी जी वैदिक विधाओं में शास्त्रीय प्रामाणिकता लेकर आए हैं। केपी कस्पल इंटरलिंक्स और सब-सब लॉर्ड के पारंपरिक नियमों पर उनके अध्ययन ने करियर, व्यावसायिक मार्गदर्शन और जीवन पथ निर्धारण में स्पष्टता स्थापित की है। वैदिक विजडम एकेडमी के मुख्य शिक्षक के रूप में, वे 25+ देशों के शिष्यों का मार्गदर्शन कर रहे हैं।",
           quote: "ज्योतिष आकाशीय ज्ञान है और वास्तु पवित्र स्थानिक सामंजस्य। जब आप दोनों को पारंपरिक वैदिक सिद्धांतों से जोड़ते हैं, तो अनिश्चितता आध्यात्मिक व व्यावहारिक स्पष्टता में बदल जाती है।"
+        },
+        ravi: {
+          name: "रवि कुमार निगम",
+          role: "वरिष्ठ के.पी. ज्योतिषाचार्य",
+          age: "आयु 63 वर्ष",
+          experience: "10+ वर्ष का अनुभव",
+          image: "/assets/ravi-kumar-nigam.jpg",
+          badge: "वरिष्ठ के.पी. ज्योतिषाचार्य • आयु 63 वर्ष",
+          credentials: [
+            "कृष्णमूर्ति पद्धति (K.P. Astrology) में 10+ वर्षों का गहन व्यावहारिक अनुभव",
+            "कस्पल इंटरलिंक्स (CIL), सब-लॉर्ड सिद्धांत एवं समय निर्धारण के मर्मज्ञ",
+            "1,200+ जातकों को प्रामाणिक, भयमुक्त एवं तर्कसंगत ज्योतिषीय परामर्श",
+            "शास्त्रीय भारतीय ज्योतिष परंपरा के समर्पित अध्येता व ज्योतिष विद्यार्थी"
+          ],
+          bio: "63 वर्ष की परिपक्व आयु में के.पी. ज्योतिष (Krishnamurti Padhdhati) के 10+ वर्षों के सघन अनुभव के साथ, रवि कुमार निगम जी कुंडली विश्लेषण में गहन धैर्य, सूक्ष्म दृष्टि और शास्त्रीय सटीकता लाते हैं। सब-लॉर्ड और कस्पल इंटरलिंक्स के नियमों के सूक्ष्म अध्ययन द्वारा वे करियर, आर्थिक उन्नति, व्यापार एवं पारिवारिक जीवन में अत्यंत व्यावहारिक व स्पष्ट मार्गदर्शन प्रदान करते हैं।",
+          quote: "ज्योतिष भय उत्पन्न करने का साधन नहीं, बल्कि जीवन मार्ग को प्रकाशित करने वाला दिव्य प्रकाश है। के.पी. गणनाओं से जातक को सही समय और सही दिशा की स्पष्ट पहचान होती है।"
         }
       }
     },

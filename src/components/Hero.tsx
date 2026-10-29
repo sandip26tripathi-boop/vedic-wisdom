@@ -5,6 +5,7 @@ import { SriYantraMotif } from './SriYantraMotif.tsx';
 import { useAuth } from '../context/AuthContext.tsx';
 import ravindraPhoto from '../assets/ravindra-pathak.jpg';
 import sandeepPhoto from '../assets/sandeep-tripathi.jpg';
+import raviPhoto from '../assets/ravi-kumar-nigam.jpg';
 import { 
   ShieldCheck, 
   Sparkles, 
@@ -224,9 +225,14 @@ export const Hero: React.FC<HeroProps> = ({
                       alt="Sandeep K. Tripathi" 
                       className="inline-block w-6 h-6 rounded-full ring-2 ring-[#D4AF37] object-cover object-top" 
                     />
+                    <img 
+                      src={raviPhoto} 
+                      alt="Ravi Kumar Nigam" 
+                      className="inline-block w-6 h-6 rounded-full ring-2 ring-[#D4AF37] object-cover object-top" 
+                    />
                   </div>
                   <span className="font-semibold text-slate-800 dark:text-slate-200">
-                    Ravindra Pathak & Sandeep Tripathi
+                    R. Pathak, S. Tripathi & R. Nigam
                   </span>
                 </div>
                 <span className="font-bold text-amber-950 dark:text-[#F3E5AB]">Bhopal, MP, India</span>

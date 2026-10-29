@@ -312,7 +312,8 @@ export const AstroToolsEngine: React.FC<AstroToolsEngineProps> = ({
   };
 
   return (
-    <section id="free-calculators" className="py-20 bg-slate-50 dark:bg-[#0F172A] border-t border-[#D4AF37]/20 transition-colors duration-300 w-full max-w-full overflow-x-hidden">
+    <section id="free-calculators" className="py-20 bg-slate-50 dark:bg-[#0F172A] border-t border-[#D4AF37]/20 transition-colors duration-300 w-full max-w-full overflow-x-hidden relative">
+      <div id="muhurta" className="absolute -top-24" aria-hidden="true" />
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         
         {/* Section Header */}

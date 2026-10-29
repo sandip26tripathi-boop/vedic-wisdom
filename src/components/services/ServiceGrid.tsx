@@ -183,8 +183,9 @@ export const ServiceGrid: React.FC<ServiceGridProps> = ({
     <section 
       id="services"
       aria-label={isHi ? "वास्तु एवं ज्योतिष परामर्श सेवाएं" : "Property-Specific Spatial & Astrological Services"}
-      className="w-full py-12 lg:py-16 bg-[#FAF9F6] dark:bg-[#0B0F19]"
+      className="w-full py-12 lg:py-16 bg-[#FAF9F6] dark:bg-[#0B0F19] relative"
     >
+      <div id="astro-vastu" className="absolute -top-24" aria-hidden="true" />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
         
         {/* Section Header */}

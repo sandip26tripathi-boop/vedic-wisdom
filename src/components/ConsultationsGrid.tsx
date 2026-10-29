@@ -144,7 +144,9 @@ export const ConsultationsGrid: React.FC<ConsultationsGridProps> = ({
   const currentList = activeWing === 'astrology' ? astrologyServices : vastuServices;
 
   return (
-    <section id="consultations" className="py-20 bg-[#FAF9F6] dark:bg-[#0B0F19] transition-colors duration-300">
+    <section id="consultations" className="py-20 bg-[#FAF9F6] dark:bg-[#0B0F19] transition-colors duration-300 relative">
+      <div id="astrology" className="absolute -top-24" aria-hidden="true" />
+      <div id="cil-astrology" className="absolute -top-24" aria-hidden="true" />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}

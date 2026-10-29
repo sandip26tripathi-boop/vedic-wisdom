@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { SriYantraMotif } from '../SriYantraMotif.tsx';
 import { Language, Theme } from '../../types/index.ts';
+import { navLinks, NavLinkItem } from '../../data/navLinks.ts';
+export { navLinks };
 import { 
   X, 
   Sparkles, 
@@ -29,7 +31,8 @@ import {
   CheckCircle2, 
   BookOpen,
   Search,
-  ArrowUpRight
+  ArrowUpRight,
+  Calendar
 } from 'lucide-react';
 
 interface MobileCategoryDrawerProps {
@@ -90,6 +93,7 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
 
   const [searchQuery, setSearchQuery] = useState('');
   const [isCoursesAccordionOpen, setIsCoursesAccordionOpen] = useState(true);
+  const [isMoreAccordionOpen, setIsMoreAccordionOpen] = useState(true);
   const [activeSectionId, setActiveSectionId] = useState<string>('home');
   const [touchStart, setTouchStart] = useState<number | null>(null);
 
@@ -133,7 +137,13 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
       'home',
       'about',
       'features',
+      'astrology',
+      'astro-vastu',
+      'digital-reports',
+      'academy',
       'courses',
+      'cil-astrology',
+      'muhurta',
       'category-foundation',
       'category-advanced',
       'category-test-series',
@@ -313,11 +323,11 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
 
   // Filter items if user types in search box
   const normalizedQuery = searchQuery.trim().toLowerCase();
-  const filterMatch = (en: string, hi: string, descEn?: string, descHi?: string) => {
+  const filterMatch = (en: string, hi?: string, descEn?: string, descHi?: string) => {
     if (!normalizedQuery) return true;
     return (
       en.toLowerCase().includes(normalizedQuery) ||
-      hi.toLowerCase().includes(normalizedQuery) ||
+      (hi && hi.toLowerCase().includes(normalizedQuery)) ||
       (descEn && descEn.toLowerCase().includes(normalizedQuery)) ||
       (descHi && descHi.toLowerCase().includes(normalizedQuery))
     );
@@ -334,6 +344,14 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
   const filteredSupport = SUPPORT_NAV_ITEMS.filter(item => 
     filterMatch(item.nameEn, item.nameHi, item.descEn, item.descHi)
   );
+
+  const isNavLinksMatch = !normalizedQuery || [
+    'astrology', 'ज्योतिष',
+    'astro-vastu', 'वास्तु',
+    'digital reports', 'रिपोर्ट',
+    'academy & courses', 'अकादमी',
+    'more', 'cil', 'muhurta', 'मुहूर्त'
+  ].some(term => term.includes(normalizedQuery) || normalizedQuery.includes(term));
 
   return (
     <>
@@ -385,7 +403,7 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
           <div 
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
-            className="relative w-[88vw] sm:w-[400px] max-w-[430px] h-full bg-[#FAF9F6] dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 z-10 shadow-2xl flex flex-col border-l-2 border-[#D4AF37]/40 animate-in slide-in-from-right duration-300 ease-out"
+            className="relative w-[88vw] sm:w-[410px] max-w-[430px] h-full bg-[#FAF9F6] dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 z-10 shadow-2xl flex flex-col border-l-2 border-[#D4AF37]/40 animate-in slide-in-from-right duration-300 ease-out"
           >
             {/* Top Gold Gradient Bar */}
             <div className="h-1.5 w-full bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] shrink-0" />
@@ -434,7 +452,7 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
                   <button
                     type="button"
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-2.5 p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                    className="absolute right-2.5 p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
                     aria-label="Clear search"
                   >
                     <X className="w-3.5 h-3.5" />
@@ -469,12 +487,210 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
 
             {/* Scrollable Navigation Area */}
             <div className="flex-1 overflow-y-auto p-3.5 space-y-4 scrollbar-thin">
+
+              {/* SECTION 1: CORE DISCIPLINES & SERVICES (Matching navLinks) */}
+              {isNavLinksMatch && (
+                <div className="space-y-1.5">
+                  <div className="px-2 text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center justify-between">
+                    <span>{isHi ? "प्रमुख विषय एवं सेवाएं" : "Core Disciplines & Services"}</span>
+                    <span className="text-[10px] text-[#D4AF37] font-semibold">Featured</span>
+                  </div>
+
+                  <div className="rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800/80 shadow-xs p-1 space-y-0.5 overflow-hidden">
+                    
+                    {/* 1. Astrology */}
+                    <button
+                      type="button"
+                      onClick={() => handleNavigate('astrology')}
+                      className={`w-full min-h-[46px] p-2.5 rounded-xl text-left transition-all flex items-center justify-between gap-2.5 cursor-pointer ${
+                        activeSectionId === 'astrology' || activeSectionId === 'consultations'
+                          ? 'bg-amber-500/15 text-[#B45309] dark:text-[#F3E5AB] font-black border-l-4 border-[#D4AF37]'
+                          : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 font-semibold'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-2.5 min-w-0">
+                        <div className="p-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-600 shrink-0">
+                          <Sparkles className="w-3.5 h-3.5" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-xs font-bold truncate">
+                            {isHi ? "ज्योतिष परामर्श" : "Astrology"}
+                          </div>
+                          <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                            {isHi ? "केपी कस्पल एवं प्रामाणिक वैदिक विश्लेषण" : "KP Cuspal Interlink & Vedic Chart Reading"}
+                          </div>
+                        </div>
+                      </div>
+                      <span className="px-2 py-0.5 rounded-md bg-[#D4AF37]/15 text-[#B45309] dark:text-[#F3E5AB] text-[9px] font-bold border border-[#D4AF37]/30 shrink-0">
+                        {isHi ? "परामर्श" : "Consult"}
+                      </span>
+                    </button>
+
+                    {/* 2. Astro-Vastu */}
+                    <button
+                      type="button"
+                      onClick={() => handleNavigate('astro-vastu')}
+                      className={`w-full min-h-[46px] p-2.5 rounded-xl text-left transition-all flex items-center justify-between gap-2.5 cursor-pointer ${
+                        activeSectionId === 'astro-vastu' || activeSectionId === 'services'
+                          ? 'bg-amber-500/15 text-[#B45309] dark:text-[#F3E5AB] font-black border-l-4 border-[#D4AF37]'
+                          : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 font-semibold'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-2.5 min-w-0">
+                        <div className="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 shrink-0">
+                          <Building2 className="w-3.5 h-3.5" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-xs font-bold truncate">
+                            {isHi ? "एस्ट्रो-वास्तु समाधान" : "Astro-Vastu"}
+                          </div>
+                          <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                            {isHi ? "शून्य तोड़-फोड़ ऊर्जा वास्तु उपचार" : "0% Non-Demolition Spatial Energy Alignment"}
+                          </div>
+                        </div>
+                      </div>
+                      <span className="px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 text-[9px] font-bold border border-emerald-500/30 shrink-0">
+                        {isHi ? "बिना तोड़-फोड़" : "0% Demolition"}
+                      </span>
+                    </button>
+
+                    {/* 3. Digital Reports */}
+                    <button
+                      type="button"
+                      onClick={() => handleNavigate('digital-reports')}
+                      className={`w-full min-h-[46px] p-2.5 rounded-xl text-left transition-all flex items-center justify-between gap-2.5 cursor-pointer ${
+                        activeSectionId === 'digital-reports'
+                          ? 'bg-amber-500/15 text-[#B45309] dark:text-[#F3E5AB] font-black border-l-4 border-[#D4AF37]'
+                          : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 font-semibold'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-2.5 min-w-0">
+                        <div className="p-1.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-600 shrink-0">
+                          <FileText className="w-3.5 h-3.5" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-xs font-bold truncate">
+                            {isHi ? "डिजिटल जन्मपत्री रिपोर्ट्स" : "Digital Reports"}
+                          </div>
+                          <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                            {isHi ? "24-पृष्ठ की विस्तृत डिजिटल रिपोर्ट" : "Instant 24-page analytical natal dossier"}
+                          </div>
+                        </div>
+                      </div>
+                      <span className="px-2 py-0.5 rounded-md bg-sky-500/15 text-sky-700 dark:text-sky-300 text-[9px] font-bold border border-sky-500/30 shrink-0">
+                        {isHi ? "पीडीएफ" : "Instant PDF"}
+                      </span>
+                    </button>
+
+                    {/* 4. Academy & Courses */}
+                    <button
+                      type="button"
+                      onClick={() => handleNavigate('academy')}
+                      className={`w-full min-h-[46px] p-2.5 rounded-xl text-left transition-all flex items-center justify-between gap-2.5 cursor-pointer ${
+                        activeSectionId === 'academy' || activeSectionId === 'courses'
+                          ? 'bg-amber-500/15 text-[#B45309] dark:text-[#F3E5AB] font-black border-l-4 border-[#D4AF37]'
+                          : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 font-semibold'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-2.5 min-w-0">
+                        <div className="p-1.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-600 shrink-0">
+                          <GraduationCap className="w-3.5 h-3.5" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-xs font-bold truncate">
+                            {isHi ? "अकादमी एवं कोर्सेज" : "Academy & Courses"}
+                          </div>
+                          <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                            {isHi ? "केपी ज्योतिष व वास्तु प्रशिक्षण" : "KP Astrology & Spatial Vastu Masterclass"}
+                          </div>
+                        </div>
+                      </div>
+                      <span className="px-2 py-0.5 rounded-md bg-purple-500/15 text-purple-700 dark:text-purple-300 text-[9px] font-bold border border-purple-500/30 shrink-0">
+                        {isHi ? "सर्टिफाइड" : "Certified"}
+                      </span>
+                    </button>
+
+                    {/* 5. More (SubLinks Accordion: CIL & Shubh Muhurta) */}
+                    <div className="border-t border-slate-100 dark:border-slate-800/80 pt-1 mt-1">
+                      <button
+                        type="button"
+                        onClick={() => setIsMoreAccordionOpen(!isMoreAccordionOpen)}
+                        className="w-full min-h-[44px] p-2.5 rounded-xl text-left transition-all flex items-center justify-between gap-2.5 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50"
+                      >
+                        <div className="flex items-center space-x-2.5">
+                          <div className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 shrink-0">
+                            <Layers className="w-3.5 h-3.5 text-[#D4AF37]" />
+                          </div>
+                          <div>
+                            <div className="text-xs font-bold text-slate-900 dark:text-white">
+                              {isHi ? "अन्य विशिष्ट सेवाएं (More)" : "More"}
+                            </div>
+                            <div className="text-[10px] text-slate-500">
+                              {isHi ? "CIL ज्योतिष एवं शुभ मुहूर्त" : "CIL Astrology & Shubh Muhurta"}
+                            </div>
+                          </div>
+                        </div>
+                        <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${isMoreAccordionOpen ? 'rotate-180 text-[#D4AF37]' : ''}`} />
+                      </button>
+
+                      {isMoreAccordionOpen && (
+                        <div className="pl-4 pr-1 py-1 space-y-1 bg-slate-50/50 dark:bg-slate-900/40 rounded-xl my-1 border border-slate-100 dark:border-slate-800">
+                          {/* Sublink A: KP Cuspal Interlink (CIL) */}
+                          <button
+                            type="button"
+                            onClick={() => handleNavigate('cil-astrology')}
+                            className="w-full min-h-[42px] p-2 rounded-lg text-left transition-all flex items-center justify-between gap-2 cursor-pointer hover:bg-white dark:hover:bg-slate-800"
+                          >
+                            <div className="flex items-center space-x-2 min-w-0">
+                              <TrendingUp className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                              <div className="min-w-0">
+                                <div className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
+                                  {isHi ? "केपी कस्पल इंटरलिंक (CIL)" : "KP Cuspal Interlink (CIL)"}
+                                </div>
+                                <div className="text-[10px] text-slate-500 truncate">
+                                  {isHi ? "सब-सब लॉर्ड सूक्ष्म गणना" : "Sub-Sub Lord precision planetary timing"}
+                                </div>
+                              </div>
+                            </div>
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#D4AF37]/15 text-[#B45309] dark:text-[#F3E5AB]">
+                              CIL
+                            </span>
+                          </button>
+
+                          {/* Sublink B: Shubh Muhurta */}
+                          <button
+                            type="button"
+                            onClick={() => handleNavigate('muhurta')}
+                            className="w-full min-h-[42px] p-2 rounded-lg text-left transition-all flex items-center justify-between gap-2 cursor-pointer hover:bg-white dark:hover:bg-slate-800"
+                          >
+                            <div className="flex items-center space-x-2 min-w-0">
+                              <Calendar className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                              <div className="min-w-0">
+                                <div className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
+                                  {isHi ? "दैनिक शुभ मुहूर्त" : "Shubh Muhurta"}
+                                </div>
+                                <div className="text-[10px] text-slate-500 truncate">
+                                  {isHi ? "अमृत, शुभ व लाभ चौघड़िया" : "Live daily auspicious Muhurta windows"}
+                                </div>
+                              </div>
+                            </div>
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-700 dark:text-emerald-300">
+                              Live
+                            </span>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                  </div>
+                </div>
+              )}
               
-              {/* SECTION A: Primary Navigation */}
+              {/* SECTION 2: Primary Site Navigation (Home, About Us, Why Choose Us) */}
               {filteredPrimary.length > 0 && (
                 <div className="space-y-1.5">
                   <div className="px-2 text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center justify-between">
-                    <span>{isHi ? "मुख्य नेविगेशन" : "Primary Navigation"}</span>
+                    <span>{isHi ? "मुख्य पृष्ठ" : "Primary Navigation"}</span>
                     <span className="text-[10px] text-[#D4AF37] font-semibold">Core</span>
                   </div>
 
@@ -529,14 +745,14 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
                 </div>
               )}
 
-              {/* SECTION B: Courses & Categorized Specializations (Accordion) */}
+              {/* SECTION 3: Courses & Categorized Specializations (Accordion) */}
               {(filteredCourses.length > 0 || !searchQuery) && (
                 <div className="space-y-1.5">
                   <div className="px-2 text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center justify-between">
                     <span>{isHi ? "पाठ्यक्रम एवं विशेषज्ञता" : "Courses & Specializations"}</span>
                     <button
                       type="button"
-                      onClick={() => handleNavigate('courses')}
+                      onClick={() => handleNavigate('academy')}
                       className="text-[10px] text-[#B45309] dark:text-[#F3E5AB] font-bold hover:underline flex items-center gap-0.5 cursor-pointer"
                     >
                       <span>{isHi ? "सभी देखें" : "View All"}</span>
@@ -620,7 +836,7 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
                 </div>
               )}
 
-              {/* SECTION C: Trust & Support */}
+              {/* SECTION 4: Trust & Support */}
               {filteredSupport.length > 0 && (
                 <div className="space-y-1.5">
                   <div className="px-2 text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center justify-between">
@@ -680,7 +896,7 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
               )}
 
               {/* No Search Results Fallback */}
-              {filteredPrimary.length === 0 && filteredCourses.length === 0 && filteredSupport.length === 0 && (
+              {!isNavLinksMatch && filteredPrimary.length === 0 && filteredCourses.length === 0 && filteredSupport.length === 0 && (
                 <div className="p-6 text-center text-slate-500 dark:text-slate-400 text-xs">
                   <p className="font-bold">{isHi ? "कोई परिणाम नहीं मिला" : "No matching sections found"}</p>
                   <p className="text-[11px] mt-1">{isHi ? "कृपया अन्य शब्द खोजें" : "Try searching another keyword"}</p>
@@ -689,7 +905,7 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
 
             </div>
 
-            {/* SECTION D: Direct Action Buttons (Pinned to Drawer Footer) */}
+            {/* SECTION 5: Direct Action Buttons (Pinned to Drawer Footer) */}
             <div className="p-3.5 border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-[#111827]/95 backdrop-blur-md space-y-2.5 shrink-0 pb-[calc(1rem+env(safe-area-inset-bottom))]">
               
               {/* Direct Instant Conversion Dual Buttons: Call Now & WhatsApp Inquiry */}

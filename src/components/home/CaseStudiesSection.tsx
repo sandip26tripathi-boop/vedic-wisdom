@@ -105,8 +105,10 @@ export const CaseStudiesSection: React.FC<CaseStudiesSectionProps> = ({
     <section 
       id="case-studies"
       aria-label={isHi ? "वास्तविक केस स्टडीज" : "Anonymized Case Studies"}
-      className="w-full py-12 lg:py-16 bg-white dark:bg-[#0B0F19] border-t border-slate-200 dark:border-slate-800"
+      className="w-full py-12 lg:py-16 bg-white dark:bg-[#0B0F19] border-t border-slate-200 dark:border-slate-800 relative"
     >
+      <div id="testimonials" className="absolute -top-24" aria-hidden="true" />
+      <div id="results" className="absolute -top-24" aria-hidden="true" />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
         
         {/* Header */}

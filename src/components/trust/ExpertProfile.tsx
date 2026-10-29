@@ -18,10 +18,11 @@ export const ExpertProfile: React.FC<ExpertProfileProps> = ({
 
   return (
     <section 
-      id="expert-profile"
+      id="about"
       aria-label={isHi ? "सलाहकार परिचय" : "Meet Your Consultant"}
-      className="relative w-full py-12 lg:py-16 bg-gradient-to-b from-[#FAF9F6] via-amber-50/20 to-[#FAF9F6] dark:from-[#0B0F19] dark:via-[#0F172A] dark:to-[#0B0F19] border-y border-amber-500/15"
+      className="relative w-full py-12 lg:py-16 bg-gradient-to-b from-[#FAF9F6] via-amber-50/20 to-[#FAF9F6] dark:from-[#0B0F19] dark:via-[#0F172A] dark:to-[#0B0F19] border-y border-amber-500/15 scroll-mt-24"
     >
+      <div id="expert-profile" className="hidden" aria-hidden="true" />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
         <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-3xl border border-amber-500/25 dark:border-amber-500/20 shadow-xl overflow-hidden p-6 sm:p-8 lg:p-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">

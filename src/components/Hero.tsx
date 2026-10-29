@@ -36,7 +36,7 @@ export const Hero: React.FC<HeroProps> = ({
   const t = translations[currentLang];
 
   return (
-    <section className="relative overflow-hidden w-full max-w-full pt-8 pb-16 lg:pt-14 lg:pb-24 border-b border-[#D4AF37]/15 bg-[#FAF9F6] dark:bg-[#0B0F19] transition-colors duration-300">
+    <section id="home" className="relative overflow-hidden w-full max-w-full pt-8 pb-16 lg:pt-14 lg:pb-24 border-b border-[#D4AF37]/15 bg-[#FAF9F6] dark:bg-[#0B0F19] transition-colors duration-300">
       {/* Background Decorative Gradients & Sacred Geometry Watermark */}
       <div className="absolute inset-0 pointer-events-none opacity-30 dark:opacity-20 flex items-center justify-center overflow-hidden">
         <div className="absolute w-[600px] h-[600px] rounded-full bg-radial from-[#D4AF37]/20 via-transparent to-transparent blur-3xl"></div>

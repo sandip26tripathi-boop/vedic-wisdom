@@ -14,22 +14,22 @@ import {
   ShieldCheck, 
   MessageCircle, 
   ChevronRight, 
+  ChevronDown,
+  ChevronUp,
   Sun, 
-  Moon,
-  Layers,
-  LayoutGrid,
-  Menu,
-  TrendingUp,
-  Flame,
-  Calendar,
-  Zap,
-  PhoneCall,
-  MapPin,
-  Bot,
-  Factory,
-  Home,
-  CheckCircle2,
-  BookOpen
+  Moon, 
+  Layers, 
+  Menu, 
+  TrendingUp, 
+  PhoneCall, 
+  Phone,
+  MapPin, 
+  Bot, 
+  Home, 
+  CheckCircle2, 
+  BookOpen,
+  Search,
+  ArrowUpRight
 } from 'lucide-react';
 
 interface MobileCategoryDrawerProps {
@@ -46,26 +46,29 @@ interface MobileCategoryDrawerProps {
   onOpen?: () => void;
 }
 
-interface CategoryItem {
+interface NavItem {
   id: string;
   nameEn: string;
   nameHi: string;
-  descEn: string;
-  descHi: string;
+  descEn?: string;
+  descHi?: string;
+  targetId: string;
   icon: React.ComponentType<{ className?: string }>;
-  targetId?: string;
   badge?: { en: string; hi: string };
   actionType?: 'scroll' | 'copilot' | 'report' | 'booking';
   serviceType?: string;
 }
 
-interface CategoryGroup {
+interface CourseCategoryItem {
   id: string;
-  groupEn: string;
-  groupHi: string;
+  nameEn: string;
+  nameHi: string;
+  descEn: string;
+  descHi: string;
+  targetId: string;
   icon: React.ComponentType<{ className?: string }>;
-  color: string;
-  items: CategoryItem[];
+  badge: { en: string; hi: string };
+  tag: string;
 }
 
 export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
@@ -85,6 +88,11 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isCoursesAccordionOpen, setIsCoursesAccordionOpen] = useState(true);
+  const [activeSectionId, setActiveSectionId] = useState<string>('home');
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+
   const handleOpen = () => {
     if (onOpen) onOpen();
     setInternalIsOpen(true);
@@ -93,8 +101,8 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
   const handleClose = () => {
     if (onClose) onClose();
     setInternalIsOpen(false);
+    setSearchQuery('');
   };
-  const [activeGroup, setActiveGroup] = useState<string | null>(null);
 
   // Prevent background scroll when drawer is open
   useEffect(() => {
@@ -119,274 +127,213 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen]);
 
-  // Categories grounded strictly in the website architecture
-  const CATEGORY_GROUPS: CategoryGroup[] = [
+  // Track active visible section with IntersectionObserver
+  useEffect(() => {
+    const observedSectionIds = [
+      'home',
+      'about',
+      'features',
+      'courses',
+      'category-foundation',
+      'category-advanced',
+      'category-test-series',
+      'category-resources',
+      'testimonials',
+      'faq',
+      'contact',
+      'free-calculators',
+      'consultations'
+    ];
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.15) {
+            setActiveSectionId(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: '-80px 0px -40% 0px', threshold: [0.15, 0.4] }
+    );
+
+    observedSectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Swipe-to-dismiss gesture on mobile touch
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStart === null) return;
+    const touchEnd = e.changedTouches[0].clientX;
+    // Swiping right by more than 65px closes the drawer smoothly
+    if (touchEnd - touchStart > 65) {
+      handleClose();
+    }
+    setTouchStart(null);
+  };
+
+  // SECTION A: Primary Navigation
+  const PRIMARY_NAV_ITEMS: NavItem[] = [
     {
-      id: 'astrology',
-      groupEn: 'Vedic & KP Astrology',
-      groupHi: 'वैदिक एवं केपी ज्योतिष',
-      icon: Sparkles,
-      color: 'text-amber-500',
-      items: [
-        {
-          id: 'kundli-calc',
-          nameEn: 'Janam Kundli Calculator',
-          nameHi: 'जन्मपत्री एवं लग्न कुंडली',
-          descEn: 'Astronomical Lagna, Moon Sign & Nakshatra',
-          descHi: 'प्रामाणिक लग्न, चंद्र राशि एवं नक्षत्र गणना',
-          icon: Compass,
-          targetId: 'free-calculators',
-          badge: { en: 'Free Tool', hi: 'निःशुल्क' }
-        },
-        {
-          id: 'astro-consult',
-          nameEn: 'KP Cuspal Consultations',
-          nameHi: 'केपी कस्पल इंटरलिंक परामर्श',
-          descEn: 'Career, Finance, Marriage & High-stakes timing',
-          descHi: 'करियर, विवाह व व्यवसाय का सूक्ष्म विश्लेषण',
-          icon: TrendingUp,
-          targetId: 'consultations',
-          badge: { en: '1-on-1', hi: 'परामर्श' }
-        },
-        {
-          id: 'digital-reports',
-          nameEn: 'Instant Digital Reports',
-          nameHi: 'डिजिटल जन्मपत्री रिपोर्ट्स',
-          descEn: 'Automated 24-page analytical dossiers with instant download',
-          descHi: '24-पृष्ठ की विस्तृत डिजिटल रिपोर्ट डाउनलोड करें',
-          icon: FileText,
-          targetId: 'digital-reports',
-          badge: { en: 'Instant PDF', hi: 'पीडीएफ' }
-        },
-        {
-          id: 'kp-academy',
-          nameEn: 'KP Astrology Course',
-          nameHi: 'केपी ज्योतिष प्रशिक्षण',
-          descEn: 'Comprehensive Cuspal Sub-Sub Lord mastery',
-          descHi: 'संदीप त्रिपाठी जी द्वारा प्रमाणिक केपी कोर्स',
-          icon: GraduationCap,
-          targetId: 'academy',
-          badge: { en: 'Certified', hi: 'सर्टिफाइड' }
-        }
-      ]
+      id: 'nav-home',
+      nameEn: 'Home',
+      nameHi: 'होम / मुख्य पृष्ठ',
+      descEn: 'Platform landing & holistic overview',
+      descHi: 'मुख्य परिचय व समग्र अवलोकन',
+      targetId: 'home',
+      icon: Home,
     },
     {
-      id: 'vastu',
-      groupEn: 'Spatial & Industrial Vastu',
-      groupHi: 'स्थानिक एवं औद्योगिक वास्तु',
-      icon: Building2,
-      color: 'text-emerald-500',
-      items: [
-        {
-          id: 'vastu-services',
-          nameEn: 'Non-Demolition Energy Vastu',
-          nameHi: 'शून्य तोड़-फोड़ ऊर्जा वास्तु',
-          descEn: 'Elemental metallic strips & pyramid frequency tuning',
-          descHi: 'बिना दीवार तोड़े धातु पट्टियों व पिरामिड ऊर्जा से उपचार',
-          icon: ShieldCheck,
-          targetId: 'services',
-          badge: { en: 'Non-Demolition', hi: 'बिना तोड़-फोड़' }
-        },
-        {
-          id: 'cad-intake',
-          nameEn: '4-Step Layout Intake',
-          nameHi: 'फ़्लोर प्लान व लेआउट समीक्षा',
-          descEn: 'Submit your architectural CAD or sketch for audit',
-          descHi: 'अपने फ्लैट या फैक्ट्री का नक्शा समीक्षा हेतु भेजें',
-          icon: Layers,
-          targetId: 'floor-plan-intake',
-          badge: { en: 'CAD Review', hi: 'नक्शा रिव्यू' }
-        },
-        {
-          id: 'factory-audit',
-          nameEn: 'Commercial & Factory Audits',
-          nameHi: 'औद्योगिक व फैक्ट्री ऑडिट',
-          descEn: 'Machinery stabilization & geopathic stress clearing',
-          descHi: 'भारी मशीनरी स्थिरीकरण व जियोपैथिक स्ट्रेस शोधन',
-          icon: Factory,
-          targetId: 'consultations'
-        },
-        {
-          id: 'compass-tool',
-          nameEn: '16-Zone Digital Compass',
-          nameHi: '16-जोन लाइव वास्तु कम्पास',
-          descEn: 'Calibrate cardinal degrees and inspect Devta zones',
-          descHi: 'अंकीय डिग्री व 16 दिशाओं का तात्कालिक परीक्षण',
-          icon: Compass,
-          targetId: 'free-calculators'
-        }
-      ]
-    },
-    {
-      id: 'numerology',
-      groupEn: 'Numerology & Panchang',
-      groupHi: 'अंकज्योतिष व पंचांग / मुहूर्त',
-      icon: Calendar,
-      color: 'text-sky-500',
-      items: [
-        {
-          id: 'live-panchang',
-          nameEn: 'Live Panchang & Choghadiya',
-          nameHi: 'दैनिक पंचांग व चौघड़िया',
-          descEn: 'Real-time auspicious Muhurta windows (Amrit, Shubh, Labh)',
-          descHi: 'अमृत, शुभ, लाभ आदि कल्याणकारी मुहूर्तों की सूची',
-          icon: Calendar,
-          targetId: 'free-calculators',
-          badge: { en: 'Real-Time', hi: 'लाइव' }
-        },
-        {
-          id: 'rahu-kaal',
-          nameEn: 'Rahu Kaal & Planetary Hora',
-          nameHi: 'राहुकाल व ग्रह होरा चक्र',
-          descEn: 'Astronomical caution windows for contracts and travel',
-          descHi: 'महत्वपूर्ण अनुबंधों व यात्रा हेतु वर्जित समय',
-          icon: Calculator,
-          targetId: 'free-calculators'
-        }
-      ]
-    },
-    {
-      id: 'ai-copilot',
-      groupEn: 'Gemini AI Research Engine',
-      groupHi: 'जेमिनी एआई विश्लेषक',
-      icon: Bot,
-      color: 'text-[#D4AF37]',
-      items: [
-        {
-          id: 'gemini-prompt',
-          nameEn: 'Ask Vedic Gemini AI',
-          nameHi: 'जेमिनी एआई से प्रश्न पूछें',
-          descEn: 'Ask any question on layout defects or KP planetary timing',
-          descHi: 'फैक्ट्री, फ्लैट या कुंडली का प्रश्न लिखकर तुरंत उत्तर पाएं',
-          icon: Sparkles,
-          targetId: 'gemini-ai-prompt',
-          badge: { en: 'Gemini 2.5', hi: 'एआई' }
-        },
-        {
-          id: 'astro-copilot-modal',
-          nameEn: 'Launch AstroCopilot Modal',
-          nameHi: 'एस्ट्रो-कोपायलट सहायक खोलें',
-          descEn: 'Interactive AI dialog grounded in Sandeep Tripathi research',
-          descHi: 'केपी एवं वास्तु सिद्धांतों पर आधारित संवाद सहायक',
-          icon: Bot,
-          actionType: 'copilot',
-          badge: { en: 'Interactive', hi: 'संवाद' }
-        }
-      ]
-    },
-    {
-      id: 'packages',
-      groupEn: 'Services & Consultation Pricing',
-      groupHi: 'सेवाएं व परामर्श शुल्क',
+      id: 'nav-about',
+      nameEn: 'About Us',
+      nameHi: 'हमारे बारे में',
+      descEn: 'Faculty, advisory lineage & research mission',
+      descHi: 'संस्थापक, विशेषज्ञ व प्रामाणिक परंपरा',
+      targetId: 'about',
       icon: Award,
-      color: 'text-amber-600',
-      items: [
-        {
-          id: 'spatial-services',
-          nameEn: 'Property-Specific Services',
-          nameHi: 'संपत्ति अनुसार सेवाएं',
-          descEn: 'Flat, Villa, Commercial, Factory & Kundli services',
-          descHi: 'फ्लैट, विला, प्लॉट, ऑफिस व फैक्ट्री विशिष्ट समाधान',
-          icon: Home,
-          targetId: 'services'
-        },
-        {
-          id: 'tiered-pricing',
-          nameEn: 'Tiered Pricing Architecture',
-          nameHi: 'परामर्श पैकेज व शुल्क',
-          descEn: 'Tier 1 to 3 packages with SLA turnarounds & reports',
-          descHi: 'पारदर्शी शुल्क संरचना एवं लिखित प्रतिवेदन',
-          icon: Award,
-          targetId: 'pricing',
-          badge: { en: 'Transparent', hi: 'पारदर्शी' }
-        },
-        {
-          id: 'book-now',
-          nameEn: 'Book 1-on-1 Consultation',
-          nameHi: 'विशेषज्ञ परामर्श बुक करें',
-          descEn: 'Direct appointment with Sandeep K. Tripathi & team',
-          descHi: 'संदीप त्रिपाठी जी से प्रत्यक्ष परामर्श समय आरक्षित करें',
-          icon: PhoneCall,
-          actionType: 'booking',
-          serviceType: 'industrial',
-          badge: { en: 'Book', hi: 'बुकिंग' }
-        }
-      ]
+      badge: { en: 'Lineage', hi: 'परंपरा' }
     },
     {
-      id: 'knowledge',
-      groupEn: 'Trust, Lineage & Support',
-      groupHi: 'अकादमी, केस स्टडीज व संपर्क',
-      icon: BookOpen,
-      color: 'text-indigo-500',
-      items: [
-        {
-          id: 'leadership',
-          nameEn: 'Advisory Board & Founders',
-          nameHi: 'मार्गदर्शक एवं संस्थापक',
-          descEn: 'Pt. Ravindra Pathak & Master Sandeep K. Tripathi',
-          descHi: 'पंडित रवींद्र पाठक एवं संदीप के. त्रिपाठी जी का परिचय',
-          icon: Award,
-          targetId: 'leadership'
-        },
-        {
-          id: 'case-studies',
-          nameEn: 'Industrial Case Studies',
-          nameHi: 'सफल औद्योगिक केस स्टडीज',
-          descEn: 'Documented field proof of factory turnarounds',
-          descHi: 'फैक्ट्री एवं व्यावसायिक स्थलों के प्रमाणित परिणाम',
-          icon: CheckCircle2,
-          targetId: 'case-studies',
-          badge: { en: 'Verified', hi: 'सत्यापित' }
-        },
-        {
-          id: 'research-blog',
-          nameEn: 'Vedic Research Journal',
-          nameHi: 'वैदिक शोध पत्रिका व ब्लॉग',
-          descEn: 'In-depth articles on spatial energy & Cuspal Interlinks',
-          descHi: 'स्थानिक ऊर्जा व कस्पल इंटरलिंक्स पर विस्तृत लेख',
-          icon: BookOpen,
-          targetId: 'blog'
-        },
-        {
-          id: 'faq-section',
-          nameEn: 'Frequently Asked Questions',
-          nameHi: 'अक्सर पूछे जाने वाले प्रश्न',
-          descEn: 'Clarifications on remedies, online audits & pricing',
-          descHi: 'ऑनलाइन परामर्श व उपायों से संबंधित सभी समाधान',
-          icon: HelpCircle,
-          targetId: 'faq'
-        },
-        {
-          id: 'contact-hq',
-          nameEn: 'Contact Bhopal Headquarters',
-          nameHi: 'भोपाल मुख्यालय से संपर्क',
-          descEn: 'Maple High Street, Bhopal, MP (Hotline +91 90094 48601)',
-          descHi: 'मेपल हाई स्ट्रीट, भोपाल एवं हेल्पलाइन नंबर',
-          icon: MapPin,
-          targetId: 'contact'
-        }
-      ]
+      id: 'nav-features',
+      nameEn: 'Why Choose Us',
+      nameHi: 'हमारी विशेषताएं',
+      descEn: '0% Non-demolition & scientific KP validation',
+      descHi: 'शून्य तोड़-फोड़ एवं वैज्ञानिक सिद्धांत',
+      targetId: 'features',
+      icon: ShieldCheck,
+      badge: { en: '0% Demolition', hi: '0% तोड़-फोड़' }
     }
   ];
 
-  const handleItemClick = (item: CategoryItem) => {
+  // SECTION B: Courses & Categorized Specializations
+  const COURSE_CATEGORIES: CourseCategoryItem[] = [
+    {
+      id: 'cat-foundation',
+      nameEn: 'Foundation Programs',
+      nameHi: 'बुनियादी / फाउंडेशन कोर्सेज',
+      descEn: 'KP Cuspal Interlink & Astrological Core Fundamentals',
+      descHi: 'केपी कस्पल इंटरलिंक्स एवं लग्न सिद्धांत',
+      targetId: 'category-foundation',
+      icon: Compass,
+      badge: { en: 'Foundation', hi: 'फाउंडेशन' },
+      tag: 'KP Sub-Lord Basics'
+    },
+    {
+      id: 'cat-advanced',
+      nameEn: 'Professional & Advanced Tracks',
+      nameHi: 'प्रोफेशनल व एडवांस्ड ट्रैक',
+      descEn: 'Industrial Spatial Vastu & High-Stakes Remedies',
+      descHi: 'औद्योगिक स्थानिक वास्तु व सूक्ष्म ऊर्जा संतुलन',
+      targetId: 'category-advanced',
+      icon: Building2,
+      badge: { en: 'Advanced', hi: 'एडवांस्ड' },
+      tag: 'Industrial Mastery'
+    },
+    {
+      id: 'cat-test-series',
+      nameEn: 'Test Series & Practice Batches',
+      nameHi: 'प्रैक्टिस बैच व कुंडली परीक्षण',
+      descEn: '100+ Live Chart Case Audits & Assessment Certification',
+      descHi: 'प्रत्यक्ष कुंडली परीक्षण व केस स्टडीज',
+      targetId: 'category-test-series',
+      icon: TrendingUp,
+      badge: { en: 'Practice', hi: 'प्रैक्टिस' },
+      tag: 'Live Case Audits'
+    },
+    {
+      id: 'cat-resources',
+      nameEn: 'Free Demo & Study Materials',
+      nameHi: 'निःशुल्क डेमो व अध्ययन सामग्री',
+      descEn: 'Astronomical Calculators, Panchang & Video Previews',
+      descHi: 'कैलकुलेटर, नोट्स व परिचयात्मक वीडियो',
+      targetId: 'category-resources',
+      icon: BookOpen,
+      badge: { en: 'Free Access', hi: 'मुफ्त' },
+      tag: 'Free Tools'
+    }
+  ];
+
+  // SECTION C: Trust & Support
+  const SUPPORT_NAV_ITEMS: NavItem[] = [
+    {
+      id: 'nav-testimonials',
+      nameEn: 'Student Reviews & Results',
+      nameHi: 'छात्र समीक्षाएं व वास्तविक परिणाम',
+      descEn: 'Documented field proof and student success stories',
+      descHi: 'प्रमाणित परिणाम एवं केस स्टडीज',
+      targetId: 'testimonials',
+      icon: CheckCircle2,
+      badge: { en: 'Verified', hi: 'सत्यापित' }
+    },
+    {
+      id: 'nav-faq',
+      nameEn: 'Frequently Asked Questions',
+      nameHi: 'अक्सर पूछे जाने वाले प्रश्न',
+      descEn: 'Clarifications on courses, remedies & pricing',
+      descHi: 'कोर्स, फीस व परामर्श संबंधी समाधान',
+      targetId: 'faq',
+      icon: HelpCircle,
+    },
+    {
+      id: 'nav-contact',
+      nameEn: 'Contact Us / Enquire Now',
+      nameHi: 'मुख्यालय से संपर्क व पूछताछ',
+      descEn: 'Bhopal Headquarters & dedicated consultation helpline',
+      descHi: 'मेपल हाई स्ट्रीट, भोपाल एवं हेल्पलाइन',
+      targetId: 'contact',
+      icon: MapPin,
+      badge: { en: 'Support', hi: 'हेल्पलाइन' }
+    }
+  ];
+
+  const handleNavigate = (targetId: string, actionType?: string, serviceType?: string) => {
     handleClose();
 
-    if (item.actionType === 'copilot' && onOpenCopilot) {
+    if (actionType === 'copilot' && onOpenCopilot) {
       onOpenCopilot();
       return;
     }
 
-    if (item.actionType === 'booking' && onOpenBooking) {
-      onOpenBooking(item.serviceType || 'industrial');
+    if (actionType === 'booking' && onOpenBooking) {
+      onOpenBooking(serviceType || 'industrial');
       return;
     }
 
-    if (item.targetId) {
-      onScrollTo(item.targetId);
+    if (targetId) {
+      onScrollTo(targetId);
     }
   };
+
+  // Filter items if user types in search box
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+  const filterMatch = (en: string, hi: string, descEn?: string, descHi?: string) => {
+    if (!normalizedQuery) return true;
+    return (
+      en.toLowerCase().includes(normalizedQuery) ||
+      hi.toLowerCase().includes(normalizedQuery) ||
+      (descEn && descEn.toLowerCase().includes(normalizedQuery)) ||
+      (descHi && descHi.toLowerCase().includes(normalizedQuery))
+    );
+  };
+
+  const filteredPrimary = PRIMARY_NAV_ITEMS.filter(item => 
+    filterMatch(item.nameEn, item.nameHi, item.descEn, item.descHi)
+  );
+
+  const filteredCourses = COURSE_CATEGORIES.filter(item => 
+    filterMatch(item.nameEn, item.nameHi, item.descEn, item.descHi)
+  );
+
+  const filteredSupport = SUPPORT_NAV_ITEMS.filter(item => 
+    filterMatch(item.nameEn, item.nameHi, item.descEn, item.descHi)
+  );
 
   return (
     <>
@@ -425,7 +372,7 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
           className="fixed inset-0 z-50 flex justify-end"
           role="dialog"
           aria-modal="true"
-          aria-label="Vedic Wisdom Platform Menu"
+          aria-label="Vedic Wisdom Platform Navigation Drawer"
         >
           {/* Backdrop Tap-to-Dismiss */}
           <div 
@@ -434,9 +381,11 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
             aria-hidden="true"
           />
 
-          {/* Drawer Container (Slides from Right) */}
+          {/* Drawer Container (Slides from Right with Touch-Swipe-to-Close) */}
           <div 
-            className="relative w-[86vw] sm:w-[390px] max-w-[420px] h-full bg-[#FAF9F6] dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 z-10 shadow-2xl flex flex-col border-l-2 border-[#D4AF37]/40 animate-in slide-in-from-right duration-300 ease-out"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            className="relative w-[88vw] sm:w-[400px] max-w-[430px] h-full bg-[#FAF9F6] dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 z-10 shadow-2xl flex flex-col border-l-2 border-[#D4AF37]/40 animate-in slide-in-from-right duration-300 ease-out"
           >
             {/* Top Gold Gradient Bar */}
             <div className="h-1.5 w-full bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] shrink-0" />
@@ -450,11 +399,11 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
                   </div>
                 </div>
                 <div>
-                  <h3 className="font-cinzel text-sm font-extrabold text-slate-900 dark:text-white tracking-wide">
-                    VEDIC WISDOM
+                  <h3 className="font-cinzel text-sm font-extrabold text-slate-900 dark:text-white tracking-wide flex items-center gap-1.5">
+                    VEDIC <span className="gold-gradient-text">WISDOM</span>
                   </h3>
                   <p className="text-[10px] text-slate-500 dark:text-slate-400">
-                    {isHi ? "वैदिक ज्ञान एवं सेवा मेनू" : "Platform Navigation Menu"}
+                    {isHi ? "वेबसाइट एवं कोर्स नेविगेशन" : "Site & Courses Navigation"}
                   </p>
                 </div>
               </div>
@@ -463,22 +412,46 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
               <button
                 type="button"
                 onClick={handleClose}
-                className="min-h-[44px] min-w-[44px] p-2 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer flex items-center justify-center"
+                className="min-h-[44px] min-w-[44px] p-2 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer flex items-center justify-center focus:outline-hidden"
                 aria-label={isHi ? "मेनू बंद करें" : "Close menu"}
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Quick Action Pills: Astrocopilot & Free Kundli */}
-            <div className="p-3 bg-amber-500/10 border-b border-[#D4AF37]/20 flex items-center gap-2 shrink-0">
+            {/* Quick Search Filter Input */}
+            <div className="p-3 border-b border-slate-200 dark:border-slate-800/80 bg-slate-50/70 dark:bg-slate-900/50 shrink-0">
+              <div className="relative flex items-center">
+                <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3 pointer-events-none" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={isHi ? "कोर्स या सेक्शन खोजें..." : "Quick search courses or pages..."}
+                  className="w-full min-h-[40px] pl-9 pr-8 text-xs rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/50 transition-all"
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-2.5 p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                    aria-label="Clear search"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Quick Action Pills: AI Copilot & Free Kundli Calculator */}
+            <div className="p-2.5 bg-amber-500/10 border-b border-[#D4AF37]/20 flex items-center gap-2 shrink-0">
               <button
                 type="button"
                 onClick={() => {
                   handleClose();
                   if (onOpenCopilot) onOpenCopilot();
                 }}
-                className="flex-1 min-h-[40px] px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-[#D4AF37]/40 shadow-xs flex items-center justify-center space-x-1.5 text-xs font-bold text-[#B45309] dark:text-[#F3E5AB] cursor-pointer"
+                className="flex-1 min-h-[40px] px-2 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-[#D4AF37]/40 shadow-xs flex items-center justify-center space-x-1.5 text-xs font-bold text-[#B45309] dark:text-[#F3E5AB] cursor-pointer"
               >
                 <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
                 <span>{isHi ? "एआई कोपायलट" : "AI Copilot"}</span>
@@ -486,100 +459,270 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
 
               <button
                 type="button"
-                onClick={() => {
-                  handleClose();
-                  onScrollTo('free-calculators');
-                }}
-                className="flex-1 min-h-[40px] px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] text-slate-950 font-bold text-xs shadow-xs flex items-center justify-center space-x-1.5 cursor-pointer"
+                onClick={() => handleNavigate('free-calculators')}
+                className="flex-1 min-h-[40px] px-2 py-1.5 rounded-xl bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] text-slate-950 font-bold text-xs shadow-xs flex items-center justify-center space-x-1.5 cursor-pointer"
               >
                 <Compass className="w-3.5 h-3.5 text-slate-950" />
                 <span>{isHi ? "कुंडली कैलकुलेटर" : "Free Kundli"}</span>
               </button>
             </div>
 
-            {/* Category Groups Accordion / List (Scrollable Area) */}
-            <div className="flex-1 overflow-y-auto p-3 space-y-3.5 scrollbar-thin">
-              {CATEGORY_GROUPS.map((group) => {
-                const GroupIcon = group.icon;
-                const isExpanded = activeGroup === group.id || activeGroup === null;
+            {/* Scrollable Navigation Area */}
+            <div className="flex-1 overflow-y-auto p-3.5 space-y-4 scrollbar-thin">
+              
+              {/* SECTION A: Primary Navigation */}
+              {filteredPrimary.length > 0 && (
+                <div className="space-y-1.5">
+                  <div className="px-2 text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center justify-between">
+                    <span>{isHi ? "मुख्य नेविगेशन" : "Primary Navigation"}</span>
+                    <span className="text-[10px] text-[#D4AF37] font-semibold">Core</span>
+                  </div>
 
-                return (
-                  <div 
-                    key={group.id}
-                    className="rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800/80 shadow-xs overflow-hidden"
-                  >
-                    {/* Category Group Header */}
+                  <div className="rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800/80 shadow-xs p-1 space-y-0.5 overflow-hidden">
+                    {filteredPrimary.map((item) => {
+                      const Icon = item.icon;
+                      const isActive = activeSectionId === item.targetId;
+
+                      return (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() => handleNavigate(item.targetId, item.actionType, item.serviceType)}
+                          className={`w-full min-h-[46px] p-2.5 rounded-xl text-left transition-all flex items-center justify-between gap-2.5 cursor-pointer ${
+                            isActive
+                              ? 'bg-amber-500/15 text-[#B45309] dark:text-[#F3E5AB] font-black border-l-4 border-[#D4AF37]'
+                              : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 font-semibold'
+                          }`}
+                        >
+                          <div className="flex items-center space-x-2.5 min-w-0">
+                            <div className={`p-1.5 rounded-lg border shrink-0 ${
+                              isActive
+                                ? 'bg-[#D4AF37] text-slate-950 border-[#D4AF37]'
+                                : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-[#D4AF37]'
+                            }`}>
+                              <Icon className="w-3.5 h-3.5" />
+                            </div>
+                            <div className="min-w-0">
+                              <div className="text-xs font-bold truncate">
+                                {isHi ? item.nameHi : item.nameEn}
+                              </div>
+                              {item.descEn && (
+                                <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                                  {isHi ? item.descHi : item.descEn}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="flex items-center space-x-1.5 shrink-0">
+                            {item.badge && (
+                              <span className="px-2 py-0.5 rounded-md bg-[#D4AF37]/15 text-[#B45309] dark:text-[#F3E5AB] text-[9px] font-bold border border-[#D4AF37]/30">
+                                {isHi ? item.badge.hi : item.badge.en}
+                              </span>
+                            )}
+                            <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* SECTION B: Courses & Categorized Specializations (Accordion) */}
+              {(filteredCourses.length > 0 || !searchQuery) && (
+                <div className="space-y-1.5">
+                  <div className="px-2 text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center justify-between">
+                    <span>{isHi ? "पाठ्यक्रम एवं विशेषज्ञता" : "Courses & Specializations"}</span>
                     <button
                       type="button"
-                      onClick={() => setActiveGroup(activeGroup === group.id ? null : group.id)}
-                      className="w-full min-h-[44px] px-3.5 py-2.5 bg-slate-50/70 dark:bg-slate-800/40 flex items-center justify-between border-b border-slate-100 dark:border-slate-800/50 cursor-pointer"
+                      onClick={() => handleNavigate('courses')}
+                      className="text-[10px] text-[#B45309] dark:text-[#F3E5AB] font-bold hover:underline flex items-center gap-0.5 cursor-pointer"
                     >
-                      <div className="flex items-center space-x-2">
-                        <GroupIcon className={`w-4 h-4 ${group.color}`} />
-                        <span className="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wider">
-                          {isHi ? group.groupHi : group.groupEn}
-                        </span>
+                      <span>{isHi ? "सभी देखें" : "View All"}</span>
+                      <ArrowUpRight className="w-3 h-3" />
+                    </button>
+                  </div>
+
+                  <div className="rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800/80 shadow-xs overflow-hidden">
+                    {/* Courses Master Header & Accordion Toggle */}
+                    <button
+                      type="button"
+                      onClick={() => setIsCoursesAccordionOpen(!isCoursesAccordionOpen)}
+                      className="w-full min-h-[46px] px-3.5 py-2.5 bg-gradient-to-r from-amber-500/10 via-[#D4AF37]/10 to-transparent flex items-center justify-between border-b border-slate-100 dark:border-slate-800/60 cursor-pointer"
+                    >
+                      <div className="flex items-center space-x-2.5">
+                        <div className="p-1.5 rounded-lg bg-[#D4AF37]/20 border border-[#D4AF37]/40 text-[#B45309] dark:text-[#F3E5AB]">
+                          <GraduationCap className="w-4 h-4" />
+                        </div>
+                        <div className="text-left">
+                          <div className="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wide">
+                            {isHi ? "अकादमी कोर्स श्रेणियां" : "Academy Course Tracks"}
+                          </div>
+                          <div className="text-[10px] text-slate-500">
+                            {isHi ? "4 मुख्य विषय श्रेणियां" : "4 Specialization tracks"}
+                          </div>
+                        </div>
                       </div>
-                      <ChevronRight 
-                        className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${
-                          isExpanded ? 'rotate-90 text-[#D4AF37]' : ''
-                        }`} 
-                      />
+                      
+                      {isCoursesAccordionOpen ? (
+                        <ChevronUp className="w-4 h-4 text-[#D4AF37]" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4 text-slate-400" />
+                      )}
                     </button>
 
-                    {/* Category Items List */}
-                    {isExpanded && (
+                    {/* Expandable Course Category Items */}
+                    {isCoursesAccordionOpen && (
                       <div className="p-1.5 space-y-1">
-                        {group.items.map((item) => {
-                          const ItemIcon = item.icon;
+                        {filteredCourses.map((cat) => {
+                          const Icon = cat.icon;
+                          const isActive = activeSectionId === cat.targetId;
+
                           return (
                             <button
-                              key={item.id}
+                              key={cat.id}
                               type="button"
-                              onClick={() => handleItemClick(item)}
-                              className="w-full min-h-[46px] p-2.5 rounded-xl hover:bg-[#FAF9F6] dark:hover:bg-slate-800/70 active:bg-amber-500/10 text-left transition-colors flex items-center justify-between gap-2.5 cursor-pointer group"
+                              onClick={() => handleNavigate(cat.targetId)}
+                              className={`w-full min-h-[48px] p-2.5 rounded-xl text-left transition-all flex items-center justify-between gap-2.5 cursor-pointer ${
+                                isActive
+                                  ? 'bg-amber-500/15 text-[#B45309] dark:text-[#F3E5AB] font-black border-l-4 border-[#D4AF37]'
+                                  : 'hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-800 dark:text-slate-200'
+                              }`}
                             >
                               <div className="flex items-center space-x-2.5 min-w-0">
-                                <div className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 text-[#D4AF37] group-hover:scale-105 transition-transform shrink-0">
-                                  <ItemIcon className="w-3.5 h-3.5" />
+                                <div className={`p-1.5 rounded-lg border shrink-0 ${
+                                  isActive
+                                    ? 'bg-[#D4AF37] text-slate-950 border-[#D4AF37]'
+                                    : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-[#D4AF37]'
+                                }`}>
+                                  <Icon className="w-3.5 h-3.5" />
                                 </div>
                                 <div className="min-w-0">
-                                  <div className="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-[#B45309] dark:group-hover:text-[#F3E5AB] transition-colors truncate">
-                                    {isHi ? item.nameHi : item.nameEn}
+                                  <div className="text-xs font-bold truncate">
+                                    {isHi ? cat.nameHi : cat.nameEn}
                                   </div>
-                                  <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate max-w-[190px]">
-                                    {isHi ? item.descHi : item.descEn}
+                                  <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                                    {isHi ? cat.descHi : cat.descEn}
                                   </div>
                                 </div>
                               </div>
 
-                              {item.badge && (
-                                <span className="px-2 py-0.5 rounded-md bg-[#D4AF37]/15 text-[#B45309] dark:text-[#F3E5AB] text-[9px] font-bold shrink-0 border border-[#D4AF37]/30">
-                                  {isHi ? item.badge.hi : item.badge.en}
-                                </span>
-                              )}
+                              <span className="px-2 py-0.5 rounded-md bg-[#D4AF37]/15 text-[#B45309] dark:text-[#F3E5AB] text-[9px] font-bold border border-[#D4AF37]/30 shrink-0">
+                                {isHi ? cat.badge.hi : cat.badge.en}
+                              </span>
                             </button>
                           );
                         })}
                       </div>
                     )}
                   </div>
-                );
-              })}
+                </div>
+              )}
+
+              {/* SECTION C: Trust & Support */}
+              {filteredSupport.length > 0 && (
+                <div className="space-y-1.5">
+                  <div className="px-2 text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center justify-between">
+                    <span>{isHi ? "सत्यापन एवं सहायता" : "Trust & Support"}</span>
+                    <span className="text-[10px] text-emerald-600 font-semibold">Helpdesk</span>
+                  </div>
+
+                  <div className="rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800/80 shadow-xs p-1 space-y-0.5 overflow-hidden">
+                    {filteredSupport.map((item) => {
+                      const Icon = item.icon;
+                      const isActive = activeSectionId === item.targetId;
+
+                      return (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() => handleNavigate(item.targetId, item.actionType, item.serviceType)}
+                          className={`w-full min-h-[46px] p-2.5 rounded-xl text-left transition-all flex items-center justify-between gap-2.5 cursor-pointer ${
+                            isActive
+                              ? 'bg-amber-500/15 text-[#B45309] dark:text-[#F3E5AB] font-black border-l-4 border-[#D4AF37]'
+                              : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 font-semibold'
+                          }`}
+                        >
+                          <div className="flex items-center space-x-2.5 min-w-0">
+                            <div className={`p-1.5 rounded-lg border shrink-0 ${
+                              isActive
+                                ? 'bg-[#D4AF37] text-slate-950 border-[#D4AF37]'
+                                : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-[#D4AF37]'
+                            }`}>
+                              <Icon className="w-3.5 h-3.5" />
+                            </div>
+                            <div className="min-w-0">
+                              <div className="text-xs font-bold truncate">
+                                {isHi ? item.nameHi : item.nameEn}
+                              </div>
+                              {item.descEn && (
+                                <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                                  {isHi ? item.descHi : item.descEn}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="flex items-center space-x-1.5 shrink-0">
+                            {item.badge && (
+                              <span className="px-2 py-0.5 rounded-md bg-[#D4AF37]/15 text-[#B45309] dark:text-[#F3E5AB] text-[9px] font-bold border border-[#D4AF37]/30">
+                                {isHi ? item.badge.hi : item.badge.en}
+                              </span>
+                            )}
+                            <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* No Search Results Fallback */}
+              {filteredPrimary.length === 0 && filteredCourses.length === 0 && filteredSupport.length === 0 && (
+                <div className="p-6 text-center text-slate-500 dark:text-slate-400 text-xs">
+                  <p className="font-bold">{isHi ? "कोई परिणाम नहीं मिला" : "No matching sections found"}</p>
+                  <p className="text-[11px] mt-1">{isHi ? "कृपया अन्य शब्द खोजें" : "Try searching another keyword"}</p>
+                </div>
+              )}
+
             </div>
 
-            {/* Drawer Footer Controls (Language, Theme & Direct WhatsApp) */}
-            <div className="p-3.5 border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-[#111827]/95 backdrop-blur-md space-y-2.5 shrink-0">
+            {/* SECTION D: Direct Action Buttons (Pinned to Drawer Footer) */}
+            <div className="p-3.5 border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-[#111827]/95 backdrop-blur-md space-y-2.5 shrink-0 pb-[calc(1rem+env(safe-area-inset-bottom))]">
               
-              {/* Language & Theme Controls Row (44px min-height buttons) */}
-              <div className="flex items-center justify-between gap-2">
-                
+              {/* Direct Instant Conversion Dual Buttons: Call Now & WhatsApp Inquiry */}
+              <div className="grid grid-cols-2 gap-2">
+                <a
+                  href="tel:+919009448601"
+                  className="min-h-[44px] px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-[#F3E5AB] font-bold text-xs shadow-md border border-[#D4AF37]/50 flex items-center justify-center space-x-1.5 transition-colors cursor-pointer"
+                  title="Direct Phone Call"
+                >
+                  <Phone className="w-3.5 h-3.5 text-[#D4AF37]" />
+                  <span>{isHi ? "कॉल करें" : "Call Now"}</span>
+                </a>
+
+                <a
+                  href="https://wa.me/919009448601?text=Namaste%20Sandeep%20Ji%2C%20I%20am%20browsing%20Vedic%20Wisdom%20and%20would%20like%20to%20inquire%20about%20courses%20and%20consultations."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="min-h-[44px] px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold text-xs shadow-md flex items-center justify-center space-x-1.5 transition-colors cursor-pointer"
+                  title="WhatsApp Inquiry"
+                >
+                  <MessageCircle className="w-3.5 h-3.5" />
+                  <span>{isHi ? "व्हाट्सएप" : "WhatsApp"}</span>
+                </a>
+              </div>
+
+              {/* Language & Theme Controls Row */}
+              <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-100 dark:border-slate-800">
                 {/* Language Switcher */}
                 <div className="flex-1 flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl p-0.5 border border-slate-200 dark:border-slate-700">
                   <button
                     type="button"
                     onClick={() => onLanguageChange('en')}
-                    className={`flex-1 min-h-[44px] text-xs font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center ${
+                    className={`flex-1 min-h-[38px] text-xs font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center ${
                       currentLang === 'en'
                         ? 'bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-white shadow-xs'
                         : 'text-slate-600 dark:text-slate-400'
@@ -590,7 +733,7 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
                   <button
                     type="button"
                     onClick={() => onLanguageChange('hi')}
-                    className={`flex-1 min-h-[44px] text-xs font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center ${
+                    className={`flex-1 min-h-[38px] text-xs font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center ${
                       currentLang === 'hi'
                         ? 'bg-gradient-to-r from-[#D4AF37] to-[#B45309] text-white shadow-xs'
                         : 'text-slate-600 dark:text-slate-400'
@@ -604,34 +747,17 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
                 <button
                   type="button"
                   onClick={onThemeToggle}
-                  className="min-h-[44px] min-w-[44px] px-3 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center space-x-1 text-xs font-bold text-slate-800 dark:text-slate-200 cursor-pointer"
+                  className="min-h-[38px] min-w-[42px] px-3 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center space-x-1 text-xs font-bold text-slate-800 dark:text-slate-200 cursor-pointer"
                   aria-label="Toggle theme"
                   title={currentTheme === 'dark' ? 'Switch to Day Mode' : 'Switch to Night Mode'}
                 >
                   {currentTheme === 'dark' ? (
-                    <>
-                      <Sun className="w-4 h-4 text-amber-400" />
-                      <span className="text-[11px] font-bold">Day</span>
-                    </>
+                    <Sun className="w-4 h-4 text-amber-400" />
                   ) : (
-                    <>
-                      <Moon className="w-4 h-4 text-indigo-500" />
-                      <span className="text-[11px] font-bold">Night</span>
-                    </>
+                    <Moon className="w-4 h-4 text-indigo-500" />
                   )}
                 </button>
               </div>
-
-              {/* Direct WhatsApp Consultation Hotline */}
-              <a
-                href="https://wa.me/919009448601?text=Namaste%20Sandeep%20Ji%2C%20I%20am%20browsing%20Vedic%20Wisdom%20and%20would%20like%20to%20inquire%20about%20a%20consultation."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full min-h-[44px] px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold text-xs shadow-md shadow-emerald-900/20 flex items-center justify-center space-x-2 transition-colors cursor-pointer"
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span>{isHi ? "सीधा व्हाट्सएप परामर्श (+91 90094 48601)" : "Direct WhatsApp Help (+91 90094 48601)"}</span>
-              </a>
 
             </div>
 

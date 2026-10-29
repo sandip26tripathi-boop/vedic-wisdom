@@ -103,3 +103,13 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #AA820A;
 }
+
+/* Smooth anchor navigation offset so sticky header does not overlap section titles */
+section, [id] {
+  scroll-margin-top: 88px;
+}
+@media (min-width: 640px) {
+  section, [id] {
+    scroll-margin-top: 96px;
+  }
+}

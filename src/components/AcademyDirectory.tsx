@@ -150,7 +150,13 @@ export const AcademyDirectory: React.FC<AcademyDirectoryProps> = ({
     : courses.filter(course => course.category === activeTab);
 
   return (
-    <section id="academy" className="py-20 bg-slate-50 dark:bg-[#0F172A] border-y border-[#D4AF37]/20 transition-colors duration-300">
+    <section id="academy" className="py-20 bg-slate-50 dark:bg-[#0F172A] border-y border-[#D4AF37]/20 transition-colors duration-300 relative">
+      {/* Anchor targets for universal mobile course navigation */}
+      <div id="courses" className="absolute -top-24" aria-hidden="true" />
+      <div id="category-foundation" className="absolute -top-24" aria-hidden="true" />
+      <div id="category-advanced" className="absolute -top-24" aria-hidden="true" />
+      <div id="category-test-series" className="absolute -top-24" aria-hidden="true" />
+      <div id="category-resources" className="absolute -top-24" aria-hidden="true" />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}

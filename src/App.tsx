@@ -36,6 +36,7 @@ const CaseStudiesSection = lazy(() => import('./components/home/CaseStudiesSecti
 const BlogSection = lazy(() => import('./components/blog/BlogSection.tsx').then(m => ({ default: m.BlogSection })));
 const FAQSection = lazy(() => import('./components/home/FAQSection.tsx').then(m => ({ default: m.FAQSection })));
 const FloatingWhatsAppButton = lazy(() => import('./components/common/FloatingWhatsAppButton.tsx').then(m => ({ default: m.FloatingWhatsAppButton })));
+const BackToTopButton = lazy(() => import('./components/common/BackToTopButton.tsx').then(m => ({ default: m.BackToTopButton })));
 const MobileCategoryDrawer = lazy(() => import('./components/common/MobileCategoryDrawer.tsx').then(m => ({ default: m.MobileCategoryDrawer })));
 
 // Code-split heavy interactive modals & secondary views for 95+ Mobile Performance
@@ -517,6 +518,11 @@ function MainApp() {
           currentLang={currentLang} 
           onOpenConsultation={() => handleOpenBooking('general')}
         />
+      </Suspense>
+
+      {/* Floating Back to Top Anchor Button */}
+      <Suspense fallback={null}>
+        <BackToTopButton currentLang={currentLang} />
       </Suspense>
 
       {/* Category Action Menu & Slide-Over Drawer (Mobile & Desktop) */}

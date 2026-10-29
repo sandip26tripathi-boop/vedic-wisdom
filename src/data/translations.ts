@@ -428,15 +428,17 @@ export const translations = {
         },
         sandeep: {
           name: "Sandeep K. Tripathi",
-          role: "Principal Researcher & Chief Educator",
+          role: "Researcher in Classical Astrology, Numerology & Spatial Energy Vastu",
+          experience: "12 Years Experience",
+          badge: "12+ Yrs Experience • Classical Astrology, Numerology & Vastu",
           image: "/assets/sandeep-tripathi.jpg",
           credentials: [
-            "12+ Years Intensive Traditional Astrology & Non-Demolition Vastu Research",
+            "12+ Years Intensive Research in Classical Astrology, Numerology & Spatial Energy Vastu",
             "Master of Krishnamurti Padhdhati (KP), Cuspal Interlinks (CIL) & Bhrigu Nandi Nadi",
             "Authority on Jaimini Karakamsha Sutras, Lal Kitab & Swar Vigyan",
             "Trained over 3,500+ Astrologers, Vastu Consultants & Architects Globally"
           ],
-          bio: "Renowned as one of modern India's most dedicated astrological scholars, Sandeep K. Tripathi brings deep scriptural clarity to Vedic arts. His dedicated study of KP Cuspal Interlinks and the Sub-Sub Lord micro-timing system has unlocked traditional clarity in career, corporate litigation, and life forecasting. As chief educator of Vedic Wisdom Academy, he mentors students across 25+ countries.",
+          bio: "Renowned as one of modern India's most dedicated astrological scholars, Sandeep K. Tripathi brings deep scriptural clarity to Vedic arts with 12+ years of intensive research in Classical Astrology, Numerology, and Spatial Energy Vastu. His dedicated study of KP Cuspal Interlinks and the Sub-Sub Lord micro-timing system has unlocked traditional clarity in career, corporate litigation, and life forecasting. As chief educator of Vedic Wisdom Academy, he mentors students across 25+ countries.",
           quote: "Astrology is celestial wisdom and Vastu is sacred spatial harmony. When you harmonize both with classical Vedic traditions, uncertainty transforms into spiritual clarity."
         },
         ravi: {
@@ -995,15 +997,17 @@ export const translations = {
         },
         sandeep: {
           name: "संदीप के. त्रिपाठी",
-          role: "प्रमुख शोधकर्ता एवं मुख्य शिक्षक",
+          role: "शास्त्रीय ज्योतिष, अंकशास्त्र एवं स्थानिक ऊर्जा वास्तु शोधकर्ता",
+          experience: "12 वर्ष का अनुभव",
+          badge: "12+ वर्ष अनुभव • शास्त्रीय ज्योतिष, अंकशास्त्र एवं वास्तु",
           image: "/assets/sandeep-tripathi.jpg",
           credentials: [
-            "12+ वर्षों का पारंपरिक वैदिक ज्योतिष एवं बिना तोड़-फोड़ वास्तु पर गहन अध्ययन",
+            "शास्त्रीय ज्योतिष, अंकशास्त्र एवं स्थानिक ऊर्जा वास्तु में 12+ वर्षों का गहन शोध अनुभव",
             "कृष्णमूर्ति पद्धति (KP), कस्पल इंटरलिंक्स (CIL) एवं भृगु नंदी नाड़ी के मर्मज्ञ",
             "जैमिनी कारकांश, लाल किताब एवं स्वर विज्ञान के आधिकारिक व्याख्याता",
             "विश्व भर में 3,500+ ज्योतिषियों, वास्तु सलाहकारों व आर्किटेक्ट्स को प्रशिक्षित किया"
           ],
-          bio: "आधुनिक भारत के निष्ठावान ज्योतिषीय शोधकर्ताओं में गिने जाने वाले संदीप के. त्रिपाठी जी वैदिक विधाओं में शास्त्रीय प्रामाणिकता लेकर आए हैं। केपी कस्पल इंटरलिंक्स और सब-सब लॉर्ड के पारंपरिक नियमों पर उनके अध्ययन ने करियर, व्यावसायिक मार्गदर्शन और जीवन पथ निर्धारण में स्पष्टता स्थापित की है। वैदिक विजडम एकेडमी के मुख्य शिक्षक के रूप में, वे 25+ देशों के शिष्यों का मार्गदर्शन कर रहे हैं।",
+          bio: "आधुनिक भारत के निष्ठावान ज्योतिषीय शोधकर्ताओं में गिने जाने वाले संदीप के. त्रिपाठी जी शास्त्रीय ज्योतिष, अंकशास्त्र एवं स्थानिक ऊर्जा वास्तु में 12+ वर्षों के सघन शोध के साथ वैदिक विधाओं में प्रामाणिकता लेकर आए हैं। केपी कस्पल इंटरलिंक्स और सब-सब लॉर्ड के पारंपरिक नियमों पर उनके अध्ययन ने करियर, व्यावसायिक मार्गदर्शन और जीवन पथ निर्धारण में स्पष्टता स्थापित की है। वैदिक विजडम एकेडमी के मुख्य शिक्षक के रूप में, वे 25+ देशों के शिष्यों का मार्गदर्शन कर रहे हैं।",
           quote: "ज्योतिष आकाशीय ज्ञान है और वास्तु पवित्र स्थानिक सामंजस्य। जब आप दोनों को पारंपरिक वैदिक सिद्धांतों से जोड़ते हैं, तो अनिश्चितता आध्यात्मिक व व्यावहारिक स्पष्टता में बदल जाती है।"
         },
         ravi: {

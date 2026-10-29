@@ -54,15 +54,15 @@ export const ExpertProfile: React.FC<ExpertProfileProps> = ({
               </h3>
               <p className="text-xs sm:text-sm font-semibold text-amber-900 dark:text-[#F3E5AB] mt-1 max-w-xs">
                 {isHi 
-                  ? "शास्त्रीय ज्योतिष, अंकशास्त्र एवं वास्तु सलाहकार" 
-                  : "Consultant in Classical Astrology, Numerology & Spatial Energy Vastu"}
+                  ? "शास्त्रीय ज्योतिष, अंकशास्त्र एवं स्थानिक ऊर्जा वास्तु शोधकर्ता" 
+                  : "Researcher in Classical Astrology, Numerology & Spatial Energy Vastu"}
               </p>
 
               {/* Key Credentials Strip */}
               <div className="mt-4 flex flex-col space-y-2 w-full max-w-xs">
                 <div className="flex items-center space-x-2 text-xs font-semibold px-3 py-1.5 rounded-lg bg-amber-500/10 dark:bg-amber-500/15 text-amber-950 dark:text-[#F3E5AB] border border-amber-500/20">
                   <BookOpen className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                  <span className="truncate">M.Sc. Mathematics | 25+ Yrs Classical Research</span>
+                  <span className="truncate">{isHi ? "एम.एससी. गणित | 12+ वर्ष का शोध अनुभव" : "M.Sc. Mathematics | 12+ Years Experience"}</span>
                 </div>
                 <div className="flex items-center space-x-2 text-xs font-semibold px-3 py-1.5 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/15 text-emerald-950 dark:text-emerald-300 border border-emerald-500/20">
                   <Compass className="w-3.5 h-3.5 text-emerald-600 shrink-0" />

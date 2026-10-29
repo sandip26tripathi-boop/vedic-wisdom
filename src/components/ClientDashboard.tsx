@@ -397,10 +397,10 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                         Sandeep K. Tripathi
                       </h4>
                       <p className="text-xs text-[#B45309] dark:text-[#F3E5AB] font-medium">
-                        Principal Researcher & Chief Educator
+                        Researcher in Classical Astrology, Numerology & Spatial Energy Vastu
                       </p>
                       <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                        12+ Yrs KP Cuspal Interlink & Non-Demolition Energy Vastu Authority.
+                        12+ Yrs Experience in Classical Astrology, Numerology & Non-Demolition Energy Vastu.
                       </p>
                     </div>
                   </div>

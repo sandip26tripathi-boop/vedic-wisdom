@@ -126,7 +126,7 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({
 
           </div>
 
-          {/* 2. Sandeep K. Tripathi — Principal Researcher & Chief Educator */}
+          {/* 2. Sandeep K. Tripathi — Researcher in Classical Astrology, Numerology & Spatial Energy Vastu */}
           <div className="rounded-3xl p-6 sm:p-8 bg-white dark:bg-[#111827] border border-[#D4AF37]/40 shadow-xl relative overflow-hidden flex flex-col justify-between hover:shadow-2xl transition-all">
             <div className="absolute top-0 right-0 w-40 h-40 bg-radial from-amber-500/10 to-transparent blur-2xl pointer-events-none"></div>
 
@@ -152,7 +152,7 @@ export const LeadershipSection: React.FC<LeadershipSectionProps> = ({
                 </div>
 
                 <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-950 dark:text-amber-200 border border-amber-500/40 self-start sm:self-auto shrink-0">
-                  {currentLang === 'en' ? '12+ Yrs KP & Vastu Researcher' : '12+ वर्ष पारंपरिक शोध'}
+                  {currentLang === 'en' ? '12+ Yrs Experience • Researcher' : '12+ वर्ष अनुभव • शोधकर्ता'}
                 </span>
               </div>
 

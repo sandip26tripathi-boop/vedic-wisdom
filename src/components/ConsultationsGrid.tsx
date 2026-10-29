@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { translations } from '../data/translations.ts';
 import { Language } from '../types/index.ts';
 import { useCart } from '../context/CartContext.tsx';
+import { useCurrency } from '../context/CurrencyContext.tsx';
 import { 
   Sparkles, 
   Factory, 
@@ -33,6 +34,7 @@ export const ConsultationsGrid: React.FC<ConsultationsGridProps> = ({
   onOpenScopeModal,
 }) => {
   const { addToCart, openCart } = useCart();
+  const { formatPrice } = useCurrency();
   const [activeWing, setActiveWing] = useState<'astrology' | 'vastu'>('astrology');
   const t = translations[currentLang];
   const c = t.consultations;
@@ -48,6 +50,10 @@ export const ConsultationsGrid: React.FC<ConsultationsGridProps> = ({
       deliverables: astro.kpCil.deliverables,
       turnaround: astro.kpCil.turnaround,
       idealFor: astro.kpCil.idealFor,
+      priceInr: 5100,
+      priceUsd: 75,
+      timelineEn: '24–48 Hours',
+      timelineHi: '24–48 घंटे',
       icon: <Sparkles className="w-6 h-6 text-[#D4AF37]" />,
       accentColor: 'border-[#D4AF37]/40 hover:border-[#D4AF37]',
       glowColor: 'hover:shadow-[0_0_30px_rgba(212,175,55,0.2)]'
@@ -60,6 +66,10 @@ export const ConsultationsGrid: React.FC<ConsultationsGridProps> = ({
       deliverables: astro.bnn.deliverables,
       turnaround: astro.bnn.turnaround,
       idealFor: astro.bnn.idealFor,
+      priceInr: 4500,
+      priceUsd: 65,
+      timelineEn: '24–48 Hours',
+      timelineHi: '24–48 घंटे',
       icon: <RotateCw className="w-6 h-6 text-amber-500" />,
       accentColor: 'border-amber-500/40 hover:border-amber-500',
       glowColor: 'hover:shadow-[0_0_30px_rgba(245,158,11,0.2)]'
@@ -72,6 +82,10 @@ export const ConsultationsGrid: React.FC<ConsultationsGridProps> = ({
       deliverables: astro.jaimini.deliverables,
       turnaround: astro.jaimini.turnaround,
       idealFor: astro.jaimini.idealFor,
+      priceInr: 4500,
+      priceUsd: 65,
+      timelineEn: '24–48 Hours',
+      timelineHi: '24–48 घंटे',
       icon: <Compass className="w-6 h-6 text-purple-500" />,
       accentColor: 'border-purple-500/40 hover:border-purple-500',
       glowColor: 'hover:shadow-[0_0_30px_rgba(168,85,247,0.2)]'
@@ -84,6 +98,10 @@ export const ConsultationsGrid: React.FC<ConsultationsGridProps> = ({
       deliverables: astro.lalKitab.deliverables,
       turnaround: astro.lalKitab.turnaround,
       idealFor: astro.lalKitab.idealFor,
+      priceInr: 4500,
+      priceUsd: 65,
+      timelineEn: '24–48 Hours',
+      timelineHi: '24–48 घंटे',
       icon: <ShieldCheck className="w-6 h-6 text-rose-500" />,
       accentColor: 'border-rose-500/40 hover:border-rose-500',
       glowColor: 'hover:shadow-[0_0_30px_rgba(244,63,94,0.2)]'
@@ -96,6 +114,10 @@ export const ConsultationsGrid: React.FC<ConsultationsGridProps> = ({
       deliverables: astro.btr.deliverables,
       turnaround: astro.btr.turnaround,
       idealFor: astro.btr.idealFor,
+      priceInr: 6500,
+      priceUsd: 95,
+      timelineEn: '48–72 Hours',
+      timelineHi: '48–72 घंटे',
       icon: <Hourglass className="w-6 h-6 text-sky-500" />,
       accentColor: 'border-sky-500/40 hover:border-sky-500',
       glowColor: 'hover:shadow-[0_0_30px_rgba(14,165,233,0.2)]'
@@ -111,6 +133,10 @@ export const ConsultationsGrid: React.FC<ConsultationsGridProps> = ({
       deliverables: vastu.industrial.deliverables,
       turnaround: vastu.industrial.turnaround,
       idealFor: vastu.industrial.idealFor,
+      priceInr: 25000,
+      priceUsd: 350,
+      timelineEn: '3–5 Business Days',
+      timelineHi: '3–5 कार्य दिवस',
       icon: <Factory className="w-6 h-6 text-[#D4AF37]" />,
       accentColor: 'border-amber-500/40 hover:border-[#D4AF37]',
       glowColor: 'hover:shadow-[0_0_30px_rgba(212,175,55,0.2)]'
@@ -123,6 +149,10 @@ export const ConsultationsGrid: React.FC<ConsultationsGridProps> = ({
       deliverables: vastu.corporate.deliverables,
       turnaround: vastu.corporate.turnaround,
       idealFor: vastu.corporate.idealFor,
+      priceInr: 21000,
+      priceUsd: 295,
+      timelineEn: '3–5 Business Days',
+      timelineHi: '3–5 कार्य दिवस',
       icon: <Building2 className="w-6 h-6 text-sky-400" />,
       accentColor: 'border-sky-500/40 hover:border-sky-400',
       glowColor: 'hover:shadow-[0_0_30px_rgba(56,189,248,0.2)]'
@@ -135,6 +165,10 @@ export const ConsultationsGrid: React.FC<ConsultationsGridProps> = ({
       deliverables: vastu.villa.deliverables,
       turnaround: vastu.villa.turnaround,
       idealFor: vastu.villa.idealFor,
+      priceInr: 11000,
+      priceUsd: 165,
+      timelineEn: '48–72 Hours',
+      timelineHi: '48–72 घंटे',
       icon: <Home className="w-6 h-6 text-emerald-400" />,
       accentColor: 'border-emerald-500/40 hover:border-emerald-400',
       glowColor: 'hover:shadow-[0_0_30px_rgba(52,211,153,0.2)]'
@@ -237,12 +271,24 @@ export const ConsultationsGrid: React.FC<ConsultationsGridProps> = ({
                   ))}
                 </div>
 
-                {/* Turnaround Box */}
-                <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/60 mb-5 text-[11px] text-slate-600 dark:text-slate-400 space-y-1">
-                  <div className="flex items-center space-x-1.5">
-                    <Clock className="w-3 h-3 text-[#D4AF37] shrink-0" />
-                    <span className="font-semibold text-slate-800 dark:text-slate-200">{c.turnaround}</span>
-                    <span>{service.turnaround}</span>
+                {/* Visible Commercial Price & Delivery Timeline Box */}
+                <div className="p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-[#D4AF37]/15 to-transparent border border-[#D4AF37]/35 mb-5 flex items-center justify-between text-xs shadow-2xs">
+                  <div>
+                    <div className="font-mono text-lg font-black text-amber-950 dark:text-[#F3E5AB]">
+                      {formatPrice(service.priceInr, service.priceUsd)}
+                    </div>
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">
+                      {currentLang === 'en' ? 'Direct Consultation Fee' : 'परामर्श शुल्क'}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="inline-flex items-center gap-1 font-bold text-emerald-700 dark:text-emerald-400 text-xs">
+                      <Clock className="w-3.5 h-3.5" />
+                      <span>{currentLang === 'en' ? service.timelineEn : service.timelineHi}</span>
+                    </div>
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
+                      {currentLang === 'en' ? 'Delivery Timeline' : 'डिलीवरी समय'}
+                    </div>
                   </div>
                 </div>
 
@@ -266,8 +312,8 @@ export const ConsultationsGrid: React.FC<ConsultationsGridProps> = ({
                       id: service.id,
                       title: service.title,
                       category: activeWing === 'astrology' ? 'Astrology Consultation' : 'Astro-Vastu Audit',
-                      price: service.id === 'industrial' ? 25000 : service.id === 'corporate' ? 21000 : service.id === 'residential' ? 11000 : service.id === 'kpCil' ? 5100 : 4500,
-                      turnaround: service.turnaround,
+                      price: service.priceInr,
+                      turnaround: currentLang === 'en' ? service.timelineEn : service.timelineHi,
                       badge: service.badge
                     });
                     openCart();
@@ -285,16 +331,16 @@ export const ConsultationsGrid: React.FC<ConsultationsGridProps> = ({
                       id: service.id,
                       title: service.title,
                       category: activeWing === 'astrology' ? 'Astrology Consultation' : 'Astro-Vastu Audit',
-                      price: service.id === 'industrial' ? 25000 : service.id === 'corporate' ? 21000 : service.id === 'residential' ? 11000 : service.id === 'kpCil' ? 5100 : 4500,
-                      turnaround: service.turnaround,
+                      price: service.priceInr,
+                      turnaround: currentLang === 'en' ? service.timelineEn : service.timelineHi,
                       badge: service.badge
                     });
                     openCart();
                   }}
-                  className="min-h-[44px] flex-1 flex items-center justify-center space-x-1 px-3 py-2.5 rounded-xl font-bold text-xs text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 shadow-sm transition-all cursor-pointer"
-                  aria-label={`Book and pay now for ${service.title}`}
+                  className="min-h-[44px] flex-1 flex items-center justify-center space-x-1 px-3 py-2.5 rounded-xl font-extrabold text-xs text-slate-950 bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B45309] hover:opacity-95 shadow-sm transition-all cursor-pointer"
+                  aria-label={`Book now for ${service.title}`}
                 >
-                  <span>{currentLang === 'en' ? 'Book & Pay Now' : 'बुक करें व भुगतान करें'}</span>
+                  <span>{currentLang === 'en' ? 'Book Now' : 'अभी बुक करें'}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>

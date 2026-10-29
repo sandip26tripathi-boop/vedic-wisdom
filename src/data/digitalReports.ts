@@ -179,5 +179,45 @@ export const digitalReportsData: DigitalReportItem[] = [
       "विवाह उपरांत एक-दूसरे के करियर में भाग्य वृद्धि",
       "विवाह पूर्व करने योग्य विशिष्ट वैदिक शांति उपाय"
     ]
+  },
+  {
+    id: "numerologyDossier",
+    titleEn: "Comprehensive Numerology & Name Destiny Report",
+    titleHi: "संपूर्ण अंकशास्त्र एवं नामांक भाग्य रिपोर्ट",
+    badgeEn: "Name & Destiny Vibration",
+    badgeHi: "नामांक व भाग्यांक विश्लेषण",
+    descriptionEn: "Rigorous vibrational alignment of your Name Number (Namaank), Psychic Number (Mulaank), and Destiny Number (Bhagyaank) using Chaldean & Pythagorean principles to remove obstacles and align career, finances, and partnerships.",
+    descriptionHi: "कीरो एवं पाइथागोरस अंकशास्त्र पर आधारित। आपके नामांक, मूलांक और भाग्यांक का संपूर्ण सामंजस्य, अनुकूल अंक, शुभ रंग और करियर में प्रगति हेतु व्यावहारिक नाम स्पंदन सुधार।",
+    priceInr: "₹899",
+    priceUsd: "$17",
+    pagesEn: "35–40 Pages PDF",
+    pagesHi: "35–40 पृष्ठ विस्तृत रिपोर्ट",
+    deliveryTimeEn: "Instant Automated Delivery (Within 2 Hours)",
+    deliveryTimeHi: "त्वरित ऑटोमेटेड डिलीवरी (2 घंटे के भीतर)",
+    highlightsEn: [
+      "Chaldean & Pythagorean name number resonance test",
+      "Life path & destiny number 5-year growth cycles",
+      "Lucky business dates, branding numbers & signature analysis",
+      "Remedial yantras, favorable colors and planetary days"
+    ],
+    highlightsHi: [
+      "कीरो व पाइथागोरस पद्धति अनुसार नाम स्पंदन संतुलन",
+      "जीवन पथ एवं भाग्यांक के अनुसार अगले 5 वर्षों के चक्र",
+      "व्यवसाय व हस्ताक्षर (Signature) हेतु अनुकूल अंक व रंग",
+      "अंक स्वामी ग्रह के अनुसार अनुकूल दिन, रत्न व दान नियम"
+    ],
+    icon: "Calculator",
+    sampleTopicsEn: [
+      "Master Numbers 11, 22, 33 Significance & Planetary Rulership",
+      "Corporate & Personal Name Spelling Correction Matrix",
+      "Personal Year 9-Year Cyclical Forecast & Decision Windows",
+      "Compatibility Analysis with Business Partners & Spouse"
+    ],
+    sampleTopicsHi: [
+      "मास्टर नंबर 11, 22, 33 का प्रभाव एवं ग्रह आधिपत्य",
+      "कंपनी व व्यक्तिगत नाम वर्तनी (Spelling) संतुलन मैट्रिक्स",
+      "व्यक्तिगत वर्ष (Personal Year) 9-वर्षीय चक्र व निर्णय काल",
+      "जीवनसाथी व व्यावसायिक साझीदारों संग अंक अनुकूलता"
+    ]
   }
 ];

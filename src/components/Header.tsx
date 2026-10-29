@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SriYantraMotif } from './SriYantraMotif.tsx';
 import { 
   Sun, 
@@ -54,6 +54,32 @@ export const Header: React.FC<HeaderProps> = ({
   const [astroDropdownOpen, setAstroDropdownOpen] = useState(false);
   const [vastuDropdownOpen, setVastuDropdownOpen] = useState(false);
   const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('#header-profile-dropdown-container')) {
+        setProfileDropdownOpen(false);
+      }
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setProfileDropdownOpen(false);
+        setAstroDropdownOpen(false);
+        setVastuDropdownOpen(false);
+        setMoreDropdownOpen(false);
+      }
+    };
+    if (profileDropdownOpen) {
+      document.addEventListener('click', handleClickOutside);
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [profileDropdownOpen]);
 
   const t = translations[currentLang];
 
@@ -102,6 +128,7 @@ export const Header: React.FC<HeaderProps> = ({
     setAstroDropdownOpen(false);
     setVastuDropdownOpen(false);
     setMoreDropdownOpen(false);
+    setProfileDropdownOpen(false);
     const element = document.getElementById(anchorId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -296,55 +323,111 @@ export const Header: React.FC<HeaderProps> = ({
               <span>{t.nav.academy}</span>
             </button>
 
-            {/* 5. More ▾ Dropdown (Calculators, Leadership, FAQ, AI Copilot) */}
+            {/* 5. More ▾ Dropdown (KP CIL, Shubh Muhurta, Numerology, Leadership, FAQ, AI Copilot) */}
             <div 
               className="relative"
               onMouseEnter={() => setMoreDropdownOpen(true)}
               onMouseLeave={() => setMoreDropdownOpen(false)}
             >
               <button 
-                className="flex items-center space-x-1 px-2.5 py-2 rounded-lg hover:text-[#B45309] dark:hover:text-[#D4AF37] hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors"
+                className="flex items-center space-x-1 px-2.5 py-2 rounded-lg hover:text-[#B45309] dark:hover:text-[#D4AF37] hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors cursor-pointer"
               >
                 <span>{currentLang === 'en' ? 'More' : 'अन्य'}</span>
                 <ChevronDown className="w-3.5 h-3.5 opacity-70" />
               </button>
 
               {moreDropdownOpen && (
-                <div className="absolute top-full right-0 w-52 rounded-xl bg-white dark:bg-[#111827] border border-[#D4AF37]/30 shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="absolute top-full right-0 w-64 rounded-2xl bg-white dark:bg-[#111827] border border-[#D4AF37]/35 shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 px-2 py-1 uppercase tracking-wider">
+                    {currentLang === 'en' ? 'Specialized Disciplines' : 'विशिष्ट पद्धतियां व सेवाएं'}
+                  </div>
+
+                  {/* 1. KP Cuspal Interlink (CIL) */}
                   <button 
-                    onClick={() => { setMoreDropdownOpen(false); handleNavClick('free-calculators'); }}
-                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-slate-200"
+                    onClick={() => { setMoreDropdownOpen(false); handleNavClick('cil-astrology'); }}
+                    className="w-full text-left p-2 rounded-xl hover:bg-[#D4AF37]/10 transition-colors flex items-center justify-between text-xs text-slate-800 dark:text-slate-200 group cursor-pointer"
                   >
-                    <Calculator className="w-3.5 h-3.5 text-[#D4AF37]" />
-                    <span>{t.nav.calculators}</span>
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
+                      <div>
+                        <div className="font-bold group-hover:text-[#B45309] dark:group-hover:text-[#D4AF37]">
+                          KP Cuspal Interlink (CIL)
+                        </div>
+                        <div className="text-[10px] text-slate-500">
+                          {currentLang === 'en' ? 'Sub-Sub Lord precision' : 'कस्पल सब-सब लॉर्ड गणना'}
+                        </div>
+                      </div>
+                    </div>
+                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-[#D4AF37]/15 text-[#B45309] dark:text-[#F3E5AB]">
+                      CIL
+                    </span>
                   </button>
+
+                  {/* 2. Shubh Muhurta */}
+                  <button 
+                    onClick={() => { setMoreDropdownOpen(false); handleNavClick('muhurta'); }}
+                    className="w-full text-left p-2 rounded-xl hover:bg-[#D4AF37]/10 transition-colors flex items-center justify-between text-xs text-slate-800 dark:text-slate-200 group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Calculator className="w-3.5 h-3.5 text-emerald-500" />
+                      <div>
+                        <div className="font-bold group-hover:text-emerald-600 dark:group-hover:text-emerald-400">
+                          {currentLang === 'en' ? 'Shubh Muhurta' : 'शुभ मुहूर्त व चौघड़िया'}
+                        </div>
+                        <div className="text-[10px] text-slate-500">
+                          {currentLang === 'en' ? 'Daily auspicious windows' : 'दैनिक शुभ चौघड़िया समय'}
+                        </div>
+                      </div>
+                    </div>
+                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-300">
+                      Live
+                    </span>
+                  </button>
+
+                  {/* 3. Numerology */}
+                  <button 
+                    onClick={() => { setMoreDropdownOpen(false); handleNavClick('numerology'); }}
+                    className="w-full text-left p-2 rounded-xl hover:bg-[#D4AF37]/10 transition-colors flex items-center justify-between text-xs text-slate-800 dark:text-slate-200 group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Compass className="w-3.5 h-3.5 text-indigo-500" />
+                      <div>
+                        <div className="font-bold group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+                          {currentLang === 'en' ? 'Numerology' : 'अंकशास्त्र (न्यूमरोलॉजी)'}
+                        </div>
+                        <div className="text-[10px] text-slate-500">
+                          {currentLang === 'en' ? 'Name destiny & vibrations' : 'नामांक, मूलांक व भाग्यांक'}
+                        </div>
+                      </div>
+                    </div>
+                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-indigo-500/15 text-indigo-700 dark:text-indigo-300">
+                      1-9
+                    </span>
+                  </button>
+
+                  <div className="my-1.5 border-t border-slate-100 dark:border-slate-800" />
+
+                  {/* Leadership, FAQ, Copilot */}
                   <button 
                     onClick={() => { setMoreDropdownOpen(false); handleNavClick('leadership'); }}
-                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-slate-200"
+                    className="w-full text-left p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer"
                   >
                     <Award className="w-3.5 h-3.5 text-amber-500" />
                     <span>{t.nav.leadership}</span>
                   </button>
                   <button 
                     onClick={() => { setMoreDropdownOpen(false); handleNavClick('faq'); }}
-                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-slate-200"
+                    className="w-full text-left p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer"
                   >
                     <HelpCircle className="w-3.5 h-3.5 text-sky-500" />
                     <span>FAQ</span>
                   </button>
                   <button 
                     onClick={() => { setMoreDropdownOpen(false); onOpenCopilot && onOpenCopilot(); }}
-                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors flex items-center gap-2 text-xs font-semibold text-[#B45309] dark:text-[#F3E5AB]"
+                    className="w-full text-left p-2 rounded-xl hover:bg-[#D4AF37]/10 transition-colors flex items-center gap-2 text-xs font-bold text-[#B45309] dark:text-[#F3E5AB] cursor-pointer"
                   >
                     <Bot className="w-3.5 h-3.5 text-[#D4AF37]" />
                     <span>AI Copilot</span>
-                  </button>
-                  <button 
-                    onClick={() => { setMoreDropdownOpen(false); onOpenGenerateReport && onOpenGenerateReport(); }}
-                    className="w-full text-left p-2 rounded-lg hover:bg-[#D4AF37]/10 transition-colors flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-slate-200"
-                  >
-                    <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
-                    <span>AI Dossier</span>
                   </button>
                 </div>
               )}
@@ -447,37 +530,121 @@ export const Header: React.FC<HeaderProps> = ({
               )}
             </button>
 
-            {/* PROMINENT TOP-RIGHT GMAIL SIGN-IN & VERIFIED ACCOUNT BADGE */}
+            {/* PROMINENT TOP-RIGHT AUTH HEADER ACTION */}
             {isAuthenticated ? (
-              <div className="flex items-center gap-1 shrink-0">
+              <div id="header-profile-dropdown-container" className="relative shrink-0">
                 <button
-                  onClick={onOpenDashboard}
-                  className="min-h-[44px] inline-flex items-center space-x-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-xs font-bold text-slate-900 dark:text-white bg-amber-500/20 hover:bg-amber-500/30 border border-[#D4AF37] shadow-sm cursor-pointer transition-all shrink-0 max-w-[160px] sm:max-w-[210px]"
-                  title="Open Client Dashboard"
-                  aria-label="Open Vedic Client Portal Dashboard"
+                  type="button"
+                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                  className="min-h-[44px] inline-flex items-center space-x-2 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-2xl text-xs font-bold text-slate-900 dark:text-white bg-white/90 dark:bg-slate-900/90 hover:bg-slate-100 dark:hover:bg-slate-800 border border-[#D4AF37]/60 hover:border-[#D4AF37] shadow-sm cursor-pointer transition-all shrink-0 max-w-[170px] sm:max-w-[220px]"
+                  title={currentLang === 'en' ? 'Account Menu' : 'उपयोगकर्ता प्रोफाइल'}
+                  aria-label="Toggle user account menu"
+                  aria-expanded={profileDropdownOpen}
                 >
-                  <span className="w-4 h-4 rounded-full bg-white flex items-center justify-center p-0.5 shadow-2xs shrink-0">
-                    <svg className="w-3 h-3" viewBox="0 0 24 24" aria-hidden="true">
-                      <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.27-2.09 3.66-5.17 3.66-9.12z" />
-                      <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.26 21.36 7.33 24 12 24z" />
-                      <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.58H1.25C.45 8.17 0 9.99 0 12s.45 3.83 1.25 5.42l4.03-3.13z" />
-                      <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.13c.95-2.83 3.6-4.96 6.72-4.96z" />
-                    </svg>
+                  <span className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#D4AF37] via-[#F3E5AB] to-[#B45309] text-slate-950 font-black text-xs flex items-center justify-center shadow-xs shrink-0 ring-1 ring-white/50">
+                    {user?.name ? user.name.charAt(0).toUpperCase() : (user?.email?.charAt(0).toUpperCase() || 'U')}
                   </span>
-                  <span className="font-extrabold text-[11px] sm:text-xs truncate">
-                    {user?.name || user?.email?.split('@')[0] || 'Gmail Client'}
-                  </span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" title="Verified Session" />
+                  <div className="text-left min-w-0 flex-1 hidden sm:block">
+                    <div className="font-extrabold text-xs truncate text-slate-900 dark:text-white">
+                      {user?.name || user?.email?.split('@')[0] || 'Vedic Client'}
+                    </div>
+                    <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      <span>{currentLang === 'en' ? 'Verified Member' : 'प्रमाणित सदस्य'}</span>
+                    </div>
+                  </div>
+                  <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${profileDropdownOpen ? 'rotate-180 text-[#D4AF37]' : ''}`} />
                 </button>
-                <button
-                  onClick={logout}
-                  className="min-h-[44px] inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-bold text-red-600 dark:text-red-400 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 cursor-pointer transition-all shrink-0"
-                  title={currentLang === 'en' ? 'Sign Out / Logout' : 'साइन आउट'}
-                  aria-label={currentLang === 'en' ? 'Sign Out of Vedic Wisdom' : 'साइन आउट करें'}
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                  <span className="hidden md:inline font-bold">{currentLang === 'en' ? 'Sign Out' : 'लॉगआउट'}</span>
-                </button>
+
+                {/* Profile Interactive Dropdown Menu */}
+                {profileDropdownOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-72 rounded-2xl bg-white dark:bg-[#111827] border border-[#D4AF37]/40 shadow-2xl p-3 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                    {/* User Summary Header */}
+                    <div className="p-2.5 rounded-xl bg-gradient-to-r from-amber-500/10 via-[#D4AF37]/15 to-transparent border border-[#D4AF37]/25 mb-2">
+                      <div className="flex items-center space-x-2.5">
+                        <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#D4AF37] to-[#B45309] text-slate-950 font-black text-sm flex items-center justify-center shrink-0 shadow-xs">
+                          {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="font-extrabold text-xs text-slate-900 dark:text-white truncate">
+                            {user?.name || 'Vedic Wisdom Client'}
+                          </div>
+                          <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                            {user?.email || (user?.phone ? `+91 ${user.phone}` : 'Active Session')}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Nav Actions */}
+                    <div className="space-y-1 text-xs">
+                      <button
+                        onClick={() => {
+                          setProfileDropdownOpen(false);
+                          if (onOpenDashboard) onOpenDashboard();
+                        }}
+                        className="w-full text-left p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center gap-2.5 font-bold text-slate-800 dark:text-slate-200 cursor-pointer"
+                      >
+                        <User className="w-4 h-4 text-[#D4AF37]" />
+                        <span>{currentLang === 'en' ? 'Client Portal & Dashboard' : 'क्लाइंट पोर्टल व डैशबोर्ड'}</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setProfileDropdownOpen(false);
+                          handleNavClick('digital-reports');
+                        }}
+                        className="w-full text-left p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center gap-2.5 font-semibold text-slate-700 dark:text-slate-300 cursor-pointer"
+                      >
+                        <FileText className="w-4 h-4 text-sky-500" />
+                        <span>{currentLang === 'en' ? 'My Digital Reports' : 'मेरी डिजिटल रिपोर्ट्स'}</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setProfileDropdownOpen(false);
+                          handleNavClick('consultations');
+                        }}
+                        className="w-full text-left p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center gap-2.5 font-semibold text-slate-700 dark:text-slate-300 cursor-pointer"
+                      >
+                        <Sparkles className="w-4 h-4 text-amber-500" />
+                        <span>{currentLang === 'en' ? 'Active Consultations' : 'सक्रिय परामर्श सेवाएं'}</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setProfileDropdownOpen(false);
+                          openCart();
+                        }}
+                        className="w-full text-left p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center justify-between font-semibold text-slate-700 dark:text-slate-300 cursor-pointer"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <ShoppingBag className="w-4 h-4 text-emerald-500" />
+                          <span>{currentLang === 'en' ? 'Vedic Cart' : 'वैदिक सर्विसेज कार्ट'}</span>
+                        </div>
+                        {totalItems > 0 && (
+                          <span className="px-2 py-0.5 rounded-full bg-[#D4AF37] text-slate-950 font-bold font-mono text-[10px]">
+                            {totalItems}
+                          </span>
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="my-2 border-t border-slate-100 dark:border-slate-800" />
+
+                    {/* Sign Out Button */}
+                    <button
+                      onClick={() => {
+                        setProfileDropdownOpen(false);
+                        logout();
+                      }}
+                      className="w-full text-left p-2 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-500/10 transition-colors flex items-center gap-2 font-bold cursor-pointer text-xs"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      <span>{currentLang === 'en' ? 'Sign Out of Account' : 'खाते से साइन आउट करें'}</span>
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <button
@@ -644,14 +811,6 @@ export const Header: React.FC<HeaderProps> = ({
             </span>
           </button>
 
-          {/* Mobile Currency & Language Bar */}
-          <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-            <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
-              {currentLang === 'en' ? 'Currency & Timezone:' : 'मुद्रा व समय क्षेत्र:'}
-            </span>
-            <CurrencyToggle />
-          </div>
-
           {/* AI Tools Quick Access Strip */}
           <div className="grid grid-cols-2 gap-2">
             <button
@@ -670,44 +829,108 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           </div>
 
-          <div className="flex flex-col space-y-1.5 pt-2 text-sm">
+          <div className="flex flex-col space-y-1 pt-2 text-sm">
             <button
               onClick={() => { setMobileMenuOpen(false); onOpenCategoryDrawer && onOpenCategoryDrawer(); }}
-              className="min-h-[44px] text-left py-2.5 px-3 rounded-xl font-bold text-[#B45309] dark:text-[#F3E5AB] bg-[#D4AF37]/15 border border-[#D4AF37]/40 flex items-center space-x-2.5 cursor-pointer"
+              className="min-h-[44px] text-left py-2.5 px-3 rounded-xl font-bold text-[#B45309] dark:text-[#F3E5AB] bg-[#D4AF37]/15 border border-[#D4AF37]/40 flex items-center justify-between cursor-pointer"
             >
-              <Menu className="w-4 h-4 text-[#D4AF37]" />
-              <span>{currentLang === 'en' ? 'Explore Site Menu' : 'संपूर्ण वेबसाइट मेनू'}</span>
+              <span className="flex items-center space-x-2.5">
+                <Menu className="w-4 h-4 text-[#D4AF37]" />
+                <span>{currentLang === 'en' ? 'Explore Site Menu' : 'संपूर्ण वेबसाइट मेनू'}</span>
+              </span>
+              <ArrowRight className="w-3.5 h-3.5 text-[#D4AF37]" />
             </button>
+
+            {/* 1. Astrology */}
             <button
-              onClick={() => handleNavClick('consultations')}
-              className="min-h-[44px] text-left py-2.5 px-3 rounded-xl font-medium text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10 flex items-center"
+              onClick={() => handleNavClick('astrology')}
+              className="min-h-[44px] text-left py-2.5 px-3 rounded-xl font-semibold text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10 flex items-center justify-between cursor-pointer"
             >
-              {t.nav.astrology} & {t.nav.astroVastu}
+              <span className="flex items-center space-x-2">
+                <Sparkles className="w-4 h-4 text-[#D4AF37]" />
+                <span>{t.nav.astrology}</span>
+              </span>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#D4AF37]/15 text-[#B45309] dark:text-[#F3E5AB]">
+                {currentLang === 'en' ? 'KP / CIL' : 'केपी'}
+              </span>
             </button>
+
+            {/* 2. Astro-Vastu */}
+            <button
+              onClick={() => handleNavClick('astro-vastu')}
+              className="min-h-[44px] text-left py-2.5 px-3 rounded-xl font-semibold text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10 flex items-center justify-between cursor-pointer"
+            >
+              <span className="flex items-center space-x-2">
+                <Compass className="w-4 h-4 text-emerald-500" />
+                <span>{t.nav.astroVastu}</span>
+              </span>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300">
+                {currentLang === 'en' ? '0% Demolition' : 'बिना तोड़-फोड़'}
+              </span>
+            </button>
+
+            {/* 3. Digital Reports */}
             <button
               onClick={() => handleNavClick('digital-reports')}
-              className="min-h-[44px] text-left py-2.5 px-3 rounded-xl font-medium text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10 flex items-center"
+              className="min-h-[44px] text-left py-2.5 px-3 rounded-xl font-semibold text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10 flex items-center justify-between cursor-pointer"
             >
-              {t.nav.digitalReports}
+              <span className="flex items-center space-x-2">
+                <FileText className="w-4 h-4 text-sky-500" />
+                <span>{t.nav.digitalReports}</span>
+              </span>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-700 dark:text-sky-300">
+                PDF
+              </span>
             </button>
+
+            {/* 4. Academy & Courses */}
             <button
               onClick={() => handleNavClick('academy')}
-              className="min-h-[44px] text-left py-2.5 px-3 rounded-xl font-medium text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10 flex items-center"
+              className="min-h-[44px] text-left py-2.5 px-3 rounded-xl font-semibold text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10 flex items-center justify-between cursor-pointer"
             >
-              {t.nav.academy}
+              <span className="flex items-center space-x-2">
+                <GraduationCap className="w-4 h-4 text-purple-500" />
+                <span>{t.nav.academy}</span>
+              </span>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-700 dark:text-purple-300">
+                Cert
+              </span>
             </button>
-            <button
-              onClick={() => handleNavClick('free-calculators')}
-              className="min-h-[44px] text-left py-2.5 px-3 rounded-xl font-medium text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10 flex items-center"
-            >
-              {t.nav.calculators}
-            </button>
-            <button
-              onClick={() => handleNavClick('faq')}
-              className="min-h-[44px] text-left py-2.5 px-3 rounded-xl font-medium text-slate-800 dark:text-slate-100 hover:bg-[#D4AF37]/10 flex items-center"
-            >
-              FAQ
-            </button>
+
+            {/* 5. More Specific Links */}
+            <div className="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1">
+              <div className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                {currentLang === 'en' ? 'Specializations & Muhurta' : 'विशिष्ट पद्धतियां एवं मुहूर्त'}
+              </div>
+              <button
+                onClick={() => handleNavClick('cil-astrology')}
+                className="min-h-[40px] w-full text-left py-2 px-3 rounded-xl font-medium text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between cursor-pointer"
+              >
+                <span>KP Cuspal Interlink (CIL)</span>
+                <span className="text-[9px] text-amber-600 dark:text-amber-400 font-mono">CIL</span>
+              </button>
+              <button
+                onClick={() => handleNavClick('muhurta')}
+                className="min-h-[40px] w-full text-left py-2 px-3 rounded-xl font-medium text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between cursor-pointer"
+              >
+                <span>{currentLang === 'en' ? 'Shubh Muhurta & Choghadiya' : 'शुभ मुहूर्त व चौघड़िया'}</span>
+                <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-mono">Live</span>
+              </button>
+              <button
+                onClick={() => handleNavClick('numerology')}
+                className="min-h-[40px] w-full text-left py-2 px-3 rounded-xl font-medium text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between cursor-pointer"
+              >
+                <span>{currentLang === 'en' ? 'Numerology & Name Vibration' : 'अंकशास्त्र (न्यूमरोलॉजी)'}</span>
+                <span className="text-[9px] text-indigo-600 dark:text-indigo-400 font-mono">1-9</span>
+              </button>
+              <button
+                onClick={() => handleNavClick('faq')}
+                className="min-h-[40px] w-full text-left py-2 px-3 rounded-xl font-medium text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-between cursor-pointer"
+              >
+                <span>FAQ</span>
+                <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
+              </button>
+            </div>
           </div>
         </div>
       )}

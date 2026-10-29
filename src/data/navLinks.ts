@@ -79,6 +79,15 @@ export const navLinks: NavLinkItem[] = [
         desc: "Live daily auspicious Muhurta windows (Amrit, Shubh, Labh)",
         descHi: "अमृत, शुभ व लाभ आदि कल्याणकारी मुहूर्तों की सूची",
         badge: { en: "Live", hi: "लाइव" }
+      },
+      { 
+        name: "Numerology", 
+        nameHi: "अंकशास्त्र (न्यूमरोलॉजी)",
+        href: "/numerology",
+        targetId: "numerology",
+        desc: "Name vibration & life path destiny numbers",
+        descHi: "नामांक, मूलांक व भाग्यांक विश्लेषण",
+        badge: { en: "Numbers", hi: "अंकशास्त्र" }
       }
     ]
   }

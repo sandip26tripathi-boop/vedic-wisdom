@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext.tsx';
 import { Language } from '../../types/index.ts';
 import { SriYantraMotif } from '../SriYantraMotif.tsx';
 import { GlobalPlaceSearch, SelectedPlace } from '../ui/GlobalPlaceSearch.tsx';
+import { validateName, validateCity, validateDob, validateTob } from '../../utils/validation.ts';
 import { 
   Sparkles, 
   User, 
@@ -47,6 +48,7 @@ export const ReportForm: React.FC<ReportFormProps> = ({
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationStep, setGenerationStep] = useState(1);
   const [errorMsg, setErrorMsg] = useState('');
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handlePlaceSelect = (place: SelectedPlace) => {
     setPob(place.cityName);
@@ -114,14 +116,32 @@ export const ReportForm: React.FC<ReportFormProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!fullName.trim() || !dob || !tob) {
+    const newErrors: Record<string, string> = {};
+
+    const nameVal = validateName(fullName, currentLang);
+    if (!nameVal.isValid && nameVal.error) newErrors.fullName = nameVal.error;
+
+    const dobVal = validateDob(dob, currentLang);
+    if (!dobVal.isValid && dobVal.error) newErrors.dob = dobVal.error;
+
+    const tobVal = validateTob(tob, currentLang);
+    if (!tobVal.isValid && tobVal.error) newErrors.tob = tobVal.error;
+
+    const pobVal = validateCity(pob, currentLang);
+    if (!pobVal.isValid && pobVal.error) newErrors.pob = pobVal.error;
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       setErrorMsg(
         currentLang === 'en'
-          ? 'Please fill in all required birth details.'
-          : 'कृपया सभी आवश्यक जन्म विवरण भरें।'
+          ? 'Please correct highlighted errors in the birth details.'
+          : 'कृपया जन्म विवरण में दी गई त्रुटियों को सुधारें।'
       );
       return;
     }
+
+    setErrors({});
+    setErrorMsg('');
 
     // Task 1: Strict Auth & Mobile OTP Verification Funnel Gate
     // If user is unauthenticated or phone number is not verified, intercept immediately
@@ -250,10 +270,16 @@ export const ReportForm: React.FC<ReportFormProps> = ({
                     required
                     placeholder="e.g. Vikramaditya Singhania"
                     value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                    onChange={(e) => {
+                      setFullName(e.target.value);
+                      if (errors.fullName) setErrors(prev => ({ ...prev, fullName: '' }));
+                    }}
+                    className={`w-full pl-10 pr-4 py-2.5 rounded-xl border ${errors.fullName ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700'} bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37]`}
                   />
                 </div>
+                {errors.fullName && (
+                  <p className="text-[11px] text-red-500 font-semibold mt-1">{errors.fullName}</p>
+                )}
               </div>
 
               <div className="sm:col-span-4">
@@ -286,10 +312,16 @@ export const ReportForm: React.FC<ReportFormProps> = ({
                     type="date"
                     required
                     value={dob}
-                    onChange={(e) => setDob(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                    onChange={(e) => {
+                      setDob(e.target.value);
+                      if (errors.dob) setErrors(prev => ({ ...prev, dob: '' }));
+                    }}
+                    className={`w-full pl-10 pr-4 py-2.5 rounded-xl border ${errors.dob ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700'} bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37]`}
                   />
                 </div>
+                {errors.dob && (
+                  <p className="text-[11px] text-red-500 font-semibold mt-1">{errors.dob}</p>
+                )}
               </div>
 
               <div>
@@ -303,10 +335,16 @@ export const ReportForm: React.FC<ReportFormProps> = ({
                     type="time"
                     required
                     value={tob}
-                    onChange={(e) => setTob(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                    onChange={(e) => {
+                      setTob(e.target.value);
+                      if (errors.tob) setErrors(prev => ({ ...prev, tob: '' }));
+                    }}
+                    className={`w-full pl-10 pr-4 py-2.5 rounded-xl border ${errors.tob ? 'border-red-500 ring-1 ring-red-500' : 'border-slate-300 dark:border-slate-700'} bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37]`}
                   />
                 </div>
+                {errors.tob && (
+                  <p className="text-[11px] text-red-500 font-semibold mt-1">{errors.tob}</p>
+                )}
                 <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 block">
                   *Precise time facilitates systematic Sub-Sub Lord house boundary calculation.
                 </span>
@@ -328,11 +366,17 @@ export const ReportForm: React.FC<ReportFormProps> = ({
               <GlobalPlaceSearch
                 value={pob}
                 onChange={handlePlaceSelect}
-                onRawChange={(raw) => setPob(raw)}
+                onRawChange={(raw) => {
+                  setPob(raw);
+                  if (errors.pob) setErrors(prev => ({ ...prev, pob: '' }));
+                }}
                 currentLang={currentLang}
                 placeholder="Search world birth city (e.g. Bhopal, Indore, London, Dubai, New York)..."
                 required
               />
+              {errors.pob && (
+                <p className="text-[11px] text-red-500 font-semibold mt-1">{errors.pob}</p>
+              )}
             </div>
 
             {/* Row 4: Focus Area Selector */}

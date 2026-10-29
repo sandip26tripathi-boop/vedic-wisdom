@@ -16,7 +16,8 @@ import {
   ShieldAlert, 
   Heart, 
   Zap, 
-  ShoppingBag 
+  ShoppingBag,
+  Calculator
 } from 'lucide-react';
 
 interface DigitalReportsSectionProps {
@@ -44,13 +45,16 @@ export const DigitalReportsSection: React.FC<DigitalReportsSectionProps> = ({
         return <ShieldAlert className="w-5 h-5 text-amber-500" />;
       case 'Heart':
         return <Heart className="w-5 h-5 text-rose-500" />;
+      case 'Calculator':
+        return <Calculator className="w-5 h-5 text-indigo-500" />;
       default:
         return <FileText className="w-5 h-5 text-[#D4AF37]" />;
     }
   };
 
   return (
-    <section id="digital-reports" className="py-20 bg-white dark:bg-[#0B0F19] border-t border-[#D4AF37]/20 transition-colors duration-300">
+    <section id="digital-reports" className="py-20 bg-white dark:bg-[#0B0F19] border-t border-[#D4AF37]/20 transition-colors duration-300 relative">
+      <div id="numerology" className="absolute -top-24" aria-hidden="true" />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
@@ -99,8 +103,8 @@ export const DigitalReportsSection: React.FC<DigitalReportsSectionProps> = ({
           </button>
         </div>
 
-        {/* 4 Digital Reports Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* 5 Digital Reports Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
           {digitalReportsData.map((report) => (
             <div
               key={report.id}

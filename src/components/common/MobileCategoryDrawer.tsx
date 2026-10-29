@@ -678,6 +678,28 @@ export const MobileCategoryDrawer: React.FC<MobileCategoryDrawerProps> = ({
                               Live
                             </span>
                           </button>
+
+                          {/* Sublink C: Numerology */}
+                          <button
+                            type="button"
+                            onClick={() => handleNavigate('numerology')}
+                            className="w-full min-h-[42px] p-2 rounded-lg text-left transition-all flex items-center justify-between gap-2 cursor-pointer hover:bg-white dark:hover:bg-slate-800"
+                          >
+                            <div className="flex items-center space-x-2 min-w-0">
+                              <Compass className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+                              <div className="min-w-0">
+                                <div className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
+                                  {isHi ? "अंकशास्त्र (न्यूमरोलॉजी)" : "Numerology & Destiny"}
+                                </div>
+                                <div className="text-[10px] text-slate-500 truncate">
+                                  {isHi ? "नामांक, मूलांक व भाग्यांक" : "Name vibration & life path numbers"}
+                                </div>
+                              </div>
+                            </div>
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-indigo-500/15 text-indigo-700 dark:text-indigo-300">
+                              1-9
+                            </span>
+                          </button>
                         </div>
                       )}
                     </div>

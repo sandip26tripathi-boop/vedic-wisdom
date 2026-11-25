@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+:root {
+  /* Day Mode (Default) */
+  --bg-main: #FAF4E6;
+  --bg-card: #FFFFFF;
+  --bg-card-subtle: #F5EEDB;
+  --text-main: #231A12;
+  --text-muted: #574B3F;
+  --gold-primary: #B87314;
+  --gold-accent: #D4AF37;
+  --sage-accent: #4A6B53;
+  --sage-light: #E7EFE9;
+  --border-subtle: #E8DCC4;
+  --border-gold: rgba(184, 115, 20, 0.3);
+}
+
+.night-mode {
+  /* Night Mode */
+  --bg-main: #0B1120;
+  --bg-card: #131D31;
+  --bg-card-subtle: #1A2640;
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
+  --gold-primary: #D4AF37;
+  --gold-accent: #F59E0B;
+  --sage-accent: #10B981;
+  --sage-light: #064E3B;
+  --border-subtle: #1E293B;
+  --border-gold: rgba(212, 175, 55, 0.35);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom Gold Gradient Utilities */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #B87314 0%, #D4AF37 50%, #9A5B0B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.night-mode .text-gold-gradient {
+  background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 50%, #D4AF37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-gold-gradient {
+  background: linear-gradient(135deg, #B87314 0%, #D4AF37 100%);
+}
+
+.night-mode .bg-gold-gradient {
+  background: linear-gradient(135deg, #D4AF37 0%, #F59E0B 100%);
+}
+
+.gold-glow {
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.25);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gold-primary);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-accent);
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 120s linear infinite;
+}
+
+.animate-spin-reverse-slow {
+  animation: spin-slow 90s linear infinite reverse;
+}
